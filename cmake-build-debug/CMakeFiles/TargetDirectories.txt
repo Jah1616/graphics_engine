@@ -1,3 +1,3 @@
-/home/student/Downloads/2D-L-Systems/cmake-build-debug/CMakeFiles/2D_L_Systems.dir
-/home/student/Downloads/2D-L-Systems/cmake-build-debug/CMakeFiles/edit_cache.dir
-/home/student/Downloads/2D-L-Systems/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/cmake-build-debug/CMakeFiles/engine.dir
+C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/cmake-build-debug/CMakeFiles/rebuild_cache.dir
