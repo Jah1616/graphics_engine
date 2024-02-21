@@ -88,7 +88,7 @@ namespace LParser
 		protected:
 
 			/**
-			 * \brief Constructor: creates an empty LSystem
+			 * \brief Constructor: creates an empty file_to_lines
 			 */
 			LSystem();
 
@@ -140,7 +140,7 @@ namespace LParser
 			/**
 			 * \brief Returns the angle of the L-System.
 			 *
-			 * \returns 	the angle used by the LSystem
+			 * \returns 	the angle used by the file_to_lines
 			 */
 			double get_angle() const;
 
@@ -207,13 +207,13 @@ namespace LParser
 	 * \brief Reads an LSystem2D from an output stream.
 	 *
 	 * \param in		The input stream to read the LSystem2D from
-	 * \param system	The L-System object in which the parsed LSystem is to be stored
+	 * \param system	The L-System object in which the parsed file_to_lines is to be stored
 	 *
 	 * \return		The input stream from which the L-System was read
 	 */
 	std::istream& operator>>(std::istream& in, LSystem2D& system);
         /**
-         * \brief This class represents a 2D-LSystem
+         * \brief This class represents a 2D-file_to_lines
         */
 	class LSystem2D: public LSystem
 	{
@@ -229,7 +229,7 @@ namespace LParser
 			 */
 			LSystem2D(LSystem2D const& system);
 			/**
-			 * \brief Constructor: reads the LSystem from an input stream
+			 * \brief Constructor: reads the file_to_lines from an input stream
 			 *
 			 * \param in		The input stream from which the L-System is to be read
 			 */
@@ -241,7 +241,7 @@ namespace LParser
 			virtual ~LSystem2D();
 
 			/**
-			 * \brief Assignment operator. Assigns another LSystem to this object
+			 * \brief Assignment operator. Assigns another file_to_lines to this object
 			 *
 			 * \param system	The L-System to be assigned to this object
 			 */
@@ -257,7 +257,7 @@ namespace LParser
 		protected:
 			friend std::istream& operator>>(std::istream& in, LSystem2D& system);
 			/**
-			 * \brief the starting angle of the 2D-LSystem
+			 * \brief the starting angle of the 2D-file_to_lines
 			*/
 			double startingAngle;
 	};
@@ -278,14 +278,14 @@ namespace LParser
 	 * \brief Reads an LSystem3D from an output stream.
 	 *
 	 * \param in		The input stream to read the LSystem2D from
-	 * \param system	The L-System object in which the parsed LSystem is to be stored
+	 * \param system	The L-System object in which the parsed file_to_lines is to be stored
 	 *
 	 * \return		The input stream from which the L-System was read
 	 */
 	std::istream& operator>>(std::istream& in, LSystem3D& system);
 
         /**
-         * \brief This class represents a 3D-LSystem
+         * \brief This class represents a 3D-file_to_lines
         */
 	class LSystem3D: public LSystem
 	{
@@ -303,9 +303,9 @@ namespace LParser
 			LSystem3D(LSystem3D const& system);
 
 			/**
-			 * \brief Constructor: reads the LSystem from an input stream
+			 * \brief Constructor: reads the file_to_lines from an input stream
 			 *
-			 * \param in		The input stream from which the LSystem is to be read
+			 * \param in		The input stream from which the file_to_lines is to be read
 			 */
 			LSystem3D(std::istream& in);
 			/**
