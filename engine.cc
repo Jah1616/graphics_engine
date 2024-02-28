@@ -1,6 +1,6 @@
 #include "easy_image.h"
 #include "ini_configuration.h"
-#include "2D_L-System/2D_Lsystem.cpp"
+#include "2D-L-System/2D-LSystem.cpp"
 
 #include <fstream>
 #include <iostream>
@@ -9,13 +9,23 @@
 #include <vector>
 
 
+img::EasyImage generate2DLinesImage(const ini::Configuration &conf){
+    unsigned int size = conf["General"]["size"].as_int_or_die();
+    std::vector<double> bgColor = conf["General"]["backgroundcolor"].as_double_tuple_or_die();
+    std::string inputFile = conf["2DLSystem"]["inputfile"].as_string_or_die();
+    std::vector<double> color = conf["2DLSystem"]["color"].as_double_tuple_or_die();
+    bool random = conf["2DLSystem"]["random"].as_bool_or_default(false);
+
+    return lines_to_img(file_to_lines(inputFile, Color(color[0], color[1], color[2]), random),
+                        size, img::Color(lround(bgColor[0] * 255), lround(bgColor[1] * 255), lround(bgColor[2] * 255)));;
+}
+
 img::EasyImage generate_image(const ini::Configuration &configuration) {
-    img::EasyImage image;
     std::string type = configuration["General"]["type"].as_string_or_die();
 
-    if (type == "2DLSystem") image = generate2DLinesImage(configuration);
+    if (type == "2DLSystem") return generate2DLinesImage(configuration);
 
-	return image;
+	return {};
 }
 
 

@@ -1,0 +1,18 @@
+Alphabet = {F}
+
+Draw = {
+        F -> 1
+}
+
+Rules = {
+        F -> "F+F+F+FF"
+}
+
+Chances = {
+        F -> 0.7
+}
+
+Initiator     = "F+F+F"
+Angle         = 120
+StartingAngle = 0
+Iterations    = 6
