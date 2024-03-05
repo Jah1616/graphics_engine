@@ -402,7 +402,6 @@ namespace
 		angle = parser.readDouble();
 		return angle;
 	}
-
 	int parse_iterations(stream_parser& parser)
 	{
 		int nrIterations;
@@ -416,6 +415,55 @@ namespace
 			throw LParser::ParserException("Number of iterations should not be negative", parser.getLine(), parser.getCol());
 		return nrIterations;
 	}
+    void parse_chances(std::set<char> const& alphabet, std::map<char, std::map<std::string, double>>& chances, stream_parser& parser, bool parse2D)
+    {
+        parser.skip_comments_and_whitespace();
+        parser.assertChars("StochasticRules");
+        parser.skip_comments_and_whitespace();
+        parser.assertChars("=");
+        parser.skip_comments_and_whitespace();
+        parser.assertChars("{");
+        parser.skip_comments_and_whitespace();
+        chances.clear();
+        char c = parser.getChar();
+        while (true)
+        {
+            if (!std::isalpha(c))
+                throw LParser::ParserException("Invalid Alphabet character", parser.getLine(), parser.getCol());
+            char alphabet_char = c;
+            parser.skip_comments_and_whitespace();
+            parser.assertChars("->");
+            parser.skip_comments_and_whitespace();
+            parser.assertChars("{");
+            parser.skip_comments_and_whitespace();
+
+            std::map<std::string, double> rules;
+            while (true){
+                std::string replacement = parser.readQuotedString();
+                parser.skip_comments_and_whitespace();
+                parser.assertChars(":");
+                parser.skip_comments_and_whitespace();
+                double chance = parser.readDouble();
+                rules[replacement] = chance;
+                parser.skip_comments_and_whitespace();
+                c = parser.getChar();
+                if (c == '}') break;
+                else if (c != ',')
+                    throw LParser::ParserException("Expected ','", parser.getLine(), parser.getCol());
+                parser.skip_comments_and_whitespace();
+
+            }
+            chances[alphabet_char] = rules;
+            parser.skip_comments_and_whitespace();
+            c = parser.getChar();
+            if (c == '}')
+                break;
+            else if (c != ',')
+                throw LParser::ParserException("Expected ','", parser.getLine(), parser.getCol());
+            parser.skip_comments_and_whitespace();
+            c = parser.getChar();
+        }
+    }
 }
 
 LParser::ParserException::ParserException(std::string const& msg, unsigned int line, unsigned int pos) :
@@ -500,6 +548,11 @@ unsigned int LParser::LSystem::get_nr_iterations() const
 	return nrIterations;
 }
 
+std::map<std::string, double> const& LParser::LSystem::get_chances(char c) const {
+    assert(get_alphabet().find(c) != get_alphabet().end());
+    return chances.find(c)->second;
+}
+
 LParser::LSystem2D::LSystem2D() :
 	LSystem(), startingAngle(0.0)
 {
@@ -544,6 +597,10 @@ std::istream& LParser::operator>>(std::istream& in, LParser::LSystem2D& system)
 	system.angle = parse_angle(parser, "Angle");
 	system.startingAngle = parse_angle(parser, "StartingAngle");
 	system.nrIterations = parse_iterations(parser);
+
+    try {
+        parse_chances(system.alphabet, system.chances, parser, true);
+    } catch (const std::exception& e){}
 
 	return in;
 }

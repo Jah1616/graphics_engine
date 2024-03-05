@@ -158,6 +158,10 @@ namespace LParser
 			 */
 			unsigned int get_nr_iterations() const;
 
+            std::map<std::string, double> const& get_chances(char c) const;
+
+            std::map<char, std::map<std::string, double>> chances;
+
 		protected:
 		        /**
 		         * \brief the alphabet of the l-system
@@ -188,6 +192,7 @@ namespace LParser
 		         * \brief the number of replacements of the l-system
 		         */
 			unsigned int nrIterations;
+
 	};
 
 
@@ -324,7 +329,5 @@ namespace LParser
 	};
 
 }
-
-
 
 #endif //L_PARSER_INCLUDED

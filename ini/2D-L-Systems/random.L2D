@@ -1,0 +1,21 @@
+Alphabet = {A}
+
+Draw = {
+        A -> 1
+}
+
+Rules = {
+        A -> "A+A+A+"
+}
+
+Initiator     = "A"
+Angle         = 125
+StartingAngle = 0
+Iterations    = 3
+
+StochasticRules = {
+        A -> {
+                "A+A+A+" : 0.1,
+                "A-A(A+A++)-AA" : 0.9
+        }
+}

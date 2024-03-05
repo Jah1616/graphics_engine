@@ -7,6 +7,15 @@
 #include <cmath>
 #include <fstream>
 #include <stack>
+#include <random>
+
+// SOURCE: ChatGPT
+// Create a random number generator engine
+std::random_device randomDouble;
+std::mt19937 gen(randomDouble());
+
+// Create a uniform real distribution between 0 and 1
+std::uniform_real_distribution<double> dis(0.0, 1.0);
 
 
 Lines2D file_to_lines(const std::string &input, const Color &lineColor){
@@ -25,8 +34,23 @@ Lines2D file_to_lines(const std::string &input, const Color &lineColor){
     for (int i=0 ; i<iterations ; i++){
         std::string newString{};
         for (auto c : initiator){
-            if (alphabet.find(c) == alphabet.end()) newString.push_back(c);
-            else newString.append(l_system.get_replacement(c));
+            if (alphabet.find(c) == alphabet.end()){
+                newString.push_back(c);
+            }
+            else {
+                if (l_system.chances.find(c) == l_system.chances.end()){
+                    newString.append(l_system.get_replacement(c));
+                } else {
+                    double rand = dis(gen);
+                    for (const auto &replacement : l_system.get_chances(c)){
+                        rand -= replacement.second;
+                        if (rand <= 0){
+                            newString.append(replacement.first);
+                            break;
+                        }
+                    }
+                }
+            }
         }
         initiator = newString;
     }
