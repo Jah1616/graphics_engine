@@ -1,12 +1,6 @@
+#include "../utils.hpp"
+
 #include <list>
-
-
-struct Color{
-    Color(double red, double green, double blue) :red(red) ,green(green) ,blue(blue) {}
-    double red;
-    double green;
-    double blue;
-};
 
 struct Point2D{
     Point2D(double x, double y) :x(x), y(y) {}
@@ -20,7 +14,6 @@ struct Line2D{
     Point2D p2;
     Color color;
 };
-
 
 
 using Lines2D = std::list<Line2D>;

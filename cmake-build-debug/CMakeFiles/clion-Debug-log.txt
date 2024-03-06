@@ -1,4 +1,4 @@
-"C:\Program Files\JetBrains\CLion 2023.2.2\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - MinGW Makefiles" -S C:\Users\jahso\Documents\School\ComputerGraphics\graphics_engine -B C:\Users\jahso\Documents\School\ComputerGraphics\graphics_engine\cmake-build-debug
--- Configuring done (0.5s)
--- Generating done (0.3s)
--- Build files have been written to: C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/cmake-build-debug
+/snap/clion/249/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" -S /home/student/CLionProjects/graphics_engine -B /home/student/CLionProjects/graphics_engine/cmake-build-debug
+-- Configuring done (0.0s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/student/CLionProjects/graphics_engine/cmake-build-debug
