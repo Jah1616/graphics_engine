@@ -1,6 +1,10 @@
 file(REMOVE_RECURSE
-  "CMakeFiles/engine.dir/2D_L-System/l_parser/l_parser.cc.o"
-  "CMakeFiles/engine.dir/2D_L-System/l_parser/l_parser.cc.o.d"
+  "CMakeFiles/engine.dir/2D/2D_LSystem.cpp.o"
+  "CMakeFiles/engine.dir/2D/2D_LSystem.cpp.o.d"
+  "CMakeFiles/engine.dir/2D/Lines2D.cpp.o"
+  "CMakeFiles/engine.dir/2D/Lines2D.cpp.o.d"
+  "CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.o"
+  "CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.o.d"
   "CMakeFiles/engine.dir/3D/Figure3D.cpp.o"
   "CMakeFiles/engine.dir/3D/Figure3D.cpp.o.d"
   "CMakeFiles/engine.dir/3D/vector3D.cc.o"

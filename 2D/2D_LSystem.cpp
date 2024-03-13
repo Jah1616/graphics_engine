@@ -87,7 +87,7 @@ Lines2D file_to_lines(const std::string &input, const Color &lineColor){
     return out;
 }
 
-img::EasyImage lines_to_img (const Lines2D &lines, const unsigned int size, const img::Color &bgColor){
+img::EasyImage draw2DLines (const Lines2D &lines, const unsigned int size, const img::Color &bgColor){
     // set min and max coords
     Line2D firstline = lines.front();
     double xmin{fmin(firstline.p1.x, firstline.p2.x)};
@@ -139,6 +139,6 @@ img::EasyImage generate2DLinesImage(const ini::Configuration &conf){
     std::string inputFile = conf["2DLSystem"]["inputfile"].as_string_or_die();
     std::vector<double> color = conf["2DLSystem"]["color"].as_double_tuple_or_die();
 
-    return lines_to_img(file_to_lines(inputFile, Color(color[0], color[1], color[2])),
-                        size, img::Color(lround(bgColor[0] * 255), lround(bgColor[1] * 255), lround(bgColor[2] * 255)));;
+    return draw2DLines(file_to_lines(inputFile, Color(color[0], color[1], color[2])),
+                       size, img::Color(lround(bgColor[0] * 255), lround(bgColor[1] * 255), lround(bgColor[2] * 255)));;
 }

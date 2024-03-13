@@ -111,24 +111,52 @@ CMakeFiles/engine.dir/engine.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/engine.dir/engine.cc.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/student/CLionProjects/graphics_engine/engine.cc -o CMakeFiles/engine.dir/engine.cc.s
 
-CMakeFiles/engine.dir/2D_L-System/l_parser/l_parser.cc.o: CMakeFiles/engine.dir/flags.make
-CMakeFiles/engine.dir/2D_L-System/l_parser/l_parser.cc.o: /home/student/CLionProjects/graphics_engine/2D_L-System/l_parser/l_parser.cc
-CMakeFiles/engine.dir/2D_L-System/l_parser/l_parser.cc.o: CMakeFiles/engine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/student/CLionProjects/graphics_engine/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/engine.dir/2D_L-System/l_parser/l_parser.cc.o"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/engine.dir/2D_L-System/l_parser/l_parser.cc.o -MF CMakeFiles/engine.dir/2D_L-System/l_parser/l_parser.cc.o.d -o CMakeFiles/engine.dir/2D_L-System/l_parser/l_parser.cc.o -c /home/student/CLionProjects/graphics_engine/2D_L-System/l_parser/l_parser.cc
+CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.o: CMakeFiles/engine.dir/flags.make
+CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.o: /home/student/CLionProjects/graphics_engine/2D/l_parser/l_parser.cc
+CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.o: CMakeFiles/engine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/student/CLionProjects/graphics_engine/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.o -MF CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.o.d -o CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.o -c /home/student/CLionProjects/graphics_engine/2D/l_parser/l_parser.cc
 
-CMakeFiles/engine.dir/2D_L-System/l_parser/l_parser.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/engine.dir/2D_L-System/l_parser/l_parser.cc.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/student/CLionProjects/graphics_engine/2D_L-System/l_parser/l_parser.cc > CMakeFiles/engine.dir/2D_L-System/l_parser/l_parser.cc.i
+CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/student/CLionProjects/graphics_engine/2D/l_parser/l_parser.cc > CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.i
 
-CMakeFiles/engine.dir/2D_L-System/l_parser/l_parser.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/engine.dir/2D_L-System/l_parser/l_parser.cc.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/student/CLionProjects/graphics_engine/2D_L-System/l_parser/l_parser.cc -o CMakeFiles/engine.dir/2D_L-System/l_parser/l_parser.cc.s
+CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/student/CLionProjects/graphics_engine/2D/l_parser/l_parser.cc -o CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.s
+
+CMakeFiles/engine.dir/2D/Lines2D.cpp.o: CMakeFiles/engine.dir/flags.make
+CMakeFiles/engine.dir/2D/Lines2D.cpp.o: /home/student/CLionProjects/graphics_engine/2D/Lines2D.cpp
+CMakeFiles/engine.dir/2D/Lines2D.cpp.o: CMakeFiles/engine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/student/CLionProjects/graphics_engine/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/engine.dir/2D/Lines2D.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/engine.dir/2D/Lines2D.cpp.o -MF CMakeFiles/engine.dir/2D/Lines2D.cpp.o.d -o CMakeFiles/engine.dir/2D/Lines2D.cpp.o -c /home/student/CLionProjects/graphics_engine/2D/Lines2D.cpp
+
+CMakeFiles/engine.dir/2D/Lines2D.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/engine.dir/2D/Lines2D.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/student/CLionProjects/graphics_engine/2D/Lines2D.cpp > CMakeFiles/engine.dir/2D/Lines2D.cpp.i
+
+CMakeFiles/engine.dir/2D/Lines2D.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/engine.dir/2D/Lines2D.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/student/CLionProjects/graphics_engine/2D/Lines2D.cpp -o CMakeFiles/engine.dir/2D/Lines2D.cpp.s
+
+CMakeFiles/engine.dir/2D/2D_LSystem.cpp.o: CMakeFiles/engine.dir/flags.make
+CMakeFiles/engine.dir/2D/2D_LSystem.cpp.o: /home/student/CLionProjects/graphics_engine/2D/2D_LSystem.cpp
+CMakeFiles/engine.dir/2D/2D_LSystem.cpp.o: CMakeFiles/engine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/student/CLionProjects/graphics_engine/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/engine.dir/2D/2D_LSystem.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/engine.dir/2D/2D_LSystem.cpp.o -MF CMakeFiles/engine.dir/2D/2D_LSystem.cpp.o.d -o CMakeFiles/engine.dir/2D/2D_LSystem.cpp.o -c /home/student/CLionProjects/graphics_engine/2D/2D_LSystem.cpp
+
+CMakeFiles/engine.dir/2D/2D_LSystem.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/engine.dir/2D/2D_LSystem.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/student/CLionProjects/graphics_engine/2D/2D_LSystem.cpp > CMakeFiles/engine.dir/2D/2D_LSystem.cpp.i
+
+CMakeFiles/engine.dir/2D/2D_LSystem.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/engine.dir/2D/2D_LSystem.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/student/CLionProjects/graphics_engine/2D/2D_LSystem.cpp -o CMakeFiles/engine.dir/2D/2D_LSystem.cpp.s
 
 CMakeFiles/engine.dir/3D/vector3D.cc.o: CMakeFiles/engine.dir/flags.make
 CMakeFiles/engine.dir/3D/vector3D.cc.o: /home/student/CLionProjects/graphics_engine/3D/vector3D.cc
 CMakeFiles/engine.dir/3D/vector3D.cc.o: CMakeFiles/engine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/student/CLionProjects/graphics_engine/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/engine.dir/3D/vector3D.cc.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/student/CLionProjects/graphics_engine/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/engine.dir/3D/vector3D.cc.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/engine.dir/3D/vector3D.cc.o -MF CMakeFiles/engine.dir/3D/vector3D.cc.o.d -o CMakeFiles/engine.dir/3D/vector3D.cc.o -c /home/student/CLionProjects/graphics_engine/3D/vector3D.cc
 
 CMakeFiles/engine.dir/3D/vector3D.cc.i: cmake_force
@@ -142,7 +170,7 @@ CMakeFiles/engine.dir/3D/vector3D.cc.s: cmake_force
 CMakeFiles/engine.dir/3D/Figure3D.cpp.o: CMakeFiles/engine.dir/flags.make
 CMakeFiles/engine.dir/3D/Figure3D.cpp.o: /home/student/CLionProjects/graphics_engine/3D/Figure3D.cpp
 CMakeFiles/engine.dir/3D/Figure3D.cpp.o: CMakeFiles/engine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/student/CLionProjects/graphics_engine/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/engine.dir/3D/Figure3D.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/student/CLionProjects/graphics_engine/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/engine.dir/3D/Figure3D.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/engine.dir/3D/Figure3D.cpp.o -MF CMakeFiles/engine.dir/3D/Figure3D.cpp.o.d -o CMakeFiles/engine.dir/3D/Figure3D.cpp.o -c /home/student/CLionProjects/graphics_engine/3D/Figure3D.cpp
 
 CMakeFiles/engine.dir/3D/Figure3D.cpp.i: cmake_force
@@ -158,7 +186,9 @@ engine_OBJECTS = \
 "CMakeFiles/engine.dir/easy_image.cc.o" \
 "CMakeFiles/engine.dir/ini_configuration.cc.o" \
 "CMakeFiles/engine.dir/engine.cc.o" \
-"CMakeFiles/engine.dir/2D_L-System/l_parser/l_parser.cc.o" \
+"CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.o" \
+"CMakeFiles/engine.dir/2D/Lines2D.cpp.o" \
+"CMakeFiles/engine.dir/2D/2D_LSystem.cpp.o" \
 "CMakeFiles/engine.dir/3D/vector3D.cc.o" \
 "CMakeFiles/engine.dir/3D/Figure3D.cpp.o"
 
@@ -168,12 +198,14 @@ engine_EXTERNAL_OBJECTS =
 engine: CMakeFiles/engine.dir/easy_image.cc.o
 engine: CMakeFiles/engine.dir/ini_configuration.cc.o
 engine: CMakeFiles/engine.dir/engine.cc.o
-engine: CMakeFiles/engine.dir/2D_L-System/l_parser/l_parser.cc.o
+engine: CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.o
+engine: CMakeFiles/engine.dir/2D/Lines2D.cpp.o
+engine: CMakeFiles/engine.dir/2D/2D_LSystem.cpp.o
 engine: CMakeFiles/engine.dir/3D/vector3D.cc.o
 engine: CMakeFiles/engine.dir/3D/Figure3D.cpp.o
 engine: CMakeFiles/engine.dir/build.make
 engine: CMakeFiles/engine.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/student/CLionProjects/graphics_engine/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable engine"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/student/CLionProjects/graphics_engine/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Linking CXX executable engine"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/engine.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

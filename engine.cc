@@ -1,6 +1,6 @@
 #include "easy_image.h"
 #include "ini_configuration.h"
-#include "2D_L-System/2D_LSystem.cpp"
+#include "2D/2D_LSystem.cpp"
 
 #include <fstream>
 #include <iostream>

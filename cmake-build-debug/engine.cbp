@@ -82,10 +82,16 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/student/CLionProjects/graphics_engine/2D_L-System/l_parser/l_parser.cc">
+		<Unit filename="/home/student/CLionProjects/graphics_engine/2D/2D_LSystem.cpp">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="/home/student/CLionProjects/graphics_engine/2D_L-System/l_parser/l_parser.h">
+		<Unit filename="/home/student/CLionProjects/graphics_engine/2D/Lines2D.cpp">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/student/CLionProjects/graphics_engine/2D/l_parser/l_parser.cc">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="/home/student/CLionProjects/graphics_engine/2D/l_parser/l_parser.h">
 			<Option target="engine"/>
 		</Unit>
 		<Unit filename="/home/student/CLionProjects/graphics_engine/3D/Figure3D.cpp">
