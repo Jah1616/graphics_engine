@@ -75,15 +75,15 @@ Matrix rotateZ(double angle){
     return m;
 }
 
-Matrix translate(const double x, const double y, const double z){
+Matrix translate(const Vector3D& vector){
     Matrix m;
     m(1, 1) = 1;
     m(2, 2) = 1;
     m(3, 3) = 1;
     m(4, 4) = 1;
-    m(4, 1) = x;
-    m(4, 2) = y;
-    m(4, 3) = z;
+    m(4, 1) = vector.x;
+    m(4, 2) = vector.y;
+    m(4, 3) = vector.z;
     return m;
 }
 
@@ -132,30 +132,29 @@ Lines2D doProjection(const Figures3D& figs){
 }
 
 img::EasyImage generate3DLinesImage(const ini::Configuration &conf){
-    unsigned int size = conf["General"]["size"].as_int_or_die();
-    std::vector<double> bgColor = conf["General"]["backgroundcolor"].as_double_tuple_or_die();
-    unsigned int nrFigs = conf["General"]["nrFigures"].as_int_or_die();
-    std::vector<double> eye = conf["General"]["eye"].as_double_tuple_or_die();
-
+    const unsigned int size = conf["General"]["size"].as_int_or_die();
+    const std::vector<double> bgColor = conf["General"]["backgroundcolor"].as_double_tuple_or_die();
+    const unsigned int nrFigs = conf["General"]["nrFigures"].as_int_or_die();
+    const std::vector<double> eye = conf["General"]["eye"].as_double_tuple_or_die();
     const Vector3D eyePoint = Vector3D::vector(eye[0], eye[1], eye[2]);
+
     Figures3D figures;
     for (unsigned int i=0 ; i < nrFigs ; i++){
         std::string fig_string = "Figure" + std::to_string(i);
 
-        double fig_scale = conf[fig_string]["scale"].as_double_or_die();
-        double fig_rotateX = conf[fig_string]["rotateX"].as_double_or_die() * M_PI/180;
-        double fig_rotateY = conf[fig_string]["rotateY"].as_double_or_die() * M_PI/180;
-        double fig_rotateZ = conf[fig_string]["rotateZ"].as_double_or_die() * M_PI/180;
-        std::vector<double> fig_center = conf[fig_string]["center"].as_double_tuple_or_die();
+        const double fig_scale = conf[fig_string]["scale"].as_double_or_die();
+        const double fig_rotateX = conf[fig_string]["rotateX"].as_double_or_die();
+        const double fig_rotateY = conf[fig_string]["rotateY"].as_double_or_die();
+        const double fig_rotateZ = conf[fig_string]["rotateZ"].as_double_or_die();
+        const std::vector<double> fig_center = conf[fig_string]["center"].as_double_tuple_or_die();
 
-        std::vector<double> fig_color = conf[fig_string]["color"].as_double_tuple_or_die();
+        const std::vector<double> fig_color = conf[fig_string]["color"].as_double_tuple_or_die();
         Figure3D newFigure(Color(fig_color[0], fig_color[1], fig_color[2]));
-
 
         unsigned int nrPoints = conf[fig_string]["nrPoints"].as_int_or_die();
         for (unsigned int p=0 ; p < nrPoints ; p++){
             std::vector<double> coords = conf[fig_string]["point" + std::to_string(p)].as_double_tuple_or_die();
-            Vector3D point = Vector3D::point(coords[0], coords[1], coords[2]);
+            Vector3D point = Vector3D::vector(coords[0], coords[1], coords[2]);
             newFigure.points.push_back(point);
         }
 
@@ -167,11 +166,17 @@ img::EasyImage generate3DLinesImage(const ini::Configuration &conf){
             for (int p : linePoints) newFace.push_back(p);
             newFigure.faces.push_back(newFace);
         }
+
+//        applyTransform(newFigure, scale(fig_scale)
+//        *rotateX(fig_rotateX)*rotateY(fig_rotateY)*rotateZ(fig_rotateZ)
+//        *translate(fig_center[0], fig_center[1], fig_center[2])
+//        *eyePointTrans(eyePoint));
+
         applyTransform(newFigure, scale(fig_scale));
         applyTransform(newFigure, rotateX(fig_rotateX));
         applyTransform(newFigure, rotateY(fig_rotateY));
         applyTransform(newFigure, rotateZ(fig_rotateZ));
-        applyTransform(newFigure, translate(fig_center[0], fig_center[1], fig_center[2]));
+        applyTransform(newFigure, translate(Vector3D::vector(fig_center[0], fig_center[1], fig_center[2])));
         applyTransform(newFigure, eyePointTrans(eyePoint));
 
         figures.push_back(newFigure);
