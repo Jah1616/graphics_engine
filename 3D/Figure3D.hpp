@@ -20,7 +20,7 @@ struct Figure3D{
     Color color;
 };
 
-using Figures3D = std::list<Figure3D>;
+using Figures3D = std::vector<Figure3D>;
 
 void applyTransform(Figure3D& f, const Matrix& m){
     for (Vector3D& point : f.points) point *= m;
@@ -85,7 +85,7 @@ Matrix translate(const Vector3D& vector){
 }
 
 void toPolar(const Vector3D& point, double &theta, double &phi, double &r){
-    r = sqrt(point.x*point.x + point.y*point.y + point.z*point.z);
+    r = sqrt(pow(point.x, 2) + pow(point.y, 2) + pow(point.z, 2));
     theta = std::atan2(point.y, point.x);
     phi = std::acos(point.z / r);
 }
@@ -111,18 +111,16 @@ Point2D doProjection(const Vector3D& point, const double d = 1){
     return {d*point.x/-point.z, d*point.y/-point.z};
 }
 
-Lines2D doProjection(const Figures3D& figs){
+Lines2D doProjection(const Figures3D& figures){
     Lines2D lines;
-    for (const Figure3D& figure : figs){
+    for (const Figure3D& figure : figures){
         for (const Face& face : figure.faces){
-            for (unsigned int i=0 ; i<face.size()-1 ; i++){
+            unsigned int nrPoints = face.size();
+            for (unsigned int i=0 ; i<nrPoints ; i++){
                 lines.emplace_back(doProjection(figure.points[face[i]]),
-                                   doProjection(figure.points[face[i+1]]),
+                                   doProjection(figure.points[face[(i+1) % nrPoints]]),
                                    figure.color);
             }
-            if (face.size() > 2) lines.emplace_back(doProjection(figure.points[face.back()]),
-                               doProjection(figure.points[face.front()]),
-                               figure.color);
         }
     }
     return lines;
