@@ -1,4 +1,6 @@
-#include "Lines2D.cpp"
+#pragma once
+
+#include "Lines2D.hpp"
 #include "../ini_configuration.h"
 #include "../easy_image.h"
 #include "l_parser/l_parser.h"
@@ -10,15 +12,12 @@
 #include <random>
 
 // SOURCE: ChatGPT
-// Create a random number generator engine
 std::random_device randomDouble;
 std::mt19937 gen(randomDouble());
-
-// Create a uniform real distribution between 0 and 1
 std::uniform_real_distribution<double> dis(0.0, 1.0);
 
 
-Lines2D file_to_lines(const std::string &input, const Color &lineColor){
+Lines2D make2DL(const std::string &input, const Color &lineColor){
     LParser::LSystem2D l_system;
     std::ifstream input_stream(input);
     input_stream >> l_system;input_stream.close();
@@ -139,6 +138,6 @@ img::EasyImage generate2DLinesImage(const ini::Configuration &conf){
     std::string inputFile = conf["2DLSystem"]["inputfile"].as_string_or_die();
     std::vector<double> color = conf["2DLSystem"]["color"].as_double_tuple_or_die();
 
-    return draw2DLines(file_to_lines(inputFile, Color(color[0], color[1], color[2])),
-                       size, img::Color(lround(bgColor[0] * 255), lround(bgColor[1] * 255), lround(bgColor[2] * 255)));;
+    return draw2DLines(make2DL(inputFile, Color(color[0], color[1], color[2])),
+                       size, img::Color(lround(bgColor[0] * 255), lround(bgColor[1] * 255), lround(bgColor[2] * 255)));
 }

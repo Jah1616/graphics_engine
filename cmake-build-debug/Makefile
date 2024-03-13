@@ -129,54 +129,6 @@ engine/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/engine.dir/build.make CMakeFiles/engine.dir/build
 .PHONY : engine/fast
 
-2D/2D_LSystem.o: 2D/2D_LSystem.cpp.o
-.PHONY : 2D/2D_LSystem.o
-
-# target to build an object file
-2D/2D_LSystem.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/engine.dir/build.make CMakeFiles/engine.dir/2D/2D_LSystem.cpp.o
-.PHONY : 2D/2D_LSystem.cpp.o
-
-2D/2D_LSystem.i: 2D/2D_LSystem.cpp.i
-.PHONY : 2D/2D_LSystem.i
-
-# target to preprocess a source file
-2D/2D_LSystem.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/engine.dir/build.make CMakeFiles/engine.dir/2D/2D_LSystem.cpp.i
-.PHONY : 2D/2D_LSystem.cpp.i
-
-2D/2D_LSystem.s: 2D/2D_LSystem.cpp.s
-.PHONY : 2D/2D_LSystem.s
-
-# target to generate assembly for a file
-2D/2D_LSystem.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/engine.dir/build.make CMakeFiles/engine.dir/2D/2D_LSystem.cpp.s
-.PHONY : 2D/2D_LSystem.cpp.s
-
-2D/Lines2D.o: 2D/Lines2D.cpp.o
-.PHONY : 2D/Lines2D.o
-
-# target to build an object file
-2D/Lines2D.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/engine.dir/build.make CMakeFiles/engine.dir/2D/Lines2D.cpp.o
-.PHONY : 2D/Lines2D.cpp.o
-
-2D/Lines2D.i: 2D/Lines2D.cpp.i
-.PHONY : 2D/Lines2D.i
-
-# target to preprocess a source file
-2D/Lines2D.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/engine.dir/build.make CMakeFiles/engine.dir/2D/Lines2D.cpp.i
-.PHONY : 2D/Lines2D.cpp.i
-
-2D/Lines2D.s: 2D/Lines2D.cpp.s
-.PHONY : 2D/Lines2D.s
-
-# target to generate assembly for a file
-2D/Lines2D.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/engine.dir/build.make CMakeFiles/engine.dir/2D/Lines2D.cpp.s
-.PHONY : 2D/Lines2D.cpp.s
-
 2D/l_parser/l_parser.o: 2D/l_parser/l_parser.cc.o
 .PHONY : 2D/l_parser/l_parser.o
 
@@ -200,30 +152,6 @@ engine/fast:
 2D/l_parser/l_parser.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/engine.dir/build.make CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.s
 .PHONY : 2D/l_parser/l_parser.cc.s
-
-3D/Figure3D.o: 3D/Figure3D.cpp.o
-.PHONY : 3D/Figure3D.o
-
-# target to build an object file
-3D/Figure3D.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/engine.dir/build.make CMakeFiles/engine.dir/3D/Figure3D.cpp.o
-.PHONY : 3D/Figure3D.cpp.o
-
-3D/Figure3D.i: 3D/Figure3D.cpp.i
-.PHONY : 3D/Figure3D.i
-
-# target to preprocess a source file
-3D/Figure3D.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/engine.dir/build.make CMakeFiles/engine.dir/3D/Figure3D.cpp.i
-.PHONY : 3D/Figure3D.cpp.i
-
-3D/Figure3D.s: 3D/Figure3D.cpp.s
-.PHONY : 3D/Figure3D.s
-
-# target to generate assembly for a file
-3D/Figure3D.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/engine.dir/build.make CMakeFiles/engine.dir/3D/Figure3D.cpp.s
-.PHONY : 3D/Figure3D.cpp.s
 
 3D/vector3D.o: 3D/vector3D.cc.o
 .PHONY : 3D/vector3D.o
@@ -330,18 +258,9 @@ help:
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
 	@echo "... engine"
-	@echo "... 2D/2D_LSystem.o"
-	@echo "... 2D/2D_LSystem.i"
-	@echo "... 2D/2D_LSystem.s"
-	@echo "... 2D/Lines2D.o"
-	@echo "... 2D/Lines2D.i"
-	@echo "... 2D/Lines2D.s"
 	@echo "... 2D/l_parser/l_parser.o"
 	@echo "... 2D/l_parser/l_parser.i"
 	@echo "... 2D/l_parser/l_parser.s"
-	@echo "... 3D/Figure3D.o"
-	@echo "... 3D/Figure3D.i"
-	@echo "... 3D/Figure3D.s"
 	@echo "... 3D/vector3D.o"
 	@echo "... 3D/vector3D.i"
 	@echo "... 3D/vector3D.s"
