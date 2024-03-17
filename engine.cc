@@ -1,11 +1,11 @@
 #include "easy_image.h"
 #include "ini_configuration.h"
-#include "2D/2D_LSystem.hpp"
-#include "3D/Figure3D.hpp"
+#include "generateImage/2D.hpp"
+#include "generateImage/3D.hpp"
 
 #include <fstream>
 #include <iostream>
-//#include <stdexcept>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -14,8 +14,8 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
     img::EasyImage image;
     std::string type = configuration["General"]["type"].as_string_or_die();
 
-    if (type == "2DLSystem") image = generate2DLinesImage(configuration);
-    if (type == "Wireframe") image = generate3DLinesImage(configuration);
+    if (type == "2DLSystem") image = generate2DLSystemImage(configuration);
+    if (type == "Wireframe") image = generateWireframeImage(configuration);
 
 	return image;
 }

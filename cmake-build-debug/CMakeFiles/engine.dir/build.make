@@ -110,41 +110,41 @@ CMakeFiles/engine.dir/engine.cc.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/engine.dir/engine.cc.s"
 	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\jahso\Documents\School\ComputerGraphics\graphics_engine\engine.cc -o CMakeFiles\engine.dir\engine.cc.s
 
-CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.obj: CMakeFiles/engine.dir/flags.make
-CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.obj: C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/2D/l_parser/l_parser.cc
-CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.obj: CMakeFiles/engine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\jahso\Documents\School\ComputerGraphics\graphics_engine\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.obj"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.obj -MF CMakeFiles\engine.dir\2D\l_parser\l_parser.cc.obj.d -o CMakeFiles\engine.dir\2D\l_parser\l_parser.cc.obj -c C:\Users\jahso\Documents\School\ComputerGraphics\graphics_engine\2D\l_parser\l_parser.cc
+CMakeFiles/engine.dir/L-Systems/l_parser/l_parser.cc.obj: CMakeFiles/engine.dir/flags.make
+CMakeFiles/engine.dir/L-Systems/l_parser/l_parser.cc.obj: C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/L-Systems/l_parser/l_parser.cc
+CMakeFiles/engine.dir/L-Systems/l_parser/l_parser.cc.obj: CMakeFiles/engine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\jahso\Documents\School\ComputerGraphics\graphics_engine\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/engine.dir/L-Systems/l_parser/l_parser.cc.obj"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/engine.dir/L-Systems/l_parser/l_parser.cc.obj -MF CMakeFiles\engine.dir\L-Systems\l_parser\l_parser.cc.obj.d -o CMakeFiles\engine.dir\L-Systems\l_parser\l_parser.cc.obj -c C:\Users\jahso\Documents\School\ComputerGraphics\graphics_engine\L-Systems\l_parser\l_parser.cc
 
-CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.i"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\jahso\Documents\School\ComputerGraphics\graphics_engine\2D\l_parser\l_parser.cc > CMakeFiles\engine.dir\2D\l_parser\l_parser.cc.i
+CMakeFiles/engine.dir/L-Systems/l_parser/l_parser.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/engine.dir/L-Systems/l_parser/l_parser.cc.i"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\jahso\Documents\School\ComputerGraphics\graphics_engine\L-Systems\l_parser\l_parser.cc > CMakeFiles\engine.dir\L-Systems\l_parser\l_parser.cc.i
 
-CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.s"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\jahso\Documents\School\ComputerGraphics\graphics_engine\2D\l_parser\l_parser.cc -o CMakeFiles\engine.dir\2D\l_parser\l_parser.cc.s
+CMakeFiles/engine.dir/L-Systems/l_parser/l_parser.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/engine.dir/L-Systems/l_parser/l_parser.cc.s"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\jahso\Documents\School\ComputerGraphics\graphics_engine\L-Systems\l_parser\l_parser.cc -o CMakeFiles\engine.dir\L-Systems\l_parser\l_parser.cc.s
 
-CMakeFiles/engine.dir/3D/vector3D.cc.obj: CMakeFiles/engine.dir/flags.make
-CMakeFiles/engine.dir/3D/vector3D.cc.obj: C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/3D/vector3D.cc
-CMakeFiles/engine.dir/3D/vector3D.cc.obj: CMakeFiles/engine.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\jahso\Documents\School\ComputerGraphics\graphics_engine\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/engine.dir/3D/vector3D.cc.obj"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/engine.dir/3D/vector3D.cc.obj -MF CMakeFiles\engine.dir\3D\vector3D.cc.obj.d -o CMakeFiles\engine.dir\3D\vector3D.cc.obj -c C:\Users\jahso\Documents\School\ComputerGraphics\graphics_engine\3D\vector3D.cc
+CMakeFiles/engine.dir/utils/vector3D.cc.obj: CMakeFiles/engine.dir/flags.make
+CMakeFiles/engine.dir/utils/vector3D.cc.obj: C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/utils/vector3D.cc
+CMakeFiles/engine.dir/utils/vector3D.cc.obj: CMakeFiles/engine.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=C:\Users\jahso\Documents\School\ComputerGraphics\graphics_engine\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/engine.dir/utils/vector3D.cc.obj"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/engine.dir/utils/vector3D.cc.obj -MF CMakeFiles\engine.dir\utils\vector3D.cc.obj.d -o CMakeFiles\engine.dir\utils\vector3D.cc.obj -c C:\Users\jahso\Documents\School\ComputerGraphics\graphics_engine\utils\vector3D.cc
 
-CMakeFiles/engine.dir/3D/vector3D.cc.i: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/engine.dir/3D/vector3D.cc.i"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\jahso\Documents\School\ComputerGraphics\graphics_engine\3D\vector3D.cc > CMakeFiles\engine.dir\3D\vector3D.cc.i
+CMakeFiles/engine.dir/utils/vector3D.cc.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/engine.dir/utils/vector3D.cc.i"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E C:\Users\jahso\Documents\School\ComputerGraphics\graphics_engine\utils\vector3D.cc > CMakeFiles\engine.dir\utils\vector3D.cc.i
 
-CMakeFiles/engine.dir/3D/vector3D.cc.s: cmake_force
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/engine.dir/3D/vector3D.cc.s"
-	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\jahso\Documents\School\ComputerGraphics\graphics_engine\3D\vector3D.cc -o CMakeFiles\engine.dir\3D\vector3D.cc.s
+CMakeFiles/engine.dir/utils/vector3D.cc.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/engine.dir/utils/vector3D.cc.s"
+	C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\G__~1.EXE $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S C:\Users\jahso\Documents\School\ComputerGraphics\graphics_engine\utils\vector3D.cc -o CMakeFiles\engine.dir\utils\vector3D.cc.s
 
 # Object files for target engine
 engine_OBJECTS = \
 "CMakeFiles/engine.dir/easy_image.cc.obj" \
 "CMakeFiles/engine.dir/ini_configuration.cc.obj" \
 "CMakeFiles/engine.dir/engine.cc.obj" \
-"CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.obj" \
-"CMakeFiles/engine.dir/3D/vector3D.cc.obj"
+"CMakeFiles/engine.dir/L-Systems/l_parser/l_parser.cc.obj" \
+"CMakeFiles/engine.dir/utils/vector3D.cc.obj"
 
 # External object files for target engine
 engine_EXTERNAL_OBJECTS =
@@ -152,8 +152,8 @@ engine_EXTERNAL_OBJECTS =
 engine.exe: CMakeFiles/engine.dir/easy_image.cc.obj
 engine.exe: CMakeFiles/engine.dir/ini_configuration.cc.obj
 engine.exe: CMakeFiles/engine.dir/engine.cc.obj
-engine.exe: CMakeFiles/engine.dir/2D/l_parser/l_parser.cc.obj
-engine.exe: CMakeFiles/engine.dir/3D/vector3D.cc.obj
+engine.exe: CMakeFiles/engine.dir/L-Systems/l_parser/l_parser.cc.obj
+engine.exe: CMakeFiles/engine.dir/utils/vector3D.cc.obj
 engine.exe: CMakeFiles/engine.dir/build.make
 engine.exe: CMakeFiles/engine.dir/linkLibs.rsp
 engine.exe: CMakeFiles/engine.dir/objects1.rsp

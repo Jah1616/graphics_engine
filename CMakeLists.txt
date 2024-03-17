@@ -6,5 +6,5 @@ set(CMAKE_CXX_STANDARD 17)
 add_executable(engine easy_image.cc
         ini_configuration.cc
         engine.cc
-        2D/l_parser/l_parser.cc
-        3D/vector3D.cc)
+        L-Systems/l_parser/l_parser.cc
+        utils/vector3D.cc)
