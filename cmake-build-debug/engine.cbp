@@ -82,12 +82,6 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/L-Systems/l_parser/l_parser.cc">
-			<Option target="engine"/>
-		</Unit>
-		<Unit filename="C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/L-Systems/l_parser/l_parser.h">
-			<Option target="engine"/>
-		</Unit>
 		<Unit filename="C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/easy_image.cc">
 			<Option target="engine"/>
 		</Unit>
@@ -97,16 +91,22 @@
 		<Unit filename="C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/engine.cc">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/ini_configuration.cc">
+		<Unit filename="C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/ini/ini_configuration.cc">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/ini_configuration.h">
+		<Unit filename="C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/ini/ini_configuration.h">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/utils/vector3D.cc">
+		<Unit filename="C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/utils/Vector3D.cc">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/utils/vector3D.h">
+		<Unit filename="C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/utils/Vector3D.h">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/utils/l_parser/l_parser.cc">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/utils/l_parser/l_parser.h">
 			<Option target="engine"/>
 		</Unit>
 		<Unit filename="C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/CMakeLists.txt">

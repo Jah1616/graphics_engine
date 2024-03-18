@@ -1,12 +1,60 @@
 #pragma once
-#include "../ini_configuration.h"
-#include "../easy_image.h"
-#include "../utils/utils.h"
-#include "../utils/3DBodies.h"
-#include "../utils/3DTransformations.h"
-#include "../L-Systems/3D-L-System.h"
+#include "ini/ini_configuration.h"
+#include "easy_image.h"
+#include "utils/utils.h"
+#include "utils/L-Systems.h"
+#include "utils/3DBodies.h"
+#include "utils/3DTransformations.h"
 #include <cmath>
+#include <vector>
+#include <limits>
 
+
+img::EasyImage draw2DLines (const Lines2D &lines, const unsigned int size, const img::Color &bgColor){
+    // set min and max coords
+    auto xmin = std::numeric_limits<double>::max(); auto ymin = xmin;
+    auto xmax = std::numeric_limits<double>::min(); auto ymax = xmax;
+    for (const auto &line : lines){
+        xmin = std::min(xmin, std::min(line.p1.x, line.p2.x));
+        xmax = std::max(xmax, std::max(line.p1.x, line.p2.x));
+        ymin = std::min(ymin, std::min(line.p1.y, line.p2.y));
+        ymax = std::max(ymax, std::max(line.p1.y, line.p2.y));
+    }
+
+
+    const auto xrange = xmax - xmin;
+    const auto yrange = ymax - ymin;
+    const auto imagex = size * xrange / fmax(xrange, yrange);
+    const auto imagey = size * yrange / fmax(xrange, yrange);
+
+    img::EasyImage image(lround(imagex), lround(imagey));
+    image.clear(bgColor);
+
+    const auto scale = 0.95 * imagex / xrange;
+    const auto dx = (imagex - scale * (xmin + xmax)) / 2;
+    const auto dy = (imagey - scale * (ymin + ymax)) / 2;
+
+    for (auto line : lines){
+        line.p1.x *= scale; line.p1.y *= scale;
+        line.p2.x *= scale; line.p2.y *= scale;
+
+        line.p1.x += dx; line.p1.y += dy;
+        line.p2.x += dx; line.p2.y += dy;
+        image.draw_line(lround(line.p1.x), lround(line.p1.y), lround(line.p2.x), lround(line.p2.y),
+                        img::Color(lround(line.color.red*255), lround(line.color.green*255), lround(line.color.blue*255)));
+    }
+    return image;
+}
+
+img::EasyImage generate2DLSystemImage(const ini::Configuration &conf){
+    const auto size = conf["General"]["size"].as_int_or_die();
+    const auto bgColor = conf["General"]["backgroundcolor"].as_double_tuple_or_die();
+    const auto inputFile = conf["2DLSystem"]["inputfile"].as_string_or_die();
+    const auto lineColor = conf["2DLSystem"]["color"].as_double_tuple_or_die();
+
+    return draw2DLines(LSystem_2D(inputFile, Color(lineColor[0], lineColor[1], lineColor[2])),
+                       size, img::Color(lround(bgColor[0] * 255), lround(bgColor[1] * 255), lround(bgColor[2] * 255)));
+}
 
 img::EasyImage generateWireframeImage(const ini::Configuration &conf){
     const auto size = conf["General"]["size"].as_int_or_die();
@@ -71,7 +119,7 @@ img::EasyImage generateWireframeImage(const ini::Configuration &conf){
                                     conf[fig_string]["m"].as_int_or_die(),
                                     fig_color_obj);
         }
-        else if (fig_type == "3DLSystem") L3D_to_Figure3D(conf[fig_string]["inputfile"], newFigure);
+        else if (fig_type == "3DLSystem") LSystem_3D(conf[fig_string]["inputfile"], newFigure);
 
         auto transformMatrix = scale(fig_scale);
         transformMatrix *= rotateX(fig_rotateX);

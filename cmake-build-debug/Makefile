@@ -128,30 +128,6 @@ engine/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/build
 .PHONY : engine/fast
 
-L-Systems/l_parser/l_parser.obj: L-Systems/l_parser/l_parser.cc.obj
-.PHONY : L-Systems/l_parser/l_parser.obj
-
-# target to build an object file
-L-Systems/l_parser/l_parser.cc.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/L-Systems/l_parser/l_parser.cc.obj
-.PHONY : L-Systems/l_parser/l_parser.cc.obj
-
-L-Systems/l_parser/l_parser.i: L-Systems/l_parser/l_parser.cc.i
-.PHONY : L-Systems/l_parser/l_parser.i
-
-# target to preprocess a source file
-L-Systems/l_parser/l_parser.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/L-Systems/l_parser/l_parser.cc.i
-.PHONY : L-Systems/l_parser/l_parser.cc.i
-
-L-Systems/l_parser/l_parser.s: L-Systems/l_parser/l_parser.cc.s
-.PHONY : L-Systems/l_parser/l_parser.s
-
-# target to generate assembly for a file
-L-Systems/l_parser/l_parser.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/L-Systems/l_parser/l_parser.cc.s
-.PHONY : L-Systems/l_parser/l_parser.cc.s
-
 easy_image.obj: easy_image.cc.obj
 .PHONY : easy_image.obj
 
@@ -200,53 +176,77 @@ engine.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/engine.cc.s
 .PHONY : engine.cc.s
 
-ini_configuration.obj: ini_configuration.cc.obj
-.PHONY : ini_configuration.obj
+ini/ini_configuration.obj: ini/ini_configuration.cc.obj
+.PHONY : ini/ini_configuration.obj
 
 # target to build an object file
-ini_configuration.cc.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/ini_configuration.cc.obj
-.PHONY : ini_configuration.cc.obj
+ini/ini_configuration.cc.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/ini/ini_configuration.cc.obj
+.PHONY : ini/ini_configuration.cc.obj
 
-ini_configuration.i: ini_configuration.cc.i
-.PHONY : ini_configuration.i
+ini/ini_configuration.i: ini/ini_configuration.cc.i
+.PHONY : ini/ini_configuration.i
 
 # target to preprocess a source file
-ini_configuration.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/ini_configuration.cc.i
-.PHONY : ini_configuration.cc.i
+ini/ini_configuration.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/ini/ini_configuration.cc.i
+.PHONY : ini/ini_configuration.cc.i
 
-ini_configuration.s: ini_configuration.cc.s
-.PHONY : ini_configuration.s
+ini/ini_configuration.s: ini/ini_configuration.cc.s
+.PHONY : ini/ini_configuration.s
 
 # target to generate assembly for a file
-ini_configuration.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/ini_configuration.cc.s
-.PHONY : ini_configuration.cc.s
+ini/ini_configuration.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/ini/ini_configuration.cc.s
+.PHONY : ini/ini_configuration.cc.s
 
-utils/vector3D.obj: utils/vector3D.cc.obj
-.PHONY : utils/vector3D.obj
+utils/Vector3D.obj: utils/Vector3D.cc.obj
+.PHONY : utils/Vector3D.obj
 
 # target to build an object file
-utils/vector3D.cc.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/utils/vector3D.cc.obj
-.PHONY : utils/vector3D.cc.obj
+utils/Vector3D.cc.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/utils/Vector3D.cc.obj
+.PHONY : utils/Vector3D.cc.obj
 
-utils/vector3D.i: utils/vector3D.cc.i
-.PHONY : utils/vector3D.i
+utils/Vector3D.i: utils/Vector3D.cc.i
+.PHONY : utils/Vector3D.i
 
 # target to preprocess a source file
-utils/vector3D.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/utils/vector3D.cc.i
-.PHONY : utils/vector3D.cc.i
+utils/Vector3D.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/utils/Vector3D.cc.i
+.PHONY : utils/Vector3D.cc.i
 
-utils/vector3D.s: utils/vector3D.cc.s
-.PHONY : utils/vector3D.s
+utils/Vector3D.s: utils/Vector3D.cc.s
+.PHONY : utils/Vector3D.s
 
 # target to generate assembly for a file
-utils/vector3D.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/utils/vector3D.cc.s
-.PHONY : utils/vector3D.cc.s
+utils/Vector3D.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/utils/Vector3D.cc.s
+.PHONY : utils/Vector3D.cc.s
+
+utils/l_parser/l_parser.obj: utils/l_parser/l_parser.cc.obj
+.PHONY : utils/l_parser/l_parser.obj
+
+# target to build an object file
+utils/l_parser/l_parser.cc.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/utils/l_parser/l_parser.cc.obj
+.PHONY : utils/l_parser/l_parser.cc.obj
+
+utils/l_parser/l_parser.i: utils/l_parser/l_parser.cc.i
+.PHONY : utils/l_parser/l_parser.i
+
+# target to preprocess a source file
+utils/l_parser/l_parser.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/utils/l_parser/l_parser.cc.i
+.PHONY : utils/l_parser/l_parser.cc.i
+
+utils/l_parser/l_parser.s: utils/l_parser/l_parser.cc.s
+.PHONY : utils/l_parser/l_parser.s
+
+# target to generate assembly for a file
+utils/l_parser/l_parser.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/utils/l_parser/l_parser.cc.s
+.PHONY : utils/l_parser/l_parser.cc.s
 
 # Help Target
 help:
@@ -257,21 +257,21 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... engine
-	@echo ... L-Systems/l_parser/l_parser.obj
-	@echo ... L-Systems/l_parser/l_parser.i
-	@echo ... L-Systems/l_parser/l_parser.s
 	@echo ... easy_image.obj
 	@echo ... easy_image.i
 	@echo ... easy_image.s
 	@echo ... engine.obj
 	@echo ... engine.i
 	@echo ... engine.s
-	@echo ... ini_configuration.obj
-	@echo ... ini_configuration.i
-	@echo ... ini_configuration.s
-	@echo ... utils/vector3D.obj
-	@echo ... utils/vector3D.i
-	@echo ... utils/vector3D.s
+	@echo ... ini/ini_configuration.obj
+	@echo ... ini/ini_configuration.i
+	@echo ... ini/ini_configuration.s
+	@echo ... utils/Vector3D.obj
+	@echo ... utils/Vector3D.i
+	@echo ... utils/Vector3D.s
+	@echo ... utils/l_parser/l_parser.obj
+	@echo ... utils/l_parser/l_parser.i
+	@echo ... utils/l_parser/l_parser.s
 .PHONY : help
 
 
