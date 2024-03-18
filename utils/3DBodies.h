@@ -30,9 +30,9 @@ Figure3D createOctahedron(const Color& color){
 Figure3D createIcosahedron(const Color& color){
     std::vector<Vector3D> points;
     points.push_back(Vector3D::point(0, 0, sqrt(5)/2));
-    for (auto i=2 ; i<=6 ; ++i)
+    for (unsigned int i=2 ; i<=6 ; ++i)
         points.push_back(Vector3D::point(cos((i-2)*2*M_PI/5), sin((i-2)*2*M_PI/5), 0.5));
-    for (auto i=7 ; i<=11 ; ++i)
+    for (unsigned int i=7 ; i<=11 ; ++i)
         points.push_back(Vector3D::point(cos(M_PI/5 + (i-7)*2*M_PI/5),
                                          sin(M_PI/5 + (i-7)*2*M_PI/5),
                                          -0.5));
@@ -62,16 +62,16 @@ Figure3D createCylinder(const unsigned int n, const double h, const Color& color
     std::vector<Vector3D> points;
     std::vector<Face> faces;
     Face base;
-    for (auto i=0 ; i<n ; ++i){
+    for (unsigned int i=0 ; i<n ; ++i){
         points.push_back(Vector3D::point(cos(2*i*M_PI/n), sin(2*i*M_PI/n), 0));
         base.push_back(n-i-1);
     }
 
     Face top;
-    for (auto i=0 ; i<n ; ++i){
+    for (unsigned int i=0 ; i<n ; ++i){
         points.push_back(Vector3D::point(cos(2*i*M_PI/n), sin(2*i*M_PI/n), h));
         top.push_back(n+i);
-        faces.push_back({(unsigned int)i, (i+1)%n, (i+1)%n + n, i+n});
+        faces.push_back({i, (i+1)%n, (i+1)%n + n, i+n});
     }
     faces.push_back(base);
     faces.push_back(top);
@@ -84,9 +84,9 @@ Figure3D createCone(const unsigned int n, const double h, const Color& color){
     std::vector<Face> faces;
     Face base;
 
-    for (auto i=0 ; i<n ; ++i){
+    for (unsigned int i=0 ; i<n ; ++i){
         points.push_back(Vector3D::point(cos(2*i*M_PI/n), sin(2*i*M_PI/n), 0));
-        faces.push_back({(unsigned int)i, (i + 1) % n, n});
+        faces.push_back({i, (i + 1) % n, n});
         base.push_back(n-i-1);
     }
     points.push_back(Vector3D::point(0, 0, h));
@@ -97,7 +97,7 @@ Figure3D createCone(const unsigned int n, const double h, const Color& color){
 
 Figure3D createSphere(const unsigned int n, const Color& color){
     auto ico = createIcosahedron(color);
-    for (auto i=0 ; i<n ; ++i){
+    for (unsigned int i=0 ; i<n ; ++i){
         Figure3D nextIter{color};
         for (unsigned int idx=0 ; idx<ico.faces.size() ; ++idx){
             Face face = ico.faces[idx];
@@ -126,9 +126,9 @@ Figure3D createSphere(const unsigned int n, const Color& color){
 Figure3D createTorus(const double r, const double R, const unsigned int n, const unsigned int m, const Color& color){
     std::vector<Vector3D> points;
     std::vector<Face> faces;
-    for (auto i=0 ; i<n ; i++){
+    for (unsigned int i=0 ; i<n ; i++){
         auto u = 2*i*M_PI/n;
-        for (auto j=0 ; j<m ; j++){
+        for (unsigned int j=0 ; j<m ; j++){
             auto v = 2*j*M_PI/m;
             points.push_back(Vector3D::point((R+r*cos(v))*cos(u),
                                              (R+r*cos(v))*sin(u),

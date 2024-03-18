@@ -6,9 +6,11 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <chrono>
 
 
 img::EasyImage generate_image(const ini::Configuration &configuration) {
+
     img::EasyImage image;
     const auto type = configuration["General"]["type"].as_string_or_die();
 
@@ -21,6 +23,7 @@ img::EasyImage generate_image(const ini::Configuration &configuration) {
 
 int main(int argc, char const* argv[])
 {
+    auto start = std::chrono::high_resolution_clock::now();
         int retVal = 0;
         try
         {
@@ -94,5 +97,10 @@ int main(int argc, char const* argv[])
                 std::cerr << "Error: insufficient memory" << std::endl;
                 retVal = 100;
         }
-        return retVal;
+
+    auto stop = std::chrono::high_resolution_clock::now();
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+    std::cout << "Runtime: " << duration.count() << " milliseconds" << std::endl;
+
+    return retVal;
 }

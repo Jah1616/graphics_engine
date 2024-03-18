@@ -92,7 +92,7 @@ void LSystem_3D(const std::string& input, Figure3D& figure){
     const auto iterations = l_system.get_nr_iterations();
 
     // replacement
-    for (auto i=0 ; i<iterations ; i++){
+    for (unsigned int i=0 ; i<iterations ; i++){
         std::string newString;
         for (auto c : initiator){
             if (alphabet.find(c) == alphabet.end()) newString.push_back(c);

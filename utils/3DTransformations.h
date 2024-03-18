@@ -97,7 +97,7 @@ Lines2D doProjection(const Figures3D& figures){
     for (const auto& figure : figures){
         for (const auto& face : figure.faces){
             auto nrPoints = face.size();
-            for (auto i=0 ; i<nrPoints ; i++){
+            for (unsigned int i=0 ; i<nrPoints ; i++){
                 lines.emplace_back(doProjection(figure.points[face[i]]),
                                    doProjection(figure.points[face[(i+1) % nrPoints]]),
                                    figure.color);

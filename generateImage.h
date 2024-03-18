@@ -10,7 +10,7 @@
 #include <limits>
 
 
-img::EasyImage draw2DLines (const Lines2D &lines, const unsigned int size, const img::Color &bgColor){
+img::EasyImage draw2DLines (const Lines2D &lines, const int size, const img::Color &bgColor){
     // set min and max coords
     auto xmin = std::numeric_limits<double>::max(); auto ymin = xmin;
     auto xmax = std::numeric_limits<double>::min(); auto ymax = xmax;
