@@ -1,0 +1,22 @@
+Alphabet = {F}
+
+Draw = {
+        F -> 1
+}
+
+Rules = {
+        F -> "F(+F)F(-F)(F)"
+}
+
+Initiator     = "F"
+Angle         = 20
+StartingAngle = 90
+Iterations    = 4
+
+StochasticRules = {
+        F -> {
+                "F(+F)F(-F)F" : 0.33,
+                "F(+F)F" : 0.33,
+                "F(-F)F" : 0.34
+        }
+}

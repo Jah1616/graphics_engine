@@ -1,5 +1,6 @@
 #pragma once
-#include "../utils/utils.h"
+#include "utils.h"
+#include<cmath>
 
 
 Figure3D createCube(const Color& color){
@@ -29,14 +30,12 @@ Figure3D createOctahedron(const Color& color){
 Figure3D createIcosahedron(const Color& color){
     std::vector<Vector3D> points;
     points.push_back(Vector3D::point(0, 0, sqrt(5)/2));
-    for (unsigned int i=2 ; i<=6 ; ++i){
+    for (auto i=2 ; i<=6 ; ++i)
         points.push_back(Vector3D::point(cos((i-2)*2*M_PI/5), sin((i-2)*2*M_PI/5), 0.5));
-    }
-    for (unsigned int i=7 ; i<=11 ; ++i){
+    for (auto i=7 ; i<=11 ; ++i)
         points.push_back(Vector3D::point(cos(M_PI/5 + (i-7)*2*M_PI/5),
                                          sin(M_PI/5 + (i-7)*2*M_PI/5),
                                          -0.5));
-    }
     points.push_back(Vector3D::point(0, 0, -sqrt(5)/2));
 
     return {points,
@@ -46,13 +45,12 @@ Figure3D createIcosahedron(const Color& color){
 }
 
 Figure3D createDodecahedron(const Color& color){
-    Figure3D ico = createIcosahedron({0, 0, 0});
+    auto ico = createIcosahedron({0, 0, 0});
     std::vector<Vector3D> points;
-    for (Face face : ico.faces){
+    for (const auto &face : ico.faces)
         points.push_back(Vector3D::point((ico.points[face[0]].x + ico.points[face[1]].x + ico.points[face[2]].x)/3,
                                          (ico.points[face[0]].y + ico.points[face[1]].y + ico.points[face[2]].y)/3,
                                          (ico.points[face[0]].z + ico.points[face[1]].z + ico.points[face[2]].z)/3));
-    }
 
     return {points,
             {{0,1,2,3,4}, {0,5,6,7,1}, {1,7,8,9,2}, {2,9,10,11,3}, {3,11,12,13,4}, {4,13,14,5,0},
@@ -64,16 +62,16 @@ Figure3D createCylinder(const unsigned int n, const double h, const Color& color
     std::vector<Vector3D> points;
     std::vector<Face> faces;
     Face base;
-    for (unsigned int i=0 ; i<n ; ++i){
+    for (auto i=0 ; i<n ; ++i){
         points.push_back(Vector3D::point(cos(2*i*M_PI/n), sin(2*i*M_PI/n), 0));
         base.push_back(n-i-1);
     }
 
     Face top;
-    for (unsigned int i=0 ; i<n ; ++i){
+    for (auto i=0 ; i<n ; ++i){
         points.push_back(Vector3D::point(cos(2*i*M_PI/n), sin(2*i*M_PI/n), h));
         top.push_back(n+i);
-        faces.push_back({i, (i+1)%n, (i+1)%n + n, i+n});
+        faces.push_back({(unsigned int)i, (i+1)%n, (i+1)%n + n, i+n});
     }
     faces.push_back(base);
     faces.push_back(top);
@@ -86,9 +84,9 @@ Figure3D createCone(const unsigned int n, const double h, const Color& color){
     std::vector<Face> faces;
     Face base;
 
-    for (unsigned int i=0 ; i<n ; ++i){
+    for (auto i=0 ; i<n ; ++i){
         points.push_back(Vector3D::point(cos(2*i*M_PI/n), sin(2*i*M_PI/n), 0));
-        faces.push_back({i, (i + 1) % n, n});
+        faces.push_back({(unsigned int)i, (i + 1) % n, n});
         base.push_back(n-i-1);
     }
     points.push_back(Vector3D::point(0, 0, h));
@@ -98,8 +96,8 @@ Figure3D createCone(const unsigned int n, const double h, const Color& color){
 }
 
 Figure3D createSphere(const unsigned int n, const Color& color){
-    Figure3D ico = createIcosahedron(color);
-    for (unsigned int i=0 ; i<n ; ++i){
+    auto ico = createIcosahedron(color);
+    for (auto i=0 ; i<n ; ++i){
         Figure3D nextIter{color};
         for (unsigned int idx=0 ; idx<ico.faces.size() ; ++idx){
             Face face = ico.faces[idx];
@@ -128,10 +126,10 @@ Figure3D createSphere(const unsigned int n, const Color& color){
 Figure3D createTorus(const double r, const double R, const unsigned int n, const unsigned int m, const Color& color){
     std::vector<Vector3D> points;
     std::vector<Face> faces;
-    for (unsigned int i=0 ; i<n ; i++){
-        double u = 2*i*M_PI/n;
-        for (unsigned int j=0 ; j<m ; j++){
-            double v = 2*j*M_PI/m;
+    for (auto i=0 ; i<n ; i++){
+        auto u = 2*i*M_PI/n;
+        for (auto j=0 ; j<m ; j++){
+            auto v = 2*j*M_PI/m;
             points.push_back(Vector3D::point((R+r*cos(v))*cos(u),
                                              (R+r*cos(v))*sin(u),
                                              r*sin(v)));

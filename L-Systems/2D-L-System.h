@@ -2,7 +2,6 @@
 #include "l_parser/l_parser.h"
 #include "../utils/utils.h"
 #include <string>
-#include <cmath>
 #include <fstream>
 #include <stack>
 #include <random>
@@ -16,25 +15,24 @@ std::uniform_real_distribution<double> dis(0.0, 1.0);
 Lines2D L2D_to_Lines2D(const std::string &input, const Color &lineColor){
     LParser::LSystem2D l_system;
     std::ifstream input_stream(input);
-    input_stream >> l_system;input_stream.close();
+    input_stream >> l_system;
+    input_stream.close();
 
     // get constants
-    const std::set<char> alphabet = l_system.get_alphabet();
-    std::string initiator = l_system.get_initiator();
-    const unsigned int iterations = l_system.get_nr_iterations();
+    const auto alphabet = l_system.get_alphabet();
+    auto initiator = l_system.get_initiator();
+    const auto iterations = l_system.get_nr_iterations();
 
     // replacement
-    for (int i=0 ; i<iterations ; i++){
-        std::string newString{};
+    for (auto i=0 ; i<iterations ; i++){
+        std::string newString;
         for (auto c : initiator){
-            if (alphabet.find(c) == alphabet.end()){
-                newString.push_back(c);
-            }
+            if (alphabet.find(c) == alphabet.end()) newString.push_back(c);
             else {
-                if (l_system.chances.find(c) == l_system.chances.end()){
+                if (l_system.chances.find(c) == l_system.chances.end())
                     newString.append(l_system.get_replacement(c));
-                } else {
-                    double rand = dis(gen);
+                else {
+                    auto rand = dis(gen);
                     for (const auto &replacement : l_system.get_chances(c)){
                         rand -= replacement.second;
                         if (rand <= 0){
@@ -49,15 +47,15 @@ Lines2D L2D_to_Lines2D(const std::string &input, const Color &lineColor){
     }
 
     // parse string
-    const double angle = l_system.get_angle() * M_PI/180;
-    double currentAngle = l_system.get_starting_angle() * M_PI/180;
+    const auto angle = l_system.get_angle() * M_PI/180;
+    auto currentAngle = l_system.get_starting_angle() * M_PI/180;
     Lines2D out;
     Point2D p1(0, 0);
     Point2D p2(0, 0);
     std::stack<Point2D> pointsStack;
     std::stack<double> angleStack;
 
-    for (char c : initiator){
+    for (auto c : initiator){
         if (alphabet.find(c) == alphabet.end()){
             if (c == '-') currentAngle -= angle;
             if (c == '+') currentAngle += angle;

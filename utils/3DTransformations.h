@@ -1,15 +1,14 @@
 #pragma once
-#include "../utils/utils.h"
-#include <vector>
-#include <list>
+#include "utils.h"
 #include <cmath>
 
+
 void applyTransform(Figure3D& f, const Matrix& m){
-    for (Vector3D& point : f.points) point *= m;
+    for (auto& point : f.points) point *= m;
 }
 
 void applyTransform(Figures3D& f, const Matrix& m){
-    for (Figure3D& figure : f) applyTransform(figure, m);
+    for (auto& figure : f) applyTransform(figure, m);
 }
 
 Matrix scale(const double factor){
@@ -67,7 +66,7 @@ Matrix translate(const Vector3D& vector){
 }
 
 void toPolar(const Vector3D& point, double &theta, double &phi, double &r){
-    r = sqrt(pow(point.x, 2) + pow(point.y, 2) + pow(point.z, 2));
+    r = point.length();
     theta = std::atan2(point.y, point.x);
     phi = std::acos(point.z / r);
 }
@@ -95,10 +94,10 @@ Point2D doProjection(const Vector3D& point, const double d = 1){
 
 Lines2D doProjection(const Figures3D& figures){
     Lines2D lines;
-    for (const Figure3D& figure : figures){
-        for (const Face& face : figure.faces){
-            unsigned int nrPoints = face.size();
-            for (unsigned int i=0 ; i<nrPoints ; i++){
+    for (const auto& figure : figures){
+        for (const auto& face : figure.faces){
+            auto nrPoints = face.size();
+            for (auto i=0 ; i<nrPoints ; i++){
                 lines.emplace_back(doProjection(figure.points[face[i]]),
                                    doProjection(figure.points[face[(i+1) % nrPoints]]),
                                    figure.color);
