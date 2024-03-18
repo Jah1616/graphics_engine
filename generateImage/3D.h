@@ -1,11 +1,10 @@
 #pragma once
-#include "../utils/utils.hpp"
+#include "../utils/utils.h"
 #include "../ini_configuration.h"
 #include "../easy_image.h"
-#include "../3D/3DBodies.hpp"
-#include "../3D/3DTransformations.hpp"
-#include "../L-Systems/3D-L-System.hpp"
-#include <cmath>
+#include "../3D/3DBodies.h"
+#include "../3D/3DTransformations.h"
+#include "../L-Systems/3D-L-System.h"
 
 
 img::EasyImage generateWireframeImage(const ini::Configuration &conf){
@@ -47,7 +46,6 @@ img::EasyImage generateWireframeImage(const ini::Configuration &conf){
                 newFigure.faces.push_back(newFace);
             }
         }
-
         else if (fig_type == "Cube") newFigure = createCube(fig_color_obj);
         else if (fig_type == "Tetrahedron") newFigure = createTetrahedron(fig_color_obj);
         else if (fig_type == "Octahedron") newFigure = createOctahedron(fig_color_obj);
@@ -73,13 +71,16 @@ img::EasyImage generateWireframeImage(const ini::Configuration &conf){
                                     conf[fig_string]["m"].as_int_or_die(),
                                     fig_color_obj);
         }
-        else if (fig_string == "3DLSystem")
+        else if (fig_type == "3DLSystem") L3D_to_Figure3D(conf[fig_string]["inputfile"], newFigure);
 
-            applyTransform(newFigure, scale(fig_scale)
-                                      *rotateX(fig_rotateX)*rotateY(fig_rotateY)*rotateZ(fig_rotateZ)
-                                      *translate(fig_centerPoint)
-                                      *eyePointTrans(eyePoint));
+        Matrix transformMatrix = scale(fig_scale);
+        transformMatrix *= rotateX(fig_rotateX);
+        transformMatrix *= rotateY(fig_rotateY);
+        transformMatrix *= rotateZ(fig_rotateZ);
+        transformMatrix *= translate(fig_centerPoint);
+        transformMatrix *= eyePointTrans(eyePoint);
 
+        applyTransform(newFigure, transformMatrix);
         figures.push_back(newFigure);
     }
 

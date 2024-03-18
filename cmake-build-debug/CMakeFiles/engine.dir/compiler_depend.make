@@ -508,16 +508,16 @@ CMakeFiles/engine.dir/engine.cc.obj: C:/Users/jahso/Documents/School/ComputerGra
   C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_map.h \
   C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_multimap.h \
   C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/erase_if.h \
-  C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/generateImage/2D.hpp \
+  C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/generateImage/2D.h \
   C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/ini_configuration.h \
   C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/easy_image.h \
-  C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/utils/utils.hpp \
+  C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/utils/utils.h \
   C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/utils/vector3D.h \
   C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/list \
   C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_list.h \
   C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/allocated_ptr.h \
   C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/list.tcc \
-  C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/L-Systems/2D-L-System.hpp \
+  C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/L-Systems/2D-L-System.h \
   C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/L-Systems/l_parser/l_parser.h \
   C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/set \
   C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_set.h \
@@ -563,10 +563,10 @@ CMakeFiles/engine.dir/engine.cc.obj: C:/Users/jahso/Documents/School/ComputerGra
   C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_numeric.h \
   C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/pstl/glue_numeric_defs.h \
   C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/pstl/execution_defs.h \
-  C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/generateImage/3D.hpp \
-  C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/3D/3DBodies.hpp \
-  C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/3D/3DTransformations.hpp \
-  C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/L-Systems/3D-L-System.hpp
+  C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/generateImage/3D.h \
+  C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/3D/3DBodies.h \
+  C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/3D/3DTransformations.h \
+  C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/L-Systems/3D-L-System.h
 
 CMakeFiles/engine.dir/ini_configuration.cc.obj: C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/ini_configuration.cc \
   C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/ini_configuration.h \
@@ -1093,6 +1093,8 @@ C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32
 
 C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/node_handle.h:
 
+C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/L-Systems/3D-L-System.h:
+
 C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/initializer_list:
 
 C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/allocated_ptr.h:
@@ -1367,6 +1369,8 @@ C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32
 
 C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/tr1/special_function_util.h:
 
+C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/3D/3DTransformations.h:
+
 C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/stack:
 
 C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/tr1/ell_integral.tcc:
@@ -1383,15 +1387,15 @@ C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32
 
 C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/engine.cc:
 
-C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/generateImage/2D.hpp:
+C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/generateImage/2D.h:
 
-C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/utils/utils.hpp:
+C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/utils/utils.h:
 
 C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/list:
 
 C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/bits/stl_list.h:
 
-C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/L-Systems/2D-L-System.hpp:
+C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/L-Systems/2D-L-System.h:
 
 C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/fstream:
 
@@ -1425,13 +1429,9 @@ C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32
 
 C:/Program\ Files/JetBrains/CLion\ 2023.2.2/bin/mingw/lib/gcc/x86_64-w64-mingw32/13.1.0/include/c++/pstl/glue_numeric_defs.h:
 
-C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/generateImage/3D.hpp:
+C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/generateImage/3D.h:
 
-C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/3D/3DBodies.hpp:
-
-C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/3D/3DTransformations.hpp:
-
-C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/L-Systems/3D-L-System.hpp:
+C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/3D/3DBodies.h:
 
 C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/ini_configuration.cc:
 

@@ -1,9 +1,8 @@
 #pragma once
 #include "../ini_configuration.h"
 #include "../easy_image.h"
-#include "../utils/utils.hpp"
-#include "../L-Systems/2D-L-System.hpp"
-#include <cmath>
+#include "../utils/utils.h"
+#include "../L-Systems/2D-L-System.h"
 
 
 img::EasyImage draw2DLines (const Lines2D &lines, const unsigned int size, const img::Color &bgColor){

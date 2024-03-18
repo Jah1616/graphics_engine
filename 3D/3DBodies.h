@@ -1,5 +1,5 @@
 #pragma once
-#include "../utils/utils.hpp"
+#include "../utils/utils.h"
 
 
 Figure3D createCube(const Color& color){
