@@ -47,8 +47,8 @@ Lines2D LSystem_2D(const std::string &input, const Color &lineColor){
     }
 
     // parse string
-    const double angle = l_system.get_angle() * M_PI/180;
-    double currentAngle = l_system.get_starting_angle() * M_PI/180;
+    const double angle = toRadian(l_system.get_angle());
+    double currentAngle = toRadian(l_system.get_starting_angle());
     Lines2D out;
     Point2D p1(0, 0);
     Point2D p2(0, 0);
@@ -102,7 +102,7 @@ void LSystem_3D(Figure3D& figure, const std::string& input){
     }
 
     // parse string
-    const double angle = l_system.get_angle() * M_PI / 180;
+    const double angle = toRadian(l_system.get_angle());
     Vector3D H = Vector3D::vector(1, 0, 0);
     Vector3D L = Vector3D::vector(0, 1, 0);
     Vector3D U = Vector3D::vector(0, 0, 1);

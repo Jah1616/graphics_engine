@@ -46,10 +46,7 @@ void createDodecahedron(Figure3D& figure){
     figure.points.clear(); figure.faces.clear();
     Figure3D ico(figure.color); createIcosahedron(ico);
 
-    for (const Face &face : ico.faces)
-        figure.points.push_back(Vector3D::point((ico.points[face[0]].x + ico.points[face[1]].x + ico.points[face[2]].x)/3,
-                                         (ico.points[face[0]].y + ico.points[face[1]].y + ico.points[face[2]].y)/3,
-                                         (ico.points[face[0]].z + ico.points[face[1]].z + ico.points[face[2]].z)/3));
+    for (const Face &face : ico.faces) figure.points.push_back((ico.points[face[0]]+ico.points[face[1]]+ico.points[face[2]])/3);
 
     figure.faces = {{0,1,2,3,4}, {0,5,6,7,1}, {1,7,8,9,2}, {2,9,10,11,3}, {3,11,12,13,4}, {4,13,14,5,0},
                     {19,18,17,16,15}, {19,14,13,12,18}, {18,12,11,10,17}, {17,10,9,8,16}, {16,8,7,6,15}, {15,6,5,14,19}};
@@ -91,8 +88,8 @@ void createSphere(Figure3D& figure, const unsigned int n){
     figure.points.clear(); figure.faces.clear();
     Figure3D ico(figure.color); createIcosahedron(ico);
     for (unsigned int i=0 ; i<n ; ++i){
-        for (unsigned int idx=0 ; idx<ico.faces.size() ; ++idx){
-            Face face = ico.faces[idx];
+        unsigned int idx=0;
+        for (const Face& face : ico.faces){
             Vector3D a = ico.points[face[0]];
             Vector3D b = ico.points[face[1]];
             Vector3D c = ico.points[face[2]];
@@ -100,14 +97,15 @@ void createSphere(Figure3D& figure, const unsigned int n){
             figure.points.push_back(a);
             figure.points.push_back(b);
             figure.points.push_back(c);
-            figure.points.push_back(Vector3D::point((a.x + b.x) / 2, (a.y + b.y) / 2, (a.z + b.z) / 2)); // d
-            figure.points.push_back(Vector3D::point((a.x + c.x) / 2, (a.y + c.y) / 2, (a.z + c.z) / 2)); // e
-            figure.points.push_back(Vector3D::point((c.x + b.x) / 2, (c.y + b.y) / 2, (c.z + b.z) / 2)); // f
+            figure.points.push_back((a+b)/2); // d
+            figure.points.push_back((a+c)/2); // e
+            figure.points.push_back((b+c)/2); // f
 
             figure.faces.push_back({6 * idx + 0, 6 * idx + 3, 6 * idx + 4}); //ADE
             figure.faces.push_back({6 * idx + 1, 6 * idx + 5, 6 * idx + 3}); //BFD
             figure.faces.push_back({6 * idx + 2, 6 * idx + 4, 6 * idx + 5}); //CEF
             figure.faces.push_back({6 * idx + 3, 6 * idx + 5, 6 * idx + 4}); //DFE
+            ++idx;
         }
         ico = figure;
     }

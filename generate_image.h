@@ -6,7 +6,7 @@
 #include "easy_image.h"
 #include "utils/utils.h"
 #include "utils/l-systems.h"
-#include "utils/3d_bodies.h"
+#include "utils/platonic_bodies.h"
 #include "utils/3d_transformations.h"
 
 
@@ -70,9 +70,9 @@ void generateWireframeImage(img::EasyImage& image, const ini::Configuration &con
         const std::string fig_type = conf[fig_string]["type"].as_string_or_die();
 
         const double fig_scale = conf[fig_string]["scale"].as_double_or_die();
-        const double fig_rotateX = conf[fig_string]["rotateX"].as_double_or_die() * M_PI/180;
-        const double fig_rotateY = conf[fig_string]["rotateY"].as_double_or_die() * M_PI/180;
-        const double fig_rotateZ = conf[fig_string]["rotateZ"].as_double_or_die() * M_PI/180;
+        const double fig_rotateX = toRadian(conf[fig_string]["rotateX"].as_double_or_die());
+        const double fig_rotateY = toRadian(conf[fig_string]["rotateY"].as_double_or_die());
+        const double fig_rotateZ = toRadian(conf[fig_string]["rotateZ"].as_double_or_die());
         const std::vector<double> fig_centerCoords = conf[fig_string]["center"].as_double_tuple_or_die();
         const Vector3D fig_centerPoint = Vector3D::point(fig_centerCoords[0], fig_centerCoords[1], fig_centerCoords[2]);
         const std::vector<double> fig_color = conf[fig_string]["color"].as_double_tuple_or_die();

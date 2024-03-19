@@ -4,6 +4,9 @@
 #include "vector3d.h"
 
 
+double toRadian(double x) {return x * M_PI / 180;}
+double toDegrees(double x) {return x / M_PI * 180;}
+
 struct Color{
     Color(double red, double green, double blue) :red(red) ,green(green) ,blue(blue) {}
     double red;
