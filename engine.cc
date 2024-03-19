@@ -1,21 +1,19 @@
-#include "easy_image.h"
-#include "ini/ini_configuration.h"
-#include "generateImage.h"
-
 #include <fstream>
 #include <iostream>
 #include <string>
 #include <vector>
 #include <chrono>
+#include "easy_image.h"
+#include "ini/ini_configuration.h"
+#include "generate_image.h"
 
 
-img::EasyImage generate_image(const ini::Configuration &configuration) {
-
+img::EasyImage generate_image(const ini::Configuration &configuration){
     img::EasyImage image;
     const auto type = configuration["General"]["type"].as_string_or_die();
 
-    if (type == "2DLSystem") image = generate2DLSystemImage(configuration);
-    if (type == "Wireframe") image = generateWireframeImage(configuration);
+    if (type == "2DLSystem") generate2DLSystemImage(image, configuration);
+    if (type == "Wireframe") generateWireframeImage(image, configuration);
 
 	return image;
 }

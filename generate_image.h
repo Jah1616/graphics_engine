@@ -1,16 +1,17 @@
 #pragma once
-#include "ini/ini_configuration.h"
-#include "easy_image.h"
-#include "utils/utils.h"
-#include "utils/L-Systems.h"
-#include "utils/3DBodies.h"
-#include "utils/3DTransformations.h"
 #include <cmath>
 #include <vector>
 #include <limits>
+#include "ini/ini_configuration.h"
+#include "easy_image.h"
+#include "utils/utils.h"
+#include "utils/l-systems.h"
+#include "utils/3d_bodies.h"
+#include "utils/3d_transformations.h"
 
 
-img::EasyImage draw2DLines (const Lines2D &lines, const int size, const img::Color &bgColor){
+void draw2DLines (img::EasyImage& image, const int size, const Lines2D &lines,
+                  const double bgRed, const double bgGreen, const double bgBlue){
     // set min and max coords
     auto xmin = std::numeric_limits<double>::max(); auto ymin = xmin;
     auto xmax = std::numeric_limits<double>::min(); auto ymax = xmax;
@@ -27,8 +28,8 @@ img::EasyImage draw2DLines (const Lines2D &lines, const int size, const img::Col
     const auto imagex = size * xrange / fmax(xrange, yrange);
     const auto imagey = size * yrange / fmax(xrange, yrange);
 
-    img::EasyImage image(lround(imagex), lround(imagey));
-    image.clear(bgColor);
+    image = img::EasyImage(lround(imagex), lround(imagey));
+    image.clear(img::Color(lround(bgRed*255), lround(bgGreen*255), lround(bgBlue*255)));
 
     const auto scale = 0.95 * imagex / xrange;
     const auto dx = (imagex - scale * (xmin + xmax)) / 2;
@@ -43,20 +44,20 @@ img::EasyImage draw2DLines (const Lines2D &lines, const int size, const img::Col
         image.draw_line(lround(line.p1.x), lround(line.p1.y), lround(line.p2.x), lround(line.p2.y),
                         img::Color(lround(line.color.red*255), lround(line.color.green*255), lround(line.color.blue*255)));
     }
-    return image;
 }
 
-img::EasyImage generate2DLSystemImage(const ini::Configuration &conf){
+void generate2DLSystemImage(img::EasyImage& image, const ini::Configuration &conf){
     const auto size = conf["General"]["size"].as_int_or_die();
     const auto bgColor = conf["General"]["backgroundcolor"].as_double_tuple_or_die();
     const auto inputFile = conf["2DLSystem"]["inputfile"].as_string_or_die();
     const auto lineColor = conf["2DLSystem"]["color"].as_double_tuple_or_die();
 
-    return draw2DLines(LSystem_2D(inputFile, Color(lineColor[0], lineColor[1], lineColor[2])),
-                       size, img::Color(lround(bgColor[0] * 255), lround(bgColor[1] * 255), lround(bgColor[2] * 255)));
+    draw2DLines(image, size,
+                LSystem_2D(inputFile, Color(lineColor[0], lineColor[1], lineColor[2])),
+                bgColor[0], bgColor[1], bgColor[2]);
 }
 
-img::EasyImage generateWireframeImage(const ini::Configuration &conf){
+void generateWireframeImage(img::EasyImage& image, const ini::Configuration &conf){
     const auto size = conf["General"]["size"].as_int_or_die();
     const auto bgColor = conf["General"]["backgroundcolor"].as_double_tuple_or_die();
     const auto nrFigs = conf["General"]["nrFigures"].as_int_or_die();
@@ -94,32 +95,21 @@ img::EasyImage generateWireframeImage(const ini::Configuration &conf){
                 newFigure.faces.push_back(newFace);
             }
         }
-        else if (fig_type == "Cube") newFigure = createCube(fig_color_obj);
-        else if (fig_type == "Tetrahedron") newFigure = createTetrahedron(fig_color_obj);
-        else if (fig_type == "Octahedron") newFigure = createOctahedron(fig_color_obj);
-        else if (fig_type == "Icosahedron") newFigure = createIcosahedron(fig_color_obj);
-        else if (fig_type == "Dodecahedron") newFigure = createDodecahedron(fig_color_obj);
-        else if (fig_type == "Cylinder"){
-            newFigure = createCylinder(conf[fig_string]["n"].as_int_or_die(),
-                                       conf[fig_string]["height"].as_double_or_die(),
-                                       fig_color_obj);
-        }
-        else if (fig_type == "Cone"){
-            newFigure = createCone(conf[fig_string]["n"].as_int_or_die(),
-                                   conf[fig_string]["height"].as_double_or_die(),
-                                   fig_color_obj);
-        }
-        else if (fig_type == "Sphere"){
-            newFigure = createSphere(conf[fig_string]["n"].as_int_or_die(), fig_color_obj);
-        }
-        else if (fig_type == "Torus"){
-            newFigure = createTorus(conf[fig_string]["r"].as_double_or_die(),
-                                    conf[fig_string]["R"].as_double_or_die(),
-                                    conf[fig_string]["n"].as_int_or_die(),
-                                    conf[fig_string]["m"].as_int_or_die(),
-                                    fig_color_obj);
-        }
-        else if (fig_type == "3DLSystem") LSystem_3D(conf[fig_string]["inputfile"], newFigure);
+        else if (fig_type == "Cube") createCube(newFigure);
+        else if (fig_type == "Tetrahedron") createTetrahedron(newFigure);
+        else if (fig_type == "Octahedron") createOctahedron(newFigure);
+        else if (fig_type == "Icosahedron") createIcosahedron(newFigure);
+        else if (fig_type == "Dodecahedron") createDodecahedron(newFigure);
+        else if (fig_type == "Cylinder") createCylinder(newFigure, conf[fig_string]["n"].as_int_or_die(),
+                                                        conf[fig_string]["height"].as_double_or_die());
+        else if (fig_type == "Cone") createCone(newFigure, conf[fig_string]["n"].as_int_or_die(),
+                                                conf[fig_string]["height"].as_double_or_die());
+        else if (fig_type == "Sphere") createSphere(newFigure, conf[fig_string]["n"].as_int_or_die());
+        else if (fig_type == "Torus") createTorus(newFigure, conf[fig_string]["r"].as_double_or_die(),
+                                                  conf[fig_string]["R"].as_double_or_die(),
+                                                  conf[fig_string]["n"].as_int_or_die(),
+                                                  conf[fig_string]["m"].as_int_or_die());
+        else if (fig_type == "3DLSystem") LSystem_3D(newFigure, conf[fig_string]["inputfile"]);
 
         auto transformMatrix = scale(fig_scale);
         transformMatrix *= rotateX(fig_rotateX);
@@ -132,7 +122,5 @@ img::EasyImage generateWireframeImage(const ini::Configuration &conf){
         figures.push_back(newFigure);
     }
 
-    return draw2DLines(doProjection(figures), size, img::Color(lround(bgColor[0] * 255),
-                                                               lround(bgColor[1] * 255),
-                                                               lround(bgColor[2] * 255)));
+    draw2DLines(image, size, doProjection(figures), bgColor[0], bgColor[1], bgColor[2]);
 }

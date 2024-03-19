@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Vector3D.h"
+#include "vector3d.h"
 
 #include <cassert>
 #include <cmath>

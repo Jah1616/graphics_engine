@@ -1,6 +1,6 @@
 #pragma once
-#include "utils.h"
 #include <cmath>
+#include "utils.h"
 
 
 void applyTransform(Figure3D& f, const Matrix& m){

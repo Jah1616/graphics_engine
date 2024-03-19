@@ -1,10 +1,10 @@
 #pragma once
-#include "l_parser/l_parser.h"
-#include "../utils/utils.h"
 #include <string>
 #include <fstream>
 #include <stack>
 #include <random>
+#include "l_parser/l_parser.h"
+#include "../utils/utils.h"
 
 
 // SOURCE: ChatGPT
@@ -81,7 +81,7 @@ Lines2D LSystem_2D(const std::string &input, const Color &lineColor){
     return out;
 }
 
-void LSystem_3D(const std::string& input, Figure3D& figure){
+void LSystem_3D(Figure3D& figure, const std::string& input){
     LParser::LSystem3D l_system;
     std::ifstream input_stream(input);
     input_stream >> l_system;input_stream.close();

@@ -7,4 +7,4 @@ add_executable(engine easy_image.cc
         ini/ini_configuration.cc
         engine.cc
         utils/l_parser/l_parser.cc
-        utils/Vector3D.cc)
+        utils/vector3d.cc)
