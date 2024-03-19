@@ -19,20 +19,20 @@ Lines2D LSystem_2D(const std::string &input, const Color &lineColor){
     input_stream.close();
 
     // get constants
-    const auto alphabet = l_system.get_alphabet();
-    auto initiator = l_system.get_initiator();
-    const auto iterations = l_system.get_nr_iterations();
+    const std::set<char> alphabet = l_system.get_alphabet();
+    std::string initiator = l_system.get_initiator();
+    const unsigned int iterations = l_system.get_nr_iterations();
 
     // replacement
-    for (auto i=0 ; i<iterations ; i++){
+    for (unsigned int i=0 ; i<iterations ; i++){
         std::string newString;
-        for (auto c : initiator){
+        for (char c : initiator){
             if (alphabet.find(c) == alphabet.end()) newString.push_back(c);
             else {
                 if (l_system.chances.find(c) == l_system.chances.end())
                     newString.append(l_system.get_replacement(c));
                 else {
-                    auto rand = dis(gen);
+                    double rand = dis(gen);
                     for (const auto &replacement : l_system.get_chances(c)){
                         rand -= replacement.second;
                         if (rand <= 0){
@@ -47,15 +47,15 @@ Lines2D LSystem_2D(const std::string &input, const Color &lineColor){
     }
 
     // parse string
-    const auto angle = l_system.get_angle() * M_PI/180;
-    auto currentAngle = l_system.get_starting_angle() * M_PI/180;
+    const double angle = l_system.get_angle() * M_PI/180;
+    double currentAngle = l_system.get_starting_angle() * M_PI/180;
     Lines2D out;
     Point2D p1(0, 0);
     Point2D p2(0, 0);
     std::stack<Point2D> pointsStack;
     std::stack<double> angleStack;
 
-    for (auto c : initiator){
+    for (char c : initiator){
         if (alphabet.find(c) == alphabet.end()){
             if (c == '-') currentAngle -= angle;
             if (c == '+') currentAngle += angle;
@@ -87,14 +87,14 @@ void LSystem_3D(Figure3D& figure, const std::string& input){
     input_stream >> l_system;input_stream.close();
 
     // get constants
-    const auto alphabet = l_system.get_alphabet();
-    auto initiator = l_system.get_initiator();
-    const auto iterations = l_system.get_nr_iterations();
+    const std::set<char> alphabet = l_system.get_alphabet();
+    std::string initiator = l_system.get_initiator();
+    const unsigned int iterations = l_system.get_nr_iterations();
 
     // replacement
     for (unsigned int i=0 ; i<iterations ; i++){
         std::string newString;
-        for (auto c : initiator){
+        for (char c : initiator){
             if (alphabet.find(c) == alphabet.end()) newString.push_back(c);
             else newString.append(l_system.get_replacement(c));
         }
@@ -102,47 +102,47 @@ void LSystem_3D(Figure3D& figure, const std::string& input){
     }
 
     // parse string
-    const auto angle = l_system.get_angle() * M_PI / 180;
-    auto H = Vector3D::vector(1, 0, 0);
-    auto L = Vector3D::vector(0, 1, 0);
-    auto U = Vector3D::vector(0, 0, 1);
-    auto p1 = Vector3D::point(0, 0, 0);
-    auto p2 = Vector3D::point(0, 0, 0);
+    const double angle = l_system.get_angle() * M_PI / 180;
+    Vector3D H = Vector3D::vector(1, 0, 0);
+    Vector3D L = Vector3D::vector(0, 1, 0);
+    Vector3D U = Vector3D::vector(0, 0, 1);
+    Vector3D p1 = Vector3D::point(0, 0, 0);
+    Vector3D p2 = Vector3D::point(0, 0, 0);
 
     std::stack<Vector3D> vectorStack;
     std::stack<Vector3D> pointsStack;
     unsigned int index = 0;
 
-    for (auto c : initiator){
+    for (char c : initiator){
         if (alphabet.find(c) == alphabet.end()){
             if (c == '+'){ // turn left
-                auto Hnew = H*cos(angle) + L*sin(angle);
-                auto Lnew = -H*sin(angle) + L*cos(angle);
+                Vector3D Hnew = H*cos(angle) + L*sin(angle);
+                Vector3D Lnew = -H*sin(angle) + L*cos(angle);
                 H=Hnew; L=Lnew;
             }
             else if (c == '-'){ // turn right
-                auto Hnew = H*cos(-angle) + L*sin(-angle);
-                auto Lnew = -H*sin(-angle) + L*cos(-angle);
+                Vector3D Hnew = H*cos(-angle) + L*sin(-angle);
+                Vector3D Lnew = -H*sin(-angle) + L*cos(-angle);
                 H=Hnew; L=Lnew;
             }
             else if (c == '^'){ // pitch up
-                auto Hnew = H*cos(angle) + U*sin(angle);
-                auto Unew = -H*sin(angle) + U*cos(angle);
+                Vector3D Hnew = H*cos(angle) + U*sin(angle);
+                Vector3D Unew = -H*sin(angle) + U*cos(angle);
                 H=Hnew; U=Unew;
             }
             else if (c == '&'){ // pitch down
-                auto Hnew = H*cos(-angle) + U*sin(-angle);
-                auto Unew = -H*sin(-angle) + U*cos(-angle);
+                Vector3D Hnew = H*cos(-angle) + U*sin(-angle);
+                Vector3D Unew = -H*sin(-angle) + U*cos(-angle);
                 H=Hnew; U=Unew;
             }
             else if (c == '\\'){ // roll left
-                auto Lnew = L*cos(angle) - U*sin(angle);
-                auto Unew = L*sin(angle) + U*cos(angle);
+                Vector3D Lnew = L*cos(angle) - U*sin(angle);
+                Vector3D Unew = L*sin(angle) + U*cos(angle);
                 L=Lnew; U=Unew;
             }
             else if (c == '/'){ // roll right
-                auto Lnew = L*cos(-angle) - U*sin(-angle);
-                auto Unew = L*sin(-angle) + U*cos(-angle);
+                Vector3D Lnew = L*cos(-angle) - U*sin(-angle);
+                Vector3D Unew = L*sin(-angle) + U*cos(-angle);
                 L=Lnew; U=Unew;
             }
             else if (c == '|'){ // turn back

@@ -200,30 +200,6 @@ ini/ini_configuration.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/ini/ini_configuration.cc.s
 .PHONY : ini/ini_configuration.cc.s
 
-utils/Vector3D.obj: utils/Vector3D.cc.obj
-.PHONY : utils/Vector3D.obj
-
-# target to build an object file
-utils/Vector3D.cc.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/utils/Vector3D.cc.obj
-.PHONY : utils/Vector3D.cc.obj
-
-utils/Vector3D.i: utils/Vector3D.cc.i
-.PHONY : utils/Vector3D.i
-
-# target to preprocess a source file
-utils/Vector3D.cc.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/utils/Vector3D.cc.i
-.PHONY : utils/Vector3D.cc.i
-
-utils/Vector3D.s: utils/Vector3D.cc.s
-.PHONY : utils/Vector3D.s
-
-# target to generate assembly for a file
-utils/Vector3D.cc.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/utils/Vector3D.cc.s
-.PHONY : utils/Vector3D.cc.s
-
 utils/l_parser/l_parser.obj: utils/l_parser/l_parser.cc.obj
 .PHONY : utils/l_parser/l_parser.obj
 
@@ -248,6 +224,30 @@ utils/l_parser/l_parser.cc.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/utils/l_parser/l_parser.cc.s
 .PHONY : utils/l_parser/l_parser.cc.s
 
+utils/vector3d.obj: utils/vector3d.cc.obj
+.PHONY : utils/vector3d.obj
+
+# target to build an object file
+utils/vector3d.cc.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/utils/vector3d.cc.obj
+.PHONY : utils/vector3d.cc.obj
+
+utils/vector3d.i: utils/vector3d.cc.i
+.PHONY : utils/vector3d.i
+
+# target to preprocess a source file
+utils/vector3d.cc.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/utils/vector3d.cc.i
+.PHONY : utils/vector3d.cc.i
+
+utils/vector3d.s: utils/vector3d.cc.s
+.PHONY : utils/vector3d.s
+
+# target to generate assembly for a file
+utils/vector3d.cc.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\engine.dir\build.make CMakeFiles/engine.dir/utils/vector3d.cc.s
+.PHONY : utils/vector3d.cc.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -266,12 +266,12 @@ help:
 	@echo ... ini/ini_configuration.obj
 	@echo ... ini/ini_configuration.i
 	@echo ... ini/ini_configuration.s
-	@echo ... utils/Vector3D.obj
-	@echo ... utils/Vector3D.i
-	@echo ... utils/Vector3D.s
 	@echo ... utils/l_parser/l_parser.obj
 	@echo ... utils/l_parser/l_parser.i
 	@echo ... utils/l_parser/l_parser.s
+	@echo ... utils/vector3d.obj
+	@echo ... utils/vector3d.i
+	@echo ... utils/vector3d.s
 .PHONY : help
 
 

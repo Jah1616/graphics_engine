@@ -46,7 +46,7 @@ void createDodecahedron(Figure3D& figure){
     figure.points.clear(); figure.faces.clear();
     Figure3D ico(figure.color); createIcosahedron(ico);
 
-    for (const auto &face : ico.faces)
+    for (const Face &face : ico.faces)
         figure.points.push_back(Vector3D::point((ico.points[face[0]].x + ico.points[face[1]].x + ico.points[face[2]].x)/3,
                                          (ico.points[face[0]].y + ico.points[face[1]].y + ico.points[face[2]].y)/3,
                                          (ico.points[face[0]].z + ico.points[face[1]].z + ico.points[face[2]].z)/3));
@@ -117,9 +117,9 @@ void createSphere(Figure3D& figure, const unsigned int n){
 void createTorus(Figure3D& figure, const double r, const double R, const unsigned int n, const unsigned int m){
     figure.points.clear(); figure.faces.clear();
     for (unsigned int i=0 ; i<n ; i++){
-        auto u = 2*i*M_PI/n;
+        double u = 2*i*M_PI/n;
         for (unsigned int j=0 ; j<m ; j++){
-            auto v = 2*j*M_PI/m;
+            double v = 2*j*M_PI/m;
             figure.points.push_back(Vector3D::point((R+r*cos(v))*cos(u),
                                              (R+r*cos(v))*sin(u),
                                              r*sin(v)));

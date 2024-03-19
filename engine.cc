@@ -10,7 +10,7 @@
 
 img::EasyImage generate_image(const ini::Configuration &configuration){
     img::EasyImage image;
-    const auto type = configuration["General"]["type"].as_string_or_die();
+    const std::string type = configuration["General"]["type"].as_string_or_die();
 
     if (type == "2DLSystem") generate2DLSystemImage(image, configuration);
     if (type == "Wireframe") generateWireframeImage(image, configuration);

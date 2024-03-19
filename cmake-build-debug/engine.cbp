@@ -97,16 +97,16 @@
 		<Unit filename="C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/ini/ini_configuration.h">
 			<Option target="engine"/>
 		</Unit>
-		<Unit filename="C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/utils/Vector3D.cc">
-			<Option target="engine"/>
-		</Unit>
-		<Unit filename="C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/utils/Vector3D.h">
-			<Option target="engine"/>
-		</Unit>
 		<Unit filename="C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/utils/l_parser/l_parser.cc">
 			<Option target="engine"/>
 		</Unit>
 		<Unit filename="C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/utils/l_parser/l_parser.h">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/utils/vector3d.cc">
+			<Option target="engine"/>
+		</Unit>
+		<Unit filename="C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/utils/vector3d.h">
 			<Option target="engine"/>
 		</Unit>
 		<Unit filename="C:/Users/jahso/Documents/School/ComputerGraphics/graphics_engine/CMakeLists.txt">
