@@ -98,8 +98,12 @@ Lines2D doProjection(const Figures3D& figures){
         for (const Face & face : figure.faces){
             unsigned int nrPoints = face.size();
             for (unsigned int i=0 ; i<nrPoints ; i++){
-                lines.emplace_back(doProjection(figure.points[face[i]]),
-                                   doProjection(figure.points[face[(i+1) % nrPoints]]),
+                Vector3D p1 = figure.points[face[i]];
+                Vector3D p2 = figure.points[face[(i+1) % nrPoints]];
+                lines.emplace_back(doProjection(p1),
+                                   doProjection(p2),
+                                   1/p1.z,
+                                   1/p2.z,
                                    figure.color);
             }
         }

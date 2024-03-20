@@ -11,7 +11,7 @@
 
 
 void draw2DLines (img::EasyImage& image, const unsigned int size, const Lines2D &lines,
-                  const double bgRed, const double bgGreen, const double bgBlue){
+                  const double bgRed, const double bgGreen, const double bgBlue, const bool zbuffed = false){
     // set min and max coords
     double xmin = std::numeric_limits<double>::max(); double ymin = xmin;
     double xmax = std::numeric_limits<double>::min(); double ymax = xmax;
@@ -41,8 +41,16 @@ void draw2DLines (img::EasyImage& image, const unsigned int size, const Lines2D 
 
         line.p1.x += dx; line.p1.y += dy;
         line.p2.x += dx; line.p2.y += dy;
-        image.draw_line(lround(line.p1.x), lround(line.p1.y), lround(line.p2.x), lround(line.p2.y),
-                        img::Color(lround(line.color.red*255), lround(line.color.green*255), lround(line.color.blue*255)));
+
+        if (zbuffed){
+            ZBuffer zbuf(lround(imagex), lround(imagey));
+            image.draw_zbuf_line(zbuf, lround(line.p1.x), lround(line.p1.y), line.z1,
+                                 lround(line.p2.x), lround(line.p2.y), line.z2,
+                                 img::Color(lround(line.color.red*255), lround(line.color.green*255), lround(line.color.blue*255)));
+        } else {
+            image.draw_line(lround(line.p1.x), lround(line.p1.y), lround(line.p2.x), lround(line.p2.y),
+                            img::Color(lround(line.color.red*255), lround(line.color.green*255), lround(line.color.blue*255)));
+        }
     }
 }
 
@@ -57,7 +65,7 @@ void generate2DLSystemImage(img::EasyImage& image, const ini::Configuration &con
                 bgColor[0], bgColor[1], bgColor[2]);
 }
 
-void generateWireframeImage(img::EasyImage& image, const ini::Configuration &conf){
+void generateWireframeImage(img::EasyImage& image, const ini::Configuration &conf, const bool zbuffed = false){
     const unsigned int size = conf["General"]["size"].as_int_or_die();
     const std::vector<double> bgColor = conf["General"]["backgroundcolor"].as_double_tuple_or_die();
     const unsigned int nrFigs = conf["General"]["nrFigures"].as_int_or_die();

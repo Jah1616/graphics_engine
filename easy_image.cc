@@ -26,6 +26,18 @@
 #define le32toh(x) (x)
 #endif
 
+
+double posInf = std::numeric_limits<double>::infinity();
+double negInf = -std::numeric_limits<double>::infinity();
+ZBuffer::ZBuffer(const unsigned int width, const unsigned int height):image_width(width), image_height(height){
+    std::vector<double> col;
+    col.reserve(height);
+    for (unsigned int y = 0; y<height; ++y) col.push_back(posInf);
+
+    this->reserve(width);
+    for (unsigned int x=0 ; x<width ; ++x) this->push_back(col);
+}
+
 namespace
 {
 	//structs borrowed from wikipedia's article on the BMP file format
@@ -262,6 +274,90 @@ void img::EasyImage::draw_line(unsigned int x0, unsigned int y0, unsigned int x1
 		}
 	}
 }
+
+void img::EasyImage::draw_zbuf_line(ZBuffer &zbuf, unsigned int x0, unsigned int y0, const double z0,
+                                    unsigned int x1, unsigned int y1, const double z1, const img::Color &color){
+    if (x0 >= this->width || y0 >= this->height || x1 >= this->width || y1 > this->height) {
+        std::stringstream ss;
+        ss << "Drawing line from (" << x0 << "," << y0 << ") to (" << x1 << "," << y1 << ") in image of width "
+           << this->width << " and height " << this->height;
+        throw std::runtime_error(ss.str());
+    }
+
+    if (x0 == x1){
+        //special case for x0 == x1
+        for (unsigned int i = std::min(y0, y1); i <= std::max(y0, y1); i++){
+            double p = (i-y1)/(y0-y1);
+            double z = p/z0 + (1-p)/z1;
+            if (z < zbuf[x0][i]){
+                (*this)(x0, i) = color;
+                zbuf[x0][i] = z;
+            }
+        }
+    }
+    else if (y0 == y1){
+        //special case for y0 == y1
+        for (unsigned int i = std::min(x0, x1); i <= std::max(x0, x1); i++){
+            double p = (i-x1)/(x0-x1);
+            double z = p/z0 + (1-p)/z1;
+            if (z < zbuf[i][y0]){
+                (*this)(i, y0) = color;
+                zbuf[i][y0] = z;
+            }
+        }
+    }
+    else{
+        if (x0 > x1){
+            //flip points if x1>x0: we want x0 to have the lowest value
+            std::swap(x0, x1);
+            std::swap(y0, y1);
+        }
+        double m = ((double) y1 - (double) y0) / ((double) x1 - (double) x0);
+        if (-1.0 <= m && m <= 1.0){
+            for (unsigned int i = 0; i <= (x1 - x0); i++){
+                unsigned int x = x0 + i;
+                unsigned int y = (unsigned int) round(y0 + m * i);
+
+                double p = (i-x1)/(x0-x1);
+                double z = p/z0 + (1-p)/z1;
+
+                if (z < zbuf[x][y]){
+                    (*this)(x, y) = color;
+                    zbuf[x][y] = z;
+                }
+            }
+        }
+        else if (m > 1.0){
+            for (unsigned int i = 0; i <= (y1 - y0); i++){
+                unsigned int x = (unsigned int) round(x0 + (i / m));
+                unsigned int y = y0 + i;
+
+                double p = (i-x1)/(x0-x1);
+                double z = p/z0 + (1-p)/z1;
+
+                if (z < zbuf[x][y]){
+                    (*this)(x, y) = color;
+                    zbuf[x][y] = z;
+                }
+            }
+        }
+        else if (m < -1.0){
+            for (unsigned int i = 0; i <= (y0 - y1); i++){
+                unsigned int x = (unsigned int) round(x0 - (i / m));
+                unsigned int y = y0 - i;
+
+                double p = (i-x1)/(x1-x0);
+                double z = p/x0 + (1-p)/x1;
+
+                if (z < zbuf[x][y]){
+                    (*this)(x, y) = color;
+                    zbuf[x][y] = z;
+                }
+            }
+        }
+    }
+}
+
 std::ostream& img::operator<<(std::ostream& out, EasyImage const& image)
 {
 

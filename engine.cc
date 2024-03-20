@@ -14,6 +14,7 @@ img::EasyImage generate_image(const ini::Configuration &configuration){
 
     if (type == "2DLSystem") generate2DLSystemImage(image, configuration);
     if (type == "Wireframe") generateWireframeImage(image, configuration);
+    if (type == "ZBufferedWireframe") generateWireframeImage(image, configuration, true);
 
 	return image;
 }

@@ -1,3 +1,1 @@
-"C:\Program Files\JetBrains\CLion 2023.2.2\bin\cmake\win\x64\bin\cmake.exe" -E rm -f CMakeFiles\engine.dir/objects.a
-C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\ar.exe qc CMakeFiles\engine.dir/objects.a @CMakeFiles\engine.dir\objects1.rsp
-C:\PROGRA~1\JETBRA~1\CLION2~1.2\bin\mingw\bin\G__~1.EXE -g -Wl,--whole-archive CMakeFiles\engine.dir/objects.a -Wl,--no-whole-archive -o engine.exe -Wl,--out-implib,libengine.dll.a -Wl,--major-image-version,0,--minor-image-version,0 @CMakeFiles\engine.dir\linkLibs.rsp
+/usr/bin/c++ -g CMakeFiles/engine.dir/easy_image.cc.o CMakeFiles/engine.dir/ini/ini_configuration.cc.o CMakeFiles/engine.dir/engine.cc.o CMakeFiles/engine.dir/utils/l_parser/l_parser.cc.o CMakeFiles/engine.dir/utils/vector3d.cc.o -o engine 
