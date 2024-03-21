@@ -30,12 +30,7 @@
 double posInf = std::numeric_limits<double>::infinity();
 double negInf = -std::numeric_limits<double>::infinity();
 ZBuffer::ZBuffer(const unsigned int width, const unsigned int height):image_width(width), image_height(height){
-    std::vector<double> col;
-    col.reserve(height);
-    for (unsigned int y = 0; y<height; ++y) col.push_back(posInf);
-
-    this->reserve(width);
-    for (unsigned int x=0 ; x<width ; ++x) this->push_back(col);
+    this->resize(width, std::vector<double>(height, posInf));
 }
 
 namespace {
@@ -233,10 +228,10 @@ void img::EasyImage::draw_zbuf_line(ZBuffer &zbuf, int x0, int y0, const double 
         double deltay = y0-y1;
         for (int i = y0; i <= y1; i++){
             double p = (i - y1)/deltay;
-            double z = p*z0 + (1-p)*z1;
-            if (z < zbuf[x0][i]){
+            double z_inv = p/z0 + (1-p)/z1;
+            if (z_inv < zbuf[x0][i]){
                 (*this)(x0, i) = color;
-                zbuf[x0][i] = z;
+                zbuf[x0][i] = z_inv;
             }
         }
     }
@@ -249,10 +244,10 @@ void img::EasyImage::draw_zbuf_line(ZBuffer &zbuf, int x0, int y0, const double 
         double deltax = x0-x1;
         for (int i = x0; i <= x1; i++){
             double p = (i - x1)/deltax;
-            double z = p*z0 + (1-p)*z1;
-            if (z < zbuf[i][y0]){
+            double z_inv = p/z0 + (1-p)/z1;
+            if (z_inv < zbuf[i][y0]){
                 (*this)(i, y0) = color;
-                zbuf[i][y0] = z;
+                zbuf[i][y0] = z_inv;
             }
         }
     }
@@ -263,17 +258,17 @@ void img::EasyImage::draw_zbuf_line(ZBuffer &zbuf, int x0, int y0, const double 
             std::swap(y0, y1);
         }
         double m = (double)(y1- y0) / (x1-x0);
-        double delta = sqrt(pow((x1-x0), 2) + pow((y1-y0), 2));
+        double delta = sqrt((x1-x0)*(x1-x0) + (y1-y0)*(y1-y0));
         if (-1.0 <= m && m <= 1.0){
             for (int i = 0; i <= (x1 - x0); i++){
                 int x = x0+i;
                 int y = (int)round(y0 + m * i);
 
-                double p = sqrt(pow((x1-x), 2) + pow((y1-y), 2)) / delta;
-                double z = p*z0 + (1-p)*z1;
-                if (z < zbuf[x][y]){
+                double p = sqrt((x1-x)*(x1-x) + (y1-y)*(y1-y)) / delta;
+                double z_inv = p/z0 + (1-p)/z1;
+                if (z_inv < zbuf[x][y]){
                     (*this)(x, y) = color;
-                    zbuf[x][y] = z;
+                    zbuf[x][y] = z_inv;
                 }
             }
         }
@@ -282,11 +277,11 @@ void img::EasyImage::draw_zbuf_line(ZBuffer &zbuf, int x0, int y0, const double 
                 int x = (int) round(x0 + (i / m));
                 int y = y0 + i;
 
-                double p = sqrt(pow((x1-x), 2) + pow((y1-y), 2)) / delta;
-                double z = p*z0 + (1-p)*z1;
-                if (z < zbuf[x][y]){
+                double p = sqrt((x1-x)*(x1-x) + (y1-y)*(y1-y)) / delta;
+                double z_inv = p/z0 + (1-p)/z1;
+                if (z_inv < zbuf[x][y]){
                     (*this)(x, y) = color;
-                    zbuf[x][y] = z;
+                    zbuf[x][y] = z_inv;
                 }
             }
         }
@@ -295,11 +290,11 @@ void img::EasyImage::draw_zbuf_line(ZBuffer &zbuf, int x0, int y0, const double 
                 int x = (int) round(x0 - (i / m));
                 int y = y0 - i;
 
-                double p = sqrt(pow((x1-x), 2) + pow((y1-y), 2)) / delta;
-                double z = p*z0 + (1-p)*z1;
-                if (z < zbuf[x][y]){
+                double p = sqrt((x1-x)*(x1-x) + (y1-y)*(y1-y)) / delta;
+                double z_inv = p/z0 + (1-p)/z1;
+                if (z_inv < zbuf[x][y]){
                     (*this)(x, y) = color;
-                    zbuf[x][y] = z;
+                    zbuf[x][y] = z_inv;
                 }
             }
         }

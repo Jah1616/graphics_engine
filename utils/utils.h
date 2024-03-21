@@ -10,11 +10,8 @@ double toRadian(double x) {return x * M_PI / 180;}
 double toDegrees(double x) {return x / M_PI * 180;}
 
 
-struct Color{
+struct Color{double red; double green; double blue;
     Color(const double red, const double green, const double blue) :red(red) ,green(green) ,blue(blue) {}
-    double red;
-    double green;
-    double blue;
 };
 img::Color imgColor(const Color& color){
     return img::Color(img::Color(lround(color.red*255), lround(color.green*255), lround(color.blue*255)));
@@ -24,33 +21,27 @@ img::Color imgColor(const std::vector<double>& color){
 }
 
 
-struct Point2D{
+struct Point2D{double x; double y;
     Point2D(const double x, const double y) :x(x), y(y) {}
-    double x;
-    double y;
 };
 
-struct Line2D{
+struct Line2D{Point2D p1; Point2D p2; Color color; double z1; double z2;
     Line2D(const Point2D& p1, const Point2D& p2, const Color& color) :p1(p1), p2(p2), color(color), z1(), z2() {}
     Line2D(const Point2D& p1, const Point2D& p2, const double z1, const double z2, const Color& color)
     :p1(p1), p2(p2), color(color), z1(z1), z2(z2){}
-    Point2D p1;
-    Point2D p2;
-    Color color;
-    double z1;
-    double z2;
+    void invert(){
+        std::swap(p1, p2);
+        std::swap(z1, z2);
+    }
 };
 typedef std::list<Line2D> Lines2D;
 
 
 typedef std::vector<unsigned int> Face;
-struct Figure3D{
+struct Figure3D{std::vector<Vector3D> points; std::vector<Face> faces; Color color;
     Figure3D(const std::vector<Vector3D>& points, const std::vector<Face>& faces, const Color& color)
     :points(points) ,faces(faces) ,color(color){}
     Figure3D(const Color& color): points{}, faces{}, color(color) {};
-    std::vector<Vector3D> points;
-    std::vector<Face> faces;
-    Color color;
 };
 typedef std::list<Figure3D> Figures3D;
 
@@ -90,7 +81,7 @@ Point2D operator - (Point2D lhs, const Point2D& rhs){
 }
 
 bool operator == (const Vector3D& lhs, const Vector3D& rhs){
-    return (lhs.is_point() and rhs.is_point()) or (lhs.is_vector() and rhs.is_vector())
+    return ((lhs.is_point() and rhs.is_point()) or (lhs.is_vector() and rhs.is_vector()))
     and lhs.x == rhs.x and lhs.y == rhs.y and lhs.z == rhs.z;
 }
 bool operator == (const Point2D& lhs, const Point2D& rhs){

@@ -1,5 +1,6 @@
 #pragma once
 #include <cmath>
+#include <unordered_map>
 #include "utils.h"
 
 
@@ -34,6 +35,7 @@ void createOctahedron(Figure3D& figure){
 }
 
 void createIcosahedron(Figure3D& figure){
+    figure.points.clear(); figure.faces.clear();
     static std::vector<Vector3D> points;
     if (points.empty()){
         points.reserve(12);
@@ -55,6 +57,7 @@ void createIcosahedron(Figure3D& figure){
 }
 
 void createDodecahedron(Figure3D& figure){
+    figure.points.clear(); figure.faces.clear();
     static std::vector<Vector3D> points;
     if (points.empty()){
         Figure3D ico(figure.color); createIcosahedron(ico);
@@ -75,15 +78,22 @@ void createCylinder(Figure3D& figure, const unsigned int n, const double h){
     figure.points.reserve(2*n);
     figure.faces.reserve(n+2);
 
+    static std::unordered_map<unsigned int, std::vector<double>> lookup;
+    if (lookup.find(n) == lookup.end()){
+        lookup[n].reserve(2*n);
+        for (unsigned int i=0 ; i<n ; ++i) lookup[n].push_back(cos(2*i*M_PI/n));
+        for (unsigned int i=0 ; i<n ; ++i) lookup[n].push_back(sin(2*i*M_PI/n));
+    }
+
     Face base;
     for (unsigned int i=0 ; i<n ; ++i){
-        figure.points.push_back(Vector3D::point(cos(2*i*M_PI/n), sin(2*i*M_PI/n), 0));
+        figure.points.push_back(Vector3D::point(lookup[n][i], lookup[n][n+i], 0));
         base.push_back(n-i-1);
     }
 
     Face top;
     for (unsigned int i=0 ; i<n ; ++i){
-        figure.points.push_back(Vector3D::point(cos(2*i*M_PI/n), sin(2*i*M_PI/n), h));
+        figure.points.push_back(Vector3D::point(lookup[n][i], lookup[n][n+i], h));
         top.push_back(n+i);
         figure.faces.push_back({i, (i+1)%n, (i+1)%n + n, i+n});
     }
@@ -96,9 +106,16 @@ void createCone(Figure3D& figure, const unsigned int n, const double h){
     figure.points.reserve(n+1);
     figure.faces.reserve(n+1);
 
+    static std::unordered_map<unsigned int, std::vector<double>> lookup;
+    if (lookup.find(n) == lookup.end()){
+        lookup[n].reserve(2*n);
+        for (unsigned int i=0 ; i<n ; ++i) lookup[n].push_back(cos(2*i*M_PI/n));
+        for (unsigned int i=0 ; i<n ; ++i) lookup[n].push_back(sin(2*i*M_PI/n));
+    }
+
     Face base;
     for (unsigned int i=0 ; i<n ; ++i){
-        figure.points.push_back(Vector3D::point(cos(2*i*M_PI/n), sin(2*i*M_PI/n), 0));
+        figure.points.push_back(Vector3D::point(lookup[n][i], lookup[n][n+i], 0));
         figure.faces.push_back({i, (i + 1) % n, n});
         base.push_back(n-i-1);
     }
@@ -107,29 +124,49 @@ void createCone(Figure3D& figure, const unsigned int n, const double h){
 }
 
 void createSphere(Figure3D& figure, const unsigned int n){
-    createIcosahedron(figure);
-    figure.points.reserve(5 * pow(4, n+1) - 8);
-    figure.faces.reserve(20 * pow(4,n));
-    for (unsigned int i=0 ; i<n ; i++){
-        unsigned int facesEnd = figure.faces.size();
-        for (unsigned int j=0 ; j<facesEnd ; j++){
-            Face face = figure.faces[j];
-            unsigned int pointsEnd = figure.points.size();
-            const Vector3D a = figure.points[face[0]];
-            const Vector3D b = figure.points[face[1]];
-            const Vector3D c = figure.points[face[2]];
+    figure.points.clear(); figure.faces.clear();
 
-            figure.points.push_back((a+b)/2); // D
-            figure.points.push_back((a+c)/2); // E
-            figure.points.push_back((b+c)/2); // F
+    static int maxN = -1;
+    static std::vector<Vector3D> points; // points are always added to the back but shared
+    static std::unordered_map<unsigned int, std::vector<Face>> faces_lookup;
 
-            figure.faces.push_back({face[0],    pointsEnd,      pointsEnd+1});  //ADE
-            figure.faces.push_back({face[1],    pointsEnd+2,    pointsEnd});    //BFD
-            figure.faces.push_back({face[2],    pointsEnd+1,    pointsEnd+2});  //CEF
-            figure.faces[j] = {pointsEnd,  pointsEnd+2,    pointsEnd+1};        //DFE
-        }
+    if (maxN == -1){
+        Figure3D ico({0, 0, 0});
+        createIcosahedron(ico);
+        points = ico.points;
+        faces_lookup[0] = ico.faces;
+        maxN = 0;
     }
-    for (Vector3D& point : figure.points) point.normalise();
+
+    while (maxN < n){
+        std::vector<Face>& newFaces = faces_lookup[maxN + 1];
+        newFaces = faces_lookup[maxN];
+
+        unsigned int facesEnd = newFaces.size();
+        newFaces.reserve(20 * pow(4,maxN+1));
+        points.reserve(5 * pow(4, maxN+2) - 8);
+
+        for (unsigned int i=0 ; i < facesEnd ; i++){
+            Face face = newFaces[i];
+            unsigned int pointsEnd = points.size();
+            const Vector3D& a = points[face[0]];
+            const Vector3D& b = points[face[1]];
+            const Vector3D& c = points[face[2]];
+
+            points.push_back((a+b)/2);
+            points.push_back((a+c)/2);
+            points.push_back((b+c)/2);
+
+            newFaces.push_back({face[0],    pointsEnd,      pointsEnd+1});  //ADE
+            newFaces.push_back({face[1],    pointsEnd+2,    pointsEnd});    //BFD
+            newFaces.push_back({face[2],    pointsEnd+1,    pointsEnd+2});  //CEF
+            newFaces[i] = {pointsEnd, pointsEnd + 2, pointsEnd + 1};        //DFE
+        }
+        ++maxN;
+    }
+    figure.points = std::vector(points.begin(), points.begin() + (5 * pow(4, n+1) - 8));
+    for (Vector3D& p : figure.points) p.normalise();
+    figure.faces = faces_lookup[n];
 }
 
 void createTorus(Figure3D& figure, const double r, const double R, const unsigned int n, const unsigned int m){

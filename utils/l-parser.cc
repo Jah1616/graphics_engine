@@ -16,7 +16,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "l_parser.h"
+#include "l-parser.h"
 
 #include <assert.h>
 #include <iostream>
