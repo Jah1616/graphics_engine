@@ -24,7 +24,7 @@
 
 class ZBuffer: public std::vector<std::vector<double>>{
 public:
-    ZBuffer(const unsigned int width, const unsigned int height);
+    ZBuffer(unsigned int width, unsigned int height);
 private:
     double image_width;
     double image_height;
@@ -228,9 +228,9 @@ namespace img
 			 * 	assert(x1 < getWidth())
 			 * 	assert(y1 < getHeight())
 			 */
-			void draw_line(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1, Color color);
-            void draw_zbuf_line(ZBuffer& zbuf, const unsigned int x0, const unsigned int y0, const double z0,
-                                const unsigned int x1, const unsigned int y1, const double z1, const Color& color);
+			void draw_line(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1, const Color& color);
+            void draw_zbuf_line(ZBuffer& zbuf, int x0, int y0, const double z0,
+                                int x1, int y1, const double z1, const Color& color);
 
 		private:
 			friend std::istream& operator>>(std::istream& in, EasyImage & image);

@@ -16,6 +16,12 @@ struct Color{
     double green;
     double blue;
 };
+img::Color imgColor(const Color& color){
+    return img::Color(img::Color(lround(color.red*255), lround(color.green*255), lround(color.blue*255)));
+}
+img::Color imgColor(const std::vector<double>& color){
+    return img::Color(img::Color(lround(color[0]*255), lround(color[1]*255), lround(color[2]*255)));
+}
 
 
 struct Point2D{
@@ -23,8 +29,9 @@ struct Point2D{
     double x;
     double y;
 };
+
 struct Line2D{
-    Line2D(const Point2D& p1, const Point2D& p2, const Color& color) :p1(p1), p2(p2), color(color) {}
+    Line2D(const Point2D& p1, const Point2D& p2, const Color& color) :p1(p1), p2(p2), color(color), z1(), z2() {}
     Line2D(const Point2D& p1, const Point2D& p2, const double z1, const double z2, const Color& color)
     :p1(p1), p2(p2), color(color), z1(z1), z2(z2){}
     Point2D p1;
@@ -46,3 +53,38 @@ struct Figure3D{
     Color color;
 };
 typedef std::list<Figure3D> Figures3D;
+
+
+// Point2D operators
+void operator *= (Point2D& lhs, const double rhs){
+    lhs.x *= rhs;
+    lhs.y *= rhs;
+}
+Point2D operator * (Point2D lhs, const double rhs){
+    lhs *= rhs;
+    return lhs;
+}
+void operator /= (Point2D& lhs, const double rhs){
+    lhs.x /= rhs;
+    lhs.y /= rhs;
+}
+Point2D operator / (Point2D lhs, const double rhs){
+    lhs /= rhs;
+    return lhs;
+}
+void operator += (Point2D& lhs, const Point2D& rhs){
+    lhs.x += rhs.x;
+    lhs.y += rhs.y;
+}
+Point2D operator + (Point2D lhs, const Point2D& rhs){
+    lhs += rhs;
+    return lhs;
+}
+void operator -= (Point2D& lhs, const Point2D& rhs){
+    lhs.x -= rhs.x;
+    lhs.y -= rhs.y;
+}
+Point2D operator - (Point2D lhs, const Point2D& rhs){
+    lhs -= rhs;
+    return lhs;
+}

@@ -1,1 +1,0 @@
-/usr/bin/c++ -g CMakeFiles/engine.dir/easy_image.cc.o CMakeFiles/engine.dir/ini/ini_configuration.cc.o CMakeFiles/engine.dir/engine.cc.o CMakeFiles/engine.dir/utils/l_parser/l_parser.cc.o CMakeFiles/engine.dir/utils/vector3d.cc.o -o engine 

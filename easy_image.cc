@@ -38,23 +38,19 @@ ZBuffer::ZBuffer(const unsigned int width, const unsigned int height):image_widt
     for (unsigned int x=0 ; x<width ; ++x) this->push_back(col);
 }
 
-namespace
-{
+namespace {
 	//structs borrowed from wikipedia's article on the BMP file format
-	struct bmpfile_magic
-	{
+	struct bmpfile_magic{
 			uint8_t magic[2];
 	};
 
-	struct bmpfile_header
-	{
+	struct bmpfile_header{
 			uint32_t file_size;
 			uint16_t reserved_1;
 			uint16_t reserved_2;
 			uint32_t bmp_offset;
 	};
-	struct bmp_header
-	{
+	struct bmp_header{
 			uint32_t header_size;
 			int32_t width;
 			int32_t height;
@@ -68,227 +64,176 @@ namespace
 			uint32_t nimpcolors;
 	};
 	//copy-pasted from lparser.cc to allow these classes to be used independently from each other
-	class enable_exceptions
-	{
+	class enable_exceptions{
 		private:
 			std::ios& ios;
 			std::ios::iostate state;
 		public:
 			enable_exceptions(std::ios& an_ios, std::ios::iostate exceptions) :
-				ios(an_ios)
-			{
-				state = ios.exceptions();
-				ios.exceptions(exceptions);
-			}
-			~enable_exceptions()
-			{
+            ios(an_ios){
+                state = ios.exceptions();
+                ios.exceptions(exceptions);
+            }
+			~enable_exceptions(){
 				ios.exceptions(state);
 			}
 	};
 	//helper function to convert a number (char, int, ...) to little endian
 	//regardless of the endiannes of the system
 	//more efficient machine-dependent functions exist, but this one is more portable
-	template<typename T> T to_little_endian(T value)
-	{
+	template<typename T> T to_little_endian(T value){
 		//yes, unions must be used with caution, but this is a case in which a union is needed
-		union
-		{
+		union{
 				T t;
 				uint8_t bytes[sizeof(T)];
 		} temp_storage;
 
-		for (uint8_t i = 0; i < sizeof(T); i++)
-		{
+		for (uint8_t i = 0; i < sizeof(T); i++){
 			temp_storage.bytes[i] = value & 0xFF;
 			value >>= 8;
 		}
 		return temp_storage.t;
 	}
 
-	template<typename T> T from_little_endian(T value)
-	{
+	template<typename T> T from_little_endian(T value){
 		//yes, unions must be used with caution, but this is a case in which a union is needed
-		union
-		{
+		union{
 				T t;
 				uint8_t bytes[sizeof(T)];
 		} temp_storage;
 		temp_storage.t = value;
 		T retVal = 0;
 
-		for (uint8_t i = 0; i < sizeof(T); i++)
-		{
+		for (uint8_t i = 0; i < sizeof(T); i++){
 			retVal = (retVal << 8) | temp_storage.bytes[sizeof(T) - i - 1];
 		}
 		return retVal;
 	}
 
 }
-img::Color::Color() :
-	blue(0), green(0), red(0)
-{
-}
-img::Color::Color(uint8_t r, uint8_t g, uint8_t b) :
-	blue(b), green(g), red(r)
-{
-}
-img::Color::~Color()
-{
-}
+img::Color::Color() :blue(0), green(0), red(0){}
+img::Color::Color(uint8_t r, uint8_t g, uint8_t b) :blue(b), green(g), red(r){}
+img::Color::~Color(){}
 
-img::UnsupportedFileTypeException::UnsupportedFileTypeException(std::string const& msg) :
-	message(msg)
-{
-}
+img::UnsupportedFileTypeException::UnsupportedFileTypeException(std::string const& msg) :message(msg){}
 img::UnsupportedFileTypeException::UnsupportedFileTypeException(const UnsupportedFileTypeException &original)
-: std::exception(original)
-, message(original.message)
-{
-}
-img::UnsupportedFileTypeException::~UnsupportedFileTypeException() throw ()
-{
-}
-img::UnsupportedFileTypeException& img::UnsupportedFileTypeException::operator=(UnsupportedFileTypeException const& original)
-{
+:std::exception(original) ,message(original.message){}
+img::UnsupportedFileTypeException::~UnsupportedFileTypeException() throw (){}
+img::UnsupportedFileTypeException& img::UnsupportedFileTypeException::operator=(UnsupportedFileTypeException const& original){
 	this->message = original.message;
 	return *this;
 }
-const char* img::UnsupportedFileTypeException::what() const throw ()
-{
+const char* img::UnsupportedFileTypeException::what() const throw (){
 	return message.c_str();
 }
 
-img::EasyImage::EasyImage() :
-	width(0), height(0), bitmap()
-{
-}
+img::EasyImage::EasyImage() :width(0), height(0), bitmap(){}
 
-img::EasyImage::EasyImage(unsigned int _width, unsigned int _height, Color color) :
-	width(_width), height(_height), bitmap(width * height, color)
-{
-}
+img::EasyImage::EasyImage(unsigned int _width, unsigned int _height, Color color)
+:width(_width), height(_height), bitmap(width * height, color){}
 
-img::EasyImage::EasyImage(EasyImage const& img) :
-	width(img.width), height(img.height), bitmap(img.bitmap)
-{
-}
+img::EasyImage::EasyImage(EasyImage const& img) :width(img.width), height(img.height), bitmap(img.bitmap){}
 
-img::EasyImage::~EasyImage()
-{
+img::EasyImage::~EasyImage(){
 	bitmap.clear();
 }
 
-img::EasyImage& img::EasyImage::operator=(img::EasyImage const& img)
-{
+img::EasyImage& img::EasyImage::operator=(img::EasyImage const& img){
 	width = img.width;
 	height = img.height;
 	bitmap.assign(img.bitmap.begin(),img.bitmap.end());
 	return (*this);
 }
 
-unsigned int img::EasyImage::get_width() const
-{
+unsigned int img::EasyImage::get_width() const{
 	return width;
 }
 
-unsigned int img::EasyImage::get_height() const
-{
+unsigned int img::EasyImage::get_height() const{
 	return height;
 }
 
-void img::EasyImage::clear(Color color)
-{
+void img::EasyImage::clear(Color color){
 	for (std::vector<Color>::iterator i = bitmap.begin(); i != bitmap.end(); i++)
 	{
 		*i = color;
 	}
 }
 
-img::Color& img::EasyImage::operator()(unsigned int x, unsigned int y)
-{
+img::Color& img::EasyImage::operator()(unsigned int x, unsigned int y){
 	assert(x < this->width);
 	assert(y < this->height);
 	return bitmap.at(x * height + y);
 }
 
-img::Color const& img::EasyImage::operator()(unsigned int x, unsigned int y) const
-{
+img::Color const& img::EasyImage::operator()(unsigned int x, unsigned int y) const{
 	assert(x < this->width);
 	assert(y < this->height);
 	return bitmap.at(x * height + y);
 }
 
-void img::EasyImage::draw_line(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1, Color color)
-{
+void img::EasyImage::draw_line(unsigned int x0, unsigned int y0, unsigned int x1, unsigned int y1, const Color& color){
 	if (x0 >= this->width || y0 >= this->height || x1 >= this->width || y1 > this->height) {
         std::stringstream ss;
         ss << "Drawing line from (" << x0 << "," << y0 << ") to (" << x1 << "," << y1 << ") in image of width "
         << this->width << " and height " << this->height;
         throw std::runtime_error(ss.str());
     }
-	if (x0 == x1)
-	{
+	if (x0 == x1){
 		//special case for x0 == x1
-		for (unsigned int i = std::min(y0, y1); i <= std::max(y0, y1); i++)
-		{
+		for (unsigned int i = std::min(y0, y1); i <= std::max(y0, y1); i++){
 			(*this)(x0, i) = color;
 		}
 	}
-	else if (y0 == y1)
-	{
+	else if (y0 == y1){
 		//special case for y0 == y1
-		for (unsigned int i = std::min(x0, x1); i <= std::max(x0, x1); i++)
-		{
+		for (unsigned int i = std::min(x0, x1); i <= std::max(x0, x1); i++){
 			(*this)(i, y0) = color;
 		}
 	}
-	else
-	{
-		if (x0 > x1)
-		{
+	else{
+		if (x0 > x1){
 			//flip points if x1>x0: we want x0 to have the lowest value
 			std::swap(x0, x1);
 			std::swap(y0, y1);
 		}
 		double m = ((double) y1 - (double) y0) / ((double) x1 - (double) x0);
-		if (-1.0 <= m && m <= 1.0)
-		{
-			for (unsigned int i = 0; i <= (x1 - x0); i++)
-			{
+		if (-1.0 <= m && m <= 1.0){
+			for (unsigned int i = 0; i <= (x1 - x0); i++){
 				(*this)(x0 + i, (unsigned int) round(y0 + m * i)) = color;
 			}
 		}
-		else if (m > 1.0)
-		{
-			for (unsigned int i = 0; i <= (y1 - y0); i++)
-			{
+		else if (m > 1.0){
+			for (unsigned int i = 0; i <= (y1 - y0); i++){
 				(*this)((unsigned int) round(x0 + (i / m)), y0 + i) = color;
 			}
 		}
-		else if (m < -1.0)
-		{
-			for (unsigned int i = 0; i <= (y0 - y1); i++)
-			{
+		else if (m < -1.0){
+			for (unsigned int i = 0; i <= (y0 - y1); i++){
 				(*this)((unsigned int) round(x0 - (i / m)), y0 - i) = color;
 			}
 		}
 	}
 }
 
-void img::EasyImage::draw_zbuf_line(ZBuffer &zbuf, unsigned int x0, unsigned int y0, const double z0,
-                                    unsigned int x1, unsigned int y1, const double z1, const img::Color &color){
+void img::EasyImage::draw_zbuf_line(ZBuffer &zbuf, int x0, int y0, const double z0,
+                                    int x1, int y1, const double z1, const img::Color &color){
     if (x0 >= this->width || y0 >= this->height || x1 >= this->width || y1 > this->height) {
         std::stringstream ss;
         ss << "Drawing line from (" << x0 << "," << y0 << ") to (" << x1 << "," << y1 << ") in image of width "
            << this->width << " and height " << this->height;
         throw std::runtime_error(ss.str());
     }
-
     if (x0 == x1){
         //special case for x0 == x1
-        for (unsigned int i = std::min(y0, y1); i <= std::max(y0, y1); i++){
-            double p = (i-y1)/(y0-y1);
-            double z = p/z0 + (1-p)/z1;
+        if (y0 > y1){
+            std::swap(x0, x1);
+            std::swap(y0, y1);
+        }
+        double deltay = y0-y1;
+        for (int i = y0; i <= y1; i++){
+            double p = (i - y1)/deltay;
+            double z = p*z0 + (1-p)*z1;
             if (z < zbuf[x0][i]){
                 (*this)(x0, i) = color;
                 zbuf[x0][i] = z;
@@ -297,9 +242,14 @@ void img::EasyImage::draw_zbuf_line(ZBuffer &zbuf, unsigned int x0, unsigned int
     }
     else if (y0 == y1){
         //special case for y0 == y1
-        for (unsigned int i = std::min(x0, x1); i <= std::max(x0, x1); i++){
-            double p = (i-x1)/(x0-x1);
-            double z = p/z0 + (1-p)/z1;
+        if (x0 > x1){
+            std::swap(x0, x1);
+            std::swap(y0, y1);
+        }
+        double deltax = x0-x1;
+        for (int i = x0; i <= x1; i++){
+            double p = (i - x1)/deltax;
+            double z = p*z0 + (1-p)*z1;
             if (z < zbuf[i][y0]){
                 (*this)(i, y0) = color;
                 zbuf[i][y0] = z;
@@ -312,15 +262,15 @@ void img::EasyImage::draw_zbuf_line(ZBuffer &zbuf, unsigned int x0, unsigned int
             std::swap(x0, x1);
             std::swap(y0, y1);
         }
-        double m = ((double) y1 - (double) y0) / ((double) x1 - (double) x0);
+        double m = (double)(y1- y0) / (x1-x0);
+        double delta = sqrt(pow((x1-x0), 2) + pow((y1-y0), 2));
         if (-1.0 <= m && m <= 1.0){
-            for (unsigned int i = 0; i <= (x1 - x0); i++){
-                unsigned int x = x0 + i;
-                unsigned int y = (unsigned int) round(y0 + m * i);
+            for (int i = 0; i <= (x1 - x0); i++){
+                int x = x0+i;
+                int y = (int)round(y0 + m * i);
 
-                double p = (i-x1)/(x0-x1);
-                double z = p/z0 + (1-p)/z1;
-
+                double p = sqrt(pow((x1-x), 2) + pow((y1-y), 2)) / delta;
+                double z = p*z0 + (1-p)*z1;
                 if (z < zbuf[x][y]){
                     (*this)(x, y) = color;
                     zbuf[x][y] = z;
@@ -328,13 +278,12 @@ void img::EasyImage::draw_zbuf_line(ZBuffer &zbuf, unsigned int x0, unsigned int
             }
         }
         else if (m > 1.0){
-            for (unsigned int i = 0; i <= (y1 - y0); i++){
-                unsigned int x = (unsigned int) round(x0 + (i / m));
-                unsigned int y = y0 + i;
+            for (int i = 0; i <= (y1 - y0); i++){
+                int x = (int) round(x0 + (i / m));
+                int y = y0 + i;
 
-                double p = (i-x1)/(x0-x1);
-                double z = p/z0 + (1-p)/z1;
-
+                double p = sqrt(pow((x1-x), 2) + pow((y1-y), 2)) / delta;
+                double z = p*z0 + (1-p)*z1;
                 if (z < zbuf[x][y]){
                     (*this)(x, y) = color;
                     zbuf[x][y] = z;
@@ -342,13 +291,12 @@ void img::EasyImage::draw_zbuf_line(ZBuffer &zbuf, unsigned int x0, unsigned int
             }
         }
         else if (m < -1.0){
-            for (unsigned int i = 0; i <= (y0 - y1); i++){
-                unsigned int x = (unsigned int) round(x0 - (i / m));
-                unsigned int y = y0 - i;
+            for (int i = 0; i <= (y0 - y1); i++){
+                int x = (int) round(x0 - (i / m));
+                int y = y0 - i;
 
-                double p = (i-x1)/(x1-x0);
-                double z = p/x0 + (1-p)/x1;
-
+                double p = sqrt(pow((x1-x), 2) + pow((y1-y), 2)) / delta;
+                double z = p*z0 + (1-p)*z1;
                 if (z < zbuf[x][y]){
                     (*this)(x, y) = color;
                     zbuf[x][y] = z;

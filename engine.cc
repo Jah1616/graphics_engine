@@ -9,6 +9,7 @@
 
 
 img::EasyImage generate_image(const ini::Configuration &configuration){
+//    auto start = std::chrono::high_resolution_clock::now();
     img::EasyImage image;
     const std::string type = configuration["General"]["type"].as_string_or_die();
 
@@ -16,7 +17,10 @@ img::EasyImage generate_image(const ini::Configuration &configuration){
     if (type == "Wireframe") generateWireframeImage(image, configuration);
     if (type == "ZBufferedWireframe") generateWireframeImage(image, configuration, true);
 
-	return image;
+//    auto stop = std::chrono::high_resolution_clock::now();
+//    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
+//    std::cout << "Image runtime: " << duration.count() << " milliseconds" << std::endl;
+    return image;
 }
 
 
@@ -99,7 +103,7 @@ int main(int argc, char const* argv[])
 
     auto stop = std::chrono::high_resolution_clock::now();
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-    std::cout << "Runtime: " << duration.count() << " milliseconds" << std::endl;
+    std::cout << "Total runtime: " << duration.count() << " milliseconds" << std::endl;
 
     return retVal;
 }
