@@ -88,3 +88,11 @@ Point2D operator - (Point2D lhs, const Point2D& rhs){
     lhs -= rhs;
     return lhs;
 }
+
+bool operator == (const Vector3D& lhs, const Vector3D& rhs){
+    return (lhs.is_point() and rhs.is_point()) or (lhs.is_vector() and rhs.is_vector())
+    and lhs.x == rhs.x and lhs.y == rhs.y and lhs.z == rhs.z;
+}
+bool operator == (const Point2D& lhs, const Point2D& rhs){
+    return lhs.x == rhs.x and lhs.y == rhs.y;
+}

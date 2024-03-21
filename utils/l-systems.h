@@ -74,8 +74,7 @@ Lines2D LSystem_2D(const std::string &input, const Color &lineColor){
             p2.x += cos(currentAngle);
             p2.y += sin(currentAngle);
             if (l_system.draw(c)) out.emplace_back(p1, p2, lineColor);
-            p1.x = p2.x;
-            p1.y = p2.y;
+            p1 = p2;
         }
     }
     return out;
@@ -165,7 +164,7 @@ void LSystem_3D(Figure3D& figure, const std::string& input){
         } else {
             p2 += H;
             if (l_system.draw(c)){
-                if (!figure.points.empty() and p1.x == figure.points.back().x and p1.y == figure.points.back().y and p1.z == figure.points.back().z){
+                if (!figure.points.empty() and p1 == figure.points.back()){
                     figure.points.push_back(p2);
                     figure.faces.push_back({index-1, index});
                     ++index;
