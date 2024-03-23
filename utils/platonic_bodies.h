@@ -6,6 +6,7 @@
 
 
 void createCube(Figure3D& figure){
+    Timer timer("Cube");
     auto& [points, faces, color] = figure;
     points = {Vector3D::point(1,-1,-1), Vector3D::point(-1,1,-1), Vector3D::point(1,1,1),
               Vector3D::point(-1,-1,1), Vector3D::point(1,1,-1), Vector3D::point(-1,-1,-1),
@@ -14,6 +15,7 @@ void createCube(Figure3D& figure){
 }
 
 void createTetrahedron(Figure3D& figure){
+    Timer timer("Tetrahedron");
     auto& [points, faces, color] = figure;
     points.clear(); faces.clear();
     points = {Vector3D::point(1,-1,-1), Vector3D::point(-1,1,-1),
@@ -22,6 +24,7 @@ void createTetrahedron(Figure3D& figure){
 }
 
 void createOctahedron(Figure3D& figure){
+    Timer timer("Octahedron");
     auto& [points, faces, color] = figure;
     points.clear(); faces.clear();
     points = {Vector3D::point(1,0,0), Vector3D::point(0,1,0), Vector3D::point(-1,0,0),
@@ -30,6 +33,7 @@ void createOctahedron(Figure3D& figure){
 }
 
 void createIcosahedron(Figure3D& figure){
+    Timer timer("Icosahedron");
     static std::vector<Vector3D> mem_points;
     if (mem_points.empty()){
         mem_points.reserve(12);
@@ -53,6 +57,7 @@ void createIcosahedron(Figure3D& figure){
 }
 
 void createDodecahedron(Figure3D& figure){
+    Timer timer("Dodecahedron");
     static std::vector<Vector3D> mem_points;
     if (mem_points.empty()){
         Figure3D ico({0,0,0}); createIcosahedron(ico);
@@ -69,6 +74,7 @@ void createDodecahedron(Figure3D& figure){
 }
 
 void createCylinder(Figure3D& figure, const unsigned int n, const double h){
+    Timer timer("Cylinder");
     static std::unordered_map<unsigned int, std::vector<double>> mem_cos;
     static std::unordered_map<unsigned int, std::vector<double>> mem_sin;
     if (mem_cos.find(n) == mem_cos.end()){
@@ -100,6 +106,7 @@ void createCylinder(Figure3D& figure, const unsigned int n, const double h){
 }
 
 void createCone(Figure3D& figure, const unsigned int n, const double h){
+    Timer timer("Cone");
     static std::unordered_map<unsigned int, std::vector<double>> mem_cos;
     static std::unordered_map<unsigned int, std::vector<double>> mem_sin;
     if (mem_cos.find(n) == mem_cos.end()){
@@ -125,6 +132,7 @@ void createCone(Figure3D& figure, const unsigned int n, const double h){
 }
 
 void createSphere(Figure3D& figure, const unsigned int n){
+    Timer timer("Sphere");
     static int maxN = -1;
     static std::vector<Vector3D> mem_points; // points are always added to the back but shared
     static std::unordered_map<unsigned int, std::vector<Face>> mem_faces;
@@ -172,18 +180,33 @@ void createSphere(Figure3D& figure, const unsigned int n){
 }
 
 void createTorus(Figure3D& figure, const double r, const double R, const unsigned int n, const unsigned int m){
+    Timer timer("Torus");
+
+    static std::unordered_map<unsigned int, std::vector<double>> mem_cos;
+    static std::unordered_map<unsigned int, std::vector<double>> mem_sin;
+    if (mem_cos.find(n) == mem_cos.end()){
+        mem_cos[n].reserve(n);
+        mem_sin[n].reserve(n);
+        for (unsigned int i=0 ; i<n ; ++i) mem_cos[n].push_back(cos(2*i*M_PI/n));
+        for (unsigned int i=0 ; i<n ; ++i) mem_sin[n].push_back(sin(2*i*M_PI/n));
+    }
+    if (mem_cos.find(m) == mem_cos.end()){
+        mem_cos[m].reserve(m);
+        mem_sin[m].reserve(m);
+        for (unsigned int i=0 ; i<m ; ++i) mem_cos[m].push_back(cos(2*i*M_PI/m));
+        for (unsigned int i=0 ; i<m ; ++i) mem_sin[m].push_back(sin(2*i*M_PI/m));
+    }
+
     auto& [points, faces, color] = figure;
     points.clear(); faces.clear();
     points.reserve(n*m);
     faces.reserve(n*m);
 
     for (unsigned int i=0 ; i<n ; i++){
-        double u = 2*i*M_PI/n;
         for (unsigned int j=0 ; j<m ; j++){
-            double v = 2*j*M_PI/m;
-            points.push_back(Vector3D::point((R+r*cos(v))*cos(u),
-                                                    (R+r*cos(v))*sin(u),
-                                                    r*sin(v)));
+            points.push_back(Vector3D::point((R+r*mem_cos[m][j])*mem_cos[n][i],
+                                             (R+r*mem_cos[m][j])*mem_sin[n][i],
+                                             r*mem_sin[m][j]));
             faces.push_back({n*i + j, ((i+1)%n)*n + j, ((i+1)%n)*n + (j+1)%m, n*i + (j+1)%m});
         }
     }
