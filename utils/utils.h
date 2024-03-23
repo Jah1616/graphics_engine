@@ -6,12 +6,13 @@
 #include "../easy_image.h"
 
 
-double toRadian(double x) {return x * M_PI / 180;}
-double toDegrees(double x) {return x / M_PI * 180;}
+constexpr double toRadian(double x) {return x * M_PI / 180;}
+constexpr double toDegrees(double x) {return x / M_PI * 180;}
 
 
 struct Color{double red; double green; double blue;
     Color(const double red, const double green, const double blue) :red(red) ,green(green) ,blue(blue) {}
+    Color(const std::vector<double>& color) :red(color[0]), green(color[1]), blue(color[2]) {}
 };
 img::Color imgColor(const Color& color){
     return img::Color(img::Color(lround(color.red*255), lround(color.green*255), lround(color.blue*255)));
@@ -36,6 +37,19 @@ struct Line2D{Point2D p1; Point2D p2; Color color; double z1; double z2;
 };
 typedef std::list<Line2D> Lines2D;
 
+
+struct PointPolar{
+    double r;
+    double phi;
+    double theta;
+};
+
+constexpr PointPolar toPolar(const Vector3D& point){
+    double r = point.length();
+    double theta = std::atan2(point.y, point.x);
+    double phi = std::acos(point.z / r);
+    return {r, phi, theta};
+}
 
 typedef std::vector<unsigned int> Face;
 struct Figure3D{std::vector<Vector3D> points; std::vector<Face> faces; Color color;

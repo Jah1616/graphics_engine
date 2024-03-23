@@ -12,7 +12,7 @@ std::random_device randomDouble;
 std::mt19937 gen(randomDouble());
 std::uniform_real_distribution<double> dis(0.0, 1.0);
 
-Lines2D LSystem_2D(const std::string &input, const Color &lineColor){
+void LSystem_2D(Lines2D& lines, const std::string &input, const Color &lineColor){
     LParser::LSystem2D l_system;
     std::ifstream input_stream(input);
     input_stream >> l_system;
@@ -25,7 +25,7 @@ Lines2D LSystem_2D(const std::string &input, const Color &lineColor){
 
     // replacement
     for (unsigned int i=0 ; i<iterations ; i++){
-        std::string newString;
+        std::string newString{};
         for (char c : initiator){
             if (alphabet.find(c) == alphabet.end()) newString.push_back(c);
             else {
@@ -33,10 +33,10 @@ Lines2D LSystem_2D(const std::string &input, const Color &lineColor){
                     newString.append(l_system.get_replacement(c));
                 else {
                     double rand = dis(gen);
-                    for (const auto &replacement : l_system.get_chances(c)){
-                        rand -= replacement.second;
+                    for (const auto &[replacement, chance] : l_system.get_chances(c)){
+                        rand -= chance;
                         if (rand <= 0){
-                            newString.append(replacement.first);
+                            newString.append(replacement);
                             break;
                         }
                     }
@@ -49,7 +49,6 @@ Lines2D LSystem_2D(const std::string &input, const Color &lineColor){
     // parse string
     const double angle = toRadian(l_system.get_angle());
     double currentAngle = toRadian(l_system.get_starting_angle());
-    Lines2D out;
     Point2D p1(0, 0);
     Point2D p2(0, 0);
     std::stack<Point2D> pointsStack;
@@ -73,11 +72,10 @@ Lines2D LSystem_2D(const std::string &input, const Color &lineColor){
         } else {
             p2.x += cos(currentAngle);
             p2.y += sin(currentAngle);
-            if (l_system.draw(c)) out.emplace_back(p1, p2, lineColor);
+            if (l_system.draw(c)) lines.emplace_back(p1, p2, lineColor);
             p1 = p2;
         }
     }
-    return out;
 }
 
 void LSystem_3D(Figure3D& figure, const std::string& input){
@@ -92,7 +90,7 @@ void LSystem_3D(Figure3D& figure, const std::string& input){
 
     // replacement
     for (unsigned int i=0 ; i<iterations ; i++){
-        std::string newString;
+        std::string newString{};
         for (char c : initiator){
             if (alphabet.find(c) == alphabet.end()) newString.push_back(c);
             else newString.append(l_system.get_replacement(c));
@@ -102,6 +100,9 @@ void LSystem_3D(Figure3D& figure, const std::string& input){
 
     // parse string
     const double angle = toRadian(l_system.get_angle());
+    const double cosAngle = cos(angle);
+    const double sinAngle = sin(angle);
+    const double sinAngleNeg = -sinAngle;
     Vector3D H = Vector3D::vector(1, 0, 0);
     Vector3D L = Vector3D::vector(0, 1, 0);
     Vector3D U = Vector3D::vector(0, 0, 1);
@@ -110,38 +111,38 @@ void LSystem_3D(Figure3D& figure, const std::string& input){
 
     std::stack<Vector3D> vectorStack;
     std::stack<Vector3D> pointsStack;
-    unsigned int index = 0;
+    unsigned int index{};
 
     for (char c : initiator){
         if (alphabet.find(c) == alphabet.end()){
             if (c == '+'){ // turn left
-                Vector3D Hnew = H*cos(angle) + L*sin(angle);
-                Vector3D Lnew = -H*sin(angle) + L*cos(angle);
+                Vector3D Hnew = H*cosAngle + L*sinAngle;
+                Vector3D Lnew = -H*sinAngle + L*cosAngle;
                 H=Hnew; L=Lnew;
             }
             else if (c == '-'){ // turn right
-                Vector3D Hnew = H*cos(-angle) + L*sin(-angle);
-                Vector3D Lnew = -H*sin(-angle) + L*cos(-angle);
+                Vector3D Hnew = H*cosAngle + L*sinAngleNeg;
+                Vector3D Lnew = -H*sinAngleNeg + L*cosAngle;
                 H=Hnew; L=Lnew;
             }
             else if (c == '^'){ // pitch up
-                Vector3D Hnew = H*cos(angle) + U*sin(angle);
-                Vector3D Unew = -H*sin(angle) + U*cos(angle);
+                Vector3D Hnew = H*cosAngle + U*sinAngle;
+                Vector3D Unew = -H*sinAngle + U*cosAngle;
                 H=Hnew; U=Unew;
             }
             else if (c == '&'){ // pitch down
-                Vector3D Hnew = H*cos(-angle) + U*sin(-angle);
-                Vector3D Unew = -H*sin(-angle) + U*cos(-angle);
+                Vector3D Hnew = H*cosAngle + U*sinAngleNeg;
+                Vector3D Unew = -H*sinAngleNeg + U*cosAngle;
                 H=Hnew; U=Unew;
             }
             else if (c == '\\'){ // roll left
-                Vector3D Lnew = L*cos(angle) - U*sin(angle);
-                Vector3D Unew = L*sin(angle) + U*cos(angle);
+                Vector3D Lnew = L*cosAngle - U*sinAngle;
+                Vector3D Unew = L*sinAngle + U*cosAngle;
                 L=Lnew; U=Unew;
             }
             else if (c == '/'){ // roll right
-                Vector3D Lnew = L*cos(-angle) - U*sin(-angle);
-                Vector3D Unew = L*sin(-angle) + U*cos(-angle);
+                Vector3D Lnew = L*cosAngle - U*sinAngleNeg;
+                Vector3D Unew = L*sinAngleNeg + U*cosAngle;
                 L=Lnew; U=Unew;
             }
             else if (c == '|'){ // turn back

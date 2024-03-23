@@ -54,6 +54,7 @@ Matrix rotateZ(const double angle){
 }
 
 Matrix translate(const Vector3D& vector){
+    if (!vector.is_vector()) {std::cerr << "Can not call translate() with a non-vector object.\n";}
     Matrix m;
     m(1, 1) = 1;
     m(2, 2) = 1;
@@ -65,16 +66,9 @@ Matrix translate(const Vector3D& vector){
     return m;
 }
 
-void toPolar(const Vector3D& point, double &theta, double &phi, double &r){
-    r = point.length();
-    theta = std::atan2(point.y, point.x);
-    phi = std::acos(point.z / r);
-}
-
 Matrix eyePointTrans(const Vector3D& eyepoint){
     Matrix m;
-    double theta, phi, r;
-    toPolar(eyepoint, theta, phi, r);
+    auto [r, phi, theta] = toPolar(eyepoint);
     m(1, 1) = -sin(theta);
     m(1, 2) = -cos(theta)*cos(phi);
     m(1, 3) = cos(theta)*sin(phi);
@@ -94,13 +88,13 @@ Point2D doProjection(const Vector3D& point, const double d = 1){
 
 Lines2D doProjection(const Figures3D& figures){
     Lines2D lines;
-    for (const Figure3D& figure : figures){
-        for (const Face & face : figure.faces){
+    for (const auto& [points, faces, color] : figures){
+        for (const Face& face : faces){
             unsigned int nrPoints = face.size();
             for (unsigned int i=0 ; i<nrPoints ; i++){
-                Vector3D p1 = figure.points[face[i]];
-                Vector3D p2 = figure.points[face[(i+1) % nrPoints]];
-                lines.emplace_back(doProjection(p1), doProjection(p2), p1.z, p2.z, figure.color);
+                Vector3D p1 = points[face[i]];
+                Vector3D p2 = points[face[(i+1) % nrPoints]];
+                lines.emplace_back(doProjection(p1), doProjection(p2), p1.z, p2.z, color);
             }
         }
     }

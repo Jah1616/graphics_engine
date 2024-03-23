@@ -8,18 +8,18 @@ X: Niet werkend of niet geïmplementeerd
 
 |   | Functionaliteit           | Status |
 |---|---------------------------|--------|
-| 1 | 2D L-systemen             |        |
+| 1 | 2D L-systemen             | V      |
 |   | Met haakjes               | V      |
 |   | Stochastisch              | V      |
-| 2 | Transformaties            |        |
+| 2 | Transformaties            | V      |
 |   | Eye-point                 | V      |
 |   | Projectie                 | V      |
-| 3 | Platonische Lichamen      |        |
+| 3 | Platonische Lichamen      | V      |
 |   | Kegel en cylinder         | V      |
 |   | Bol                       | V      |
 |   | Torus                     | V      |
 |   | 3D L-systemen             | V      |
-| 4 | Z-buffering (lijnen)      |        |
+| 4 | Z-buffering (lijnen)      | -      |
 | 5 | Triangulatie              |        |
 |   | Z-buffering (driehoeken)  |        |
 | 6 | 3D fractalen              |        |
@@ -39,7 +39,8 @@ X: Niet werkend of niet geïmplementeerd
 Geïmplementeerde vorm van texture mapping: ...
 
 ## Gekende problemen 
-...
+Z-buffered_wireframes geeft geen pixel-perfect kopie van de .png-bestanden.\
+normaal of iets fout?
 ## Niet-gequoteerde functionaliteit
 ...
 

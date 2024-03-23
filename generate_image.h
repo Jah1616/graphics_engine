@@ -12,9 +12,12 @@
 
 void draw2DLines (img::EasyImage& image, const unsigned int size, const Lines2D& lines,
                   const std::vector<double>& bgColor, const bool zbuffed = false){
-    double xmin = std::numeric_limits<double>::max(); double ymin = xmin;
-    double xmax = std::numeric_limits<double>::min(); double ymax = xmax;
-    for (const Line2D &line : lines){
+    double xmin = std::numeric_limits<double>::infinity();
+    double ymin = xmin;
+    double xmax = -std::numeric_limits<double>::infinity();
+    double ymax = xmax;
+
+    for (const auto& line : lines){
         xmin = std::min(xmin, std::min(line.p1.x, line.p2.x));
         xmax = std::max(xmax, std::max(line.p1.x, line.p2.x));
         ymin = std::min(ymin, std::min(line.p1.y, line.p2.y));
@@ -33,23 +36,33 @@ void draw2DLines (img::EasyImage& image, const unsigned int size, const Lines2D&
     const double dx = (imagex - scale * (xmin + xmax)) / 2;
     const double dy = (imagey - scale * (ymin + ymax)) / 2;
 
-    ZBuffer zbuf(lround(imagex), lround(imagey));
-    for (Line2D line: lines) {
-        line.p1 *= scale;
-        line.p2 *= scale;
+    if (zbuffed){
+        ZBuffer zbuf(lround(imagex), lround(imagey));
+        for (auto [p1, p2, lineColor, z1, z2]: lines) {
+            p1 *= scale;
+            p2 *= scale;
 
-        line.p1.x += dx;
-        line.p1.y += dy;
-        line.p2.x += dx;
-        line.p2.y += dy;
+            p1.x += dx;
+            p1.y += dy;
+            p2.x += dx;
+            p2.y += dy;
 
-        if (zbuffed){
-            image.draw_zbuf_line(zbuf, lround(line.p1.x), lround(line.p1.y), line.z1,
-                                 lround(line.p2.x), lround(line.p2.y), line.z2,
-                                 imgColor(line.color));
-        } else {
-            image.draw_line(lround(line.p1.x), lround(line.p1.y), lround(line.p2.x), lround(line.p2.y),
-                            imgColor(line.color));
+            image.draw_zbuf_line(zbuf, lround(p1.x), lround(p1.y), z1,
+                                 lround(p2.x), lround(p2.y), z2,
+                                 imgColor(lineColor));
+        }
+    } else {
+        for (auto [p1, p2, lineColor, z1, z2]: lines) {
+            p1 *= scale;
+            p2 *= scale;
+
+            p1.x += dx;
+            p1.y += dy;
+            p2.x += dx;
+            p2.y += dy;
+
+            image.draw_line(lround(p1.x), lround(p1.y), lround(p2.x), lround(p2.y),
+                            imgColor(lineColor));
         }
     }
 }
@@ -60,9 +73,9 @@ void generate2DLSystemImage(img::EasyImage& image, const ini::Configuration &con
     const std::string inputFile = conf["2DLSystem"]["inputfile"].as_string_or_die();
     const std::vector<double> lineColor = conf["2DLSystem"]["color"].as_double_tuple_or_die();
 
-    draw2DLines(image, size,
-                LSystem_2D(inputFile, Color(lineColor[0], lineColor[1], lineColor[2])),
-                bgColor);
+    Lines2D lines;
+    LSystem_2D(lines, inputFile, Color(lineColor));
+    draw2DLines(image, size, lines, bgColor);
 }
 
 void generateWireframeImage(img::EasyImage& image, const ini::Configuration &conf, const bool zbuffed = false){
