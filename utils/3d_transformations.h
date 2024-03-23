@@ -11,7 +11,7 @@ void applyTransform(Figures3D& f, const Matrix& m){
     for (Figure3D& figure : f) applyTransform(figure, m);
 }
 
-Matrix scale(const double factor){
+inline Matrix scale(const double factor){
     Matrix m;
     m(1, 1) = factor;
     m(2, 2) = factor;
@@ -20,7 +20,7 @@ Matrix scale(const double factor){
     return m;
 }
 
-Matrix rotateX(const double angle){
+inline Matrix rotateX(const double angle){
     Matrix m;
     m(1, 1) = 1;
     m(2, 2) = cos(angle);
@@ -31,7 +31,7 @@ Matrix rotateX(const double angle){
     return m;
 }
 
-Matrix rotateY(const double angle){
+inline Matrix rotateY(const double angle){
     Matrix m;
     m(1, 1) = cos(angle);
     m(1, 3) = -sin(angle);
@@ -42,7 +42,7 @@ Matrix rotateY(const double angle){
     return m;
 }
 
-Matrix rotateZ(const double angle){
+inline Matrix rotateZ(const double angle){
     Matrix m;
     m(1, 1) = cos(angle);
     m(1, 2) = sin(angle);
@@ -53,7 +53,7 @@ Matrix rotateZ(const double angle){
     return m;
 }
 
-Matrix translate(const Vector3D& vector){
+inline Matrix translate(const Vector3D& vector){
     if (!vector.is_vector()) {std::cerr << "Can not call translate() with a non-vector object.\n";}
     Matrix m;
     m(1, 1) = 1;
@@ -66,7 +66,8 @@ Matrix translate(const Vector3D& vector){
     return m;
 }
 
-Matrix eyePointTrans(const Vector3D& eyepoint){
+inline Matrix eyePointTrans(const Vector3D& eyepoint){
+    if (!eyepoint.is_point()) {std::cerr << "Can not call eyePointTrans() with a non-point object.\n";}
     Matrix m;
     auto [r, phi, theta] = toPolar(eyepoint);
     m(1, 1) = -sin(theta);
@@ -82,11 +83,11 @@ Matrix eyePointTrans(const Vector3D& eyepoint){
     return m;
 }
 
-Point2D doProjection(const Vector3D& point, const double d = 1){
+inline Point2D doProjection(const Vector3D& point, const double d = 1){
     return {d*point.x/-point.z, d*point.y/-point.z};
 }
 
-Lines2D doProjection(const Figures3D& figures){
+inline Lines2D doProjection(const Figures3D& figures){
     Lines2D lines;
     for (const auto& [points, faces, color] : figures){
         for (const Face& face : faces){

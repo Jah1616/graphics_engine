@@ -2,31 +2,26 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <chrono>
 #include "easy_image.h"
 #include "ini/ini_configuration.h"
 #include "generate_image.h"
 
 
 img::EasyImage generate_image(const ini::Configuration &configuration){
-//    auto start = std::chrono::high_resolution_clock::now();
     img::EasyImage image;
     const std::string type = configuration["General"]["type"].as_string_or_die();
 
+    Timer timer(type);
     if (type == "2DLSystem") generate2DLSystemImage(image, configuration);
     if (type == "Wireframe") generateWireframeImage(image, configuration);
     if (type == "ZBufferedWireframe") generateWireframeImage(image, configuration, true);
-
-//    auto stop = std::chrono::high_resolution_clock::now();
-//    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-//    std::cout << "Image runtime: " << duration.count() << " milliseconds" << std::endl;
     return image;
 }
 
 
 int main(int argc, char const* argv[])
 {
-    auto start = std::chrono::high_resolution_clock::now();
+    Timer timer("Total");
         int retVal = 0;
         try
         {
@@ -100,10 +95,6 @@ int main(int argc, char const* argv[])
                 std::cerr << "Error: insufficient memory" << std::endl;
                 retVal = 100;
         }
-
-    auto stop = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(stop - start);
-    std::cout << "Total runtime: " << duration.count() << " milliseconds" << std::endl;
 
     return retVal;
 }

@@ -2,12 +2,38 @@
 #include <list>
 #include <limits>
 #include <vector>
+#include <chrono>
 #include "vector3d.h"
 #include "../easy_image.h"
 
 
 constexpr double toRadian(double x) {return x * M_PI / 180;}
 constexpr double toDegrees(double x) {return x / M_PI * 180;}
+
+
+class Timer{
+private:
+    const std::string _target;
+    const std::chrono::time_point<std::chrono::high_resolution_clock> _startTime;
+    std::ostream& _outputStream;
+protected:
+public:
+    Timer(const std::string& target, std::ostream& out = std::cout)
+    :_target(target)
+    ,_startTime(std::chrono::high_resolution_clock::now())
+    ,_outputStream(out) {}
+    ~Timer(){Stop();}
+
+    void Stop(){
+        auto endTime = std::chrono::high_resolution_clock::now();
+
+        auto start = std::chrono::time_point_cast<std::chrono::milliseconds>(_startTime).time_since_epoch();
+        auto end = std::chrono::time_point_cast<std::chrono::milliseconds>(endTime).time_since_epoch();
+
+        auto duration = end - start;
+        _outputStream << _target << " duration: " << duration.count() << "ms\n";
+    }
+};
 
 
 struct Color{double red; double green; double blue;
@@ -25,7 +51,6 @@ img::Color imgColor(const std::vector<double>& color){
 struct Point2D{double x; double y;
     Point2D(const double x, const double y) :x(x), y(y) {}
 };
-
 struct Line2D{Point2D p1; Point2D p2; Color color; double z1; double z2;
     Line2D(const Point2D& p1, const Point2D& p2, const Color& color) :p1(p1), p2(p2), color(color), z1(), z2() {}
     Line2D(const Point2D& p1, const Point2D& p2, const double z1, const double z2, const Color& color)
@@ -43,13 +68,13 @@ struct PointPolar{
     double phi;
     double theta;
 };
-
 constexpr PointPolar toPolar(const Vector3D& point){
-    double r = point.length();
+    double r = sqrt(point.x*point.x + point.y*point.y + point.z*point.z);
     double theta = std::atan2(point.y, point.x);
     double phi = std::acos(point.z / r);
     return {r, phi, theta};
 }
+
 
 typedef std::vector<unsigned int> Face;
 struct Figure3D{std::vector<Vector3D> points; std::vector<Face> faces; Color color;

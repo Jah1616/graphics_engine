@@ -97,11 +97,10 @@ void generateWireframeImage(img::EasyImage& image, const ini::Configuration &con
         const double fig_rotateY = toRadian(conf[fig_string]["rotateY"].as_double_or_die());
         const double fig_rotateZ = toRadian(conf[fig_string]["rotateZ"].as_double_or_die());
         const std::vector<double> fig_centerCoords = conf[fig_string]["center"].as_double_tuple_or_die();
-        const Vector3D fig_centerPoint = Vector3D::point(fig_centerCoords[0], fig_centerCoords[1], fig_centerCoords[2]);
+        const Vector3D fig_translate = Vector3D::vector(fig_centerCoords[0], fig_centerCoords[1], fig_centerCoords[2]);
         const std::vector<double> fig_color = conf[fig_string]["color"].as_double_tuple_or_die();
 
-        Color fig_color_obj(fig_color[0], fig_color[1], fig_color[2]);
-        Figure3D newFigure(fig_color_obj);
+        Figure3D newFigure({fig_color[0], fig_color[1], fig_color[2]});
 
         if (fig_type == "LineDrawing"){
             const unsigned int nrPoints = conf[fig_string]["nrPoints"].as_int_or_die();
@@ -134,12 +133,10 @@ void generateWireframeImage(img::EasyImage& image, const ini::Configuration &con
                                                   conf[fig_string]["m"].as_int_or_die());
         else if (fig_type == "3DLSystem") LSystem_3D(newFigure, conf[fig_string]["inputfile"]);
 
-        Matrix transformMatrix = scale(fig_scale);
-        transformMatrix *= rotateX(fig_rotateX);
-        transformMatrix *= rotateY(fig_rotateY);
-        transformMatrix *= rotateZ(fig_rotateZ);
-        transformMatrix *= translate(fig_centerPoint);
-        transformMatrix *= eyePointTrans(eyePoint);
+        Matrix transformMatrix = scale(fig_scale)
+                * rotateX(fig_rotateX) * rotateY(fig_rotateY) * rotateZ(fig_rotateZ)
+                * translate(fig_translate)
+                * eyePointTrans(eyePoint);
 
         applyTransform(newFigure, transformMatrix);
         figures.push_back(newFigure);
