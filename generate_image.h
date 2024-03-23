@@ -2,6 +2,7 @@
 #include <cmath>
 #include <vector>
 #include <limits>
+#include <algorithm>
 #include "ini/ini_configuration.h"
 #include "easy_image.h"
 #include "utils/utils.h"
@@ -18,10 +19,10 @@ void draw2DLines (img::EasyImage& image, const unsigned int size, const Lines2D&
     double ymax = xmax;
 
     for (const auto& line : lines){
-        xmin = std::min(xmin, std::min(line.p1.x, line.p2.x));
-        xmax = std::max(xmax, std::max(line.p1.x, line.p2.x));
-        ymin = std::min(ymin, std::min(line.p1.y, line.p2.y));
-        ymax = std::max(ymax, std::max(line.p1.y, line.p2.y));
+        xmin = std::min({xmin, line.p1.x, line.p2.x});
+        xmax = std::max({xmax, line.p1.x, line.p2.x});
+        ymin = std::min({ymin, line.p1.y, line.p2.y});
+        ymax = std::max({ymax, line.p1.y, line.p2.y});
     }
 
     const double xrange = xmax - xmin;
@@ -82,6 +83,7 @@ void generateWireframeImage(img::EasyImage& image, const ini::Configuration &con
     const unsigned int size = conf["General"]["size"].as_int_or_die();
     const std::vector<double> bgColor = conf["General"]["backgroundcolor"].as_double_tuple_or_die();
     const unsigned int nrFigs = conf["General"]["nrFigures"].as_int_or_die();
+
     const std::vector<double> eyeCoords = conf["General"]["eye"].as_double_tuple_or_die();
     const auto eyePoint = Vector3D::point(eyeCoords[0], eyeCoords[1], eyeCoords[2]);
 
