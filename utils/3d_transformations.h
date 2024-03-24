@@ -54,7 +54,7 @@ inline Matrix rotateZ(const double angle){
 }
 
 inline Matrix translate(const Vector3D& vector){
-    if (!vector.is_vector()) {std::cerr << "Can not call translate() with a non-vector object.\n";}
+//    if (!vector.is_vector()) {std::cerr << "Can not call translate() with a non-vector object.\n";}
     Matrix m;
     m(1, 1) = 1;
     m(2, 2) = 1;
@@ -67,7 +67,7 @@ inline Matrix translate(const Vector3D& vector){
 }
 
 inline Matrix eyePointTrans(const Vector3D& eyepoint){
-    if (!eyepoint.is_point()) {std::cerr << "Can not call eyePointTrans() with a non-point object.\n";}
+//    if (!eyepoint.is_point()) {std::cerr << "Can not call eyePointTrans() with a non-point object.\n";}
     Matrix m;
     auto [r, phi, theta] = toPolar(eyepoint);
     m(1, 1) = -sin(theta);

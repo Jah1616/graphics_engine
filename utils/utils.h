@@ -40,10 +40,10 @@ struct Color{double red; double green; double blue;
     Color(const double red, const double green, const double blue) :red(red) ,green(green) ,blue(blue) {}
     Color(const std::vector<double>& color) :red(color[0]), green(color[1]), blue(color[2]) {}
 };
-img::Color imgColor(const Color& color){
+inline img::Color imgColor(const Color& color){
     return img::Color(img::Color(lround(color.red*255), lround(color.green*255), lround(color.blue*255)));
 }
-img::Color imgColor(const std::vector<double>& color){
+inline img::Color imgColor(const std::vector<double>& color){
     return img::Color(img::Color(lround(color[0]*255), lround(color[1]*255), lround(color[2]*255)));
 }
 

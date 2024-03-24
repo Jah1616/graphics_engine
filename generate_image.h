@@ -13,6 +13,7 @@
 
 void draw2DLines (img::EasyImage& image, const unsigned int size, const Lines2D& lines,
                   const std::vector<double>& bgColor, const bool zbuffed = false){
+//    Timer timer("draw2DLines()");
     double xmin = std::numeric_limits<double>::infinity();
     double ymin = xmin;
     double xmax = -std::numeric_limits<double>::infinity();
@@ -38,6 +39,7 @@ void draw2DLines (img::EasyImage& image, const unsigned int size, const Lines2D&
     const double dy = (imagey - scale * (ymin + ymax)) / 2;
 
     if (zbuffed){
+//        Timer timer("draw2DLines() (zbuffed)");
         ZBuffer zbuf(lround(imagex), lround(imagey));
         for (auto [p1, p2, lineColor, z1, z2]: lines) {
             p1 *= scale;
@@ -53,6 +55,7 @@ void draw2DLines (img::EasyImage& image, const unsigned int size, const Lines2D&
                                  imgColor(lineColor));
         }
     } else {
+//        Timer timer("draw2DLines()");
         for (auto [p1, p2, lineColor, z1, z2]: lines) {
             p1 *= scale;
             p2 *= scale;
@@ -100,9 +103,10 @@ void generateWireframeImage(img::EasyImage& image, const ini::Configuration &con
         const Vector3D fig_translate = Vector3D::vector(fig_centerCoords[0], fig_centerCoords[1], fig_centerCoords[2]);
         const std::vector<double> fig_color = conf[fig_string]["color"].as_double_tuple_or_die();
 
-        Figure3D newFigure({fig_color[0], fig_color[1], fig_color[2]});
+        Figure3D newFigure(fig_color);
 
         if (fig_type == "LineDrawing"){
+//            Timer timer("Linedrawing");
             const unsigned int nrPoints = conf[fig_string]["nrPoints"].as_int_or_die();
             for (unsigned int p=0 ; p < nrPoints ; p++){
                 const std::vector<double> coords = conf[fig_string]["point" + std::to_string(p)].as_double_tuple_or_die();

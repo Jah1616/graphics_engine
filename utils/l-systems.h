@@ -13,6 +13,7 @@ std::mt19937 gen(randomDouble());
 std::uniform_real_distribution<double> dis(0.0, 1.0);
 
 void LSystem_2D(Lines2D& lines, const std::string &input, const Color &lineColor){
+//    Timer timer("2D-L-System");
     LParser::LSystem2D l_system;
     std::ifstream input_stream(input);
     input_stream >> l_system;
@@ -57,12 +58,12 @@ void LSystem_2D(Lines2D& lines, const std::string &input, const Color &lineColor
     for (char c : initiator){
         if (alphabet.find(c) == alphabet.end()){
             if (c == '-') currentAngle -= angle;
-            if (c == '+') currentAngle += angle;
-            if (c == '('){
+            else if (c == '+') currentAngle += angle;
+            else if (c == '('){
                 pointsStack.push(p2);
                 angleStack.push(currentAngle);
             }
-            if (c == ')') {
+            else if (c == ')') {
                 p1 = pointsStack.top();
                 p2 = pointsStack.top();
                 currentAngle = angleStack.top();
@@ -79,6 +80,7 @@ void LSystem_2D(Lines2D& lines, const std::string &input, const Color &lineColor
 }
 
 void LSystem_3D(Figure3D& figure, const std::string& input){
+//    Timer timer("3D-L-System");
     LParser::LSystem3D l_system;
     std::ifstream input_stream(input);
     input_stream >> l_system;input_stream.close();
