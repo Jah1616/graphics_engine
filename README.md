@@ -39,8 +39,7 @@ X: Niet werkend of niet geïmplementeerd
 Geïmplementeerde vorm van texture mapping: ...
 
 ## Gekende problemen 
-Z-buffered_wireframes geeft geen pixel-perfect kopie van de .png-bestanden.\
-normaal of iets fout?
+
 ## Niet-gequoteerde functionaliteit
 ...
 
