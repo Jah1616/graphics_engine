@@ -20,15 +20,8 @@
 #include <stdint.h>
 #include <vector>
 #include <iostream>
-#include <limits>
 
-class ZBuffer: public std::vector<std::vector<double>>{
-public:
-    ZBuffer(unsigned int width, unsigned int height);
-private:
-    unsigned int image_width;
-    unsigned int image_height;
-};
+class ZBuffer;
 
 /**
  * \brief The namespace of the EasyImage class

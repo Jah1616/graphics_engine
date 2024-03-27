@@ -48,8 +48,7 @@ struct Point2D{double x; double y;
     Point2D(const double x, const double y) :x(x), y(y) {}
 };
 struct Line2D{Point2D p1; Point2D p2; Color color; double z1; double z2;
-    Line2D(const Point2D& p1, const Point2D& p2, const Color& color) :p1(p1), p2(p2), color(color), z1(), z2() {}
-    Line2D(const Point2D& p1, const Point2D& p2, const double z1, const double z2, const Color& color)
+    Line2D(const Point2D& p1, const Point2D& p2, const Color& color, const double z1 = 0, const double z2 = 0)
     :p1(p1), p2(p2), color(color), z1(z1), z2(z2){}
     void invert(){
         std::swap(p1, p2);
@@ -73,12 +72,49 @@ constexpr PointPolar toPolar(const Vector3D& point){
 
 
 typedef std::vector<unsigned int> Face;
+std::vector<Face> triangulate(const Face& face){
+    std::vector<Face> out;
+    unsigned int first = face[0];
+    for (unsigned int i=1 ; i<=face.size()-2 ; i++) out.push_back({first, face[i], face[i+1]});
+    return out;
+}
+
+
 struct Figure3D{std::vector<Vector3D> points; std::vector<Face> faces; Color color;
     Figure3D(const std::vector<Vector3D>& points, const std::vector<Face>& faces, const Color& color)
     :points(points) ,faces(faces) ,color(color){}
     Figure3D(const Color& color): points{}, faces{}, color(color) {};
 };
 typedef std::vector<Figure3D> Figures3D;
+
+
+
+struct ImgVars{double scale; double dx; double dy; double imagex; double imagey;};
+ImgVars getImgVars(const Lines2D& lines, const unsigned int size){
+    double xmin = std::numeric_limits<double>::infinity();
+    double ymin = xmin;
+    double xmax = -std::numeric_limits<double>::infinity();
+    double ymax = xmax;
+
+    for (const auto& line : lines){
+        xmin = std::min({xmin, line.p1.x, line.p2.x});
+        xmax = std::max({xmax, line.p1.x, line.p2.x});
+        ymin = std::min({ymin, line.p1.y, line.p2.y});
+        ymax = std::max({ymax, line.p1.y, line.p2.y});
+    }
+
+    const double xrange = xmax - xmin;
+    const double yrange = ymax - ymin;
+    const double imagex = size * xrange / fmax(xrange, yrange);
+    const double imagey = size * yrange / fmax(xrange, yrange);
+
+    const double scale = 0.95 * imagex / xrange;
+    const double dx = (imagex - scale * (xmin + xmax)) / 2;
+    const double dy = (imagey - scale * (ymin + ymax)) / 2;
+
+    return {scale, dx, dy, imagex, imagey};
+}
+
 
 
 // Point2D operators

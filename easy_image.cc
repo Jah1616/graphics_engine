@@ -15,23 +15,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include "easy_image.h"
 #include <algorithm>
 #include <assert.h>
 #include <math.h>
 #include <iostream>
 #include <sstream>
+#include "easy_image.h"
+#include "utils/zbuffer.h"
 
 #ifndef le32toh
 #define le32toh(x) (x)
 #endif
 
-
-constexpr double posInf = std::numeric_limits<double>::infinity();
-constexpr double negInf = -std::numeric_limits<double>::infinity();
-ZBuffer::ZBuffer(const unsigned int width, const unsigned int height):image_width(width), image_height(height){
-    std::vector<std::vector<double>>::resize(image_width, std::vector<double>(image_height, posInf));
-}
 
 namespace {
 	//structs borrowed from wikipedia's article on the BMP file format
@@ -221,10 +216,10 @@ void img::EasyImage::draw_zbuf_line(ZBuffer &zbuf, int x0, int y0, const double 
     }
     if (x0 == x1){
         //special case for x0 == x1
-        if (y0 > y1){
-            std::swap(x0, x1);
-            std::swap(y0, y1);
-        }
+//        if (y0 > y1){
+//            std::swap(x0, x1);
+//            std::swap(y0, y1);
+//        }
         double deltay = y0-y1;
         for (int i = y0; i <= y1; i++){
             double p = (i - y1)/deltay;
@@ -237,10 +232,10 @@ void img::EasyImage::draw_zbuf_line(ZBuffer &zbuf, int x0, int y0, const double 
     }
     else if (y0 == y1){
         //special case for y0 == y1
-        if (x0 > x1){
-            std::swap(x0, x1);
-            std::swap(y0, y1);
-        }
+//        if (x0 > x1){
+//            std::swap(x0, x1);
+//            std::swap(y0, y1);
+//        }
         double deltax = x0-x1;
         for (int i = x0; i <= x1; i++){
             double p = (i - x1)/deltax;

@@ -9,66 +9,52 @@
 #include "utils/l-systems.h"
 #include "utils/platonic_bodies.h"
 #include "utils/3d_transformations.h"
-
+#include "utils/zbuffer.h"
 
 void draw2DLines (img::EasyImage& image, const unsigned int size, const Lines2D& lines,
-                  const std::vector<double>& bgColor, const bool zbuffed = false){
+                  const std::vector<double>& bgColor, ZBUF_MODE zbufMode){
 //    if (zbuffed) Timer timer("draw2DLines (zbuffed)");
 //    else Timer timer("draw2DLines");
 
-    double xmin = std::numeric_limits<double>::infinity();
-    double ymin = xmin;
-    double xmax = -std::numeric_limits<double>::infinity();
-    double ymax = xmax;
-
-    for (const auto& line : lines){
-        xmin = std::min({xmin, line.p1.x, line.p2.x});
-        xmax = std::max({xmax, line.p1.x, line.p2.x});
-        ymin = std::min({ymin, line.p1.y, line.p2.y});
-        ymax = std::max({ymax, line.p1.y, line.p2.y});
-    }
-
-    const double xrange = xmax - xmin;
-    const double yrange = ymax - ymin;
-    const double imagex = size * xrange / fmax(xrange, yrange);
-    const double imagey = size * yrange / fmax(xrange, yrange);
+    auto [scale, dx, dy, imagex, imagey] = getImgVars(lines, size);
 
     image = img::EasyImage(lround(imagex), lround(imagey));
     image.clear(imgColor(bgColor));
 
-    const double scale = 0.95 * imagex / xrange;
-    const double dx = (imagex - scale * (xmin + xmax)) / 2;
-    const double dy = (imagey - scale * (ymin + ymax)) / 2;
+    ZBuffer zbuf(lround(imagex), lround(imagey));
+    for (auto [p1, p2, lineColor, z1, z2] : lines) {
+        p1 *= scale;
+        p2 *= scale;
 
-    if (zbuffed){
-        ZBuffer zbuf(lround(imagex), lround(imagey));
-        for (auto [p1, p2, lineColor, z1, z2]: lines) {
-            p1 *= scale;
-            p2 *= scale;
+        p1.x += dx;
+        p1.y += dy;
+        p2.x += dx;
+        p2.y += dy;
 
-            p1.x += dx;
-            p1.y += dy;
-            p2.x += dx;
-            p2.y += dy;
-
-            image.draw_zbuf_line(zbuf, lround(p1.x), lround(p1.y), z1,
-                                 lround(p2.x), lround(p2.y), z2,
-                                 imgColor(lineColor));
-        }
-    } else {
-        for (auto [p1, p2, lineColor, z1, z2]: lines) {
-            p1 *= scale;
-            p2 *= scale;
-
-            p1.x += dx;
-            p1.y += dy;
-            p2.x += dx;
-            p2.y += dy;
-
-            image.draw_line(lround(p1.x), lround(p1.y), lround(p2.x), lround(p2.y),
-                            imgColor(lineColor));
-        }
+        if (zbufMode == ZBUF_NONE) image.draw_line(lround(p1.x), lround(p1.y),
+                                                   lround(p2.x), lround(p2.y),
+                                                   imgColor(lineColor));
+        else if (zbufMode == ZBUF_LINE) image.draw_zbuf_line(zbuf, lround(p1.x), lround(p1.y), z1,
+                                                             lround(p2.x), lround(p2.y), z2,
+                                                             imgColor(lineColor));
     }
+}
+
+void drawZBuffedTrianglesImage(){
+
+}
+
+void drawZBufTriangle (ZBuffer& zbuffer, img::EasyImage& image,
+                       const Vector3D& A, const Vector3D& B, const Vector3D& C,
+                       const double d, const double dx, const double dy, const Color& color){
+    const Point2D a(d*A.x/-A.z + dx, d*A.y/-A.z + dy);
+    const Point2D b(d*B.x/-B.z + dx, d*B.y/-B.z + dy);
+    const Point2D c(d*C.x/-C.z + dx, d*C.y/-C.z + dy);
+
+    const unsigned int ymin = lround(std::min({a.y, b.y, c.y}));
+    const unsigned int ymax = lround(std::max({a.y, b.y, c.y}));
+
+    for (unsigned int )
 }
 
 void generate2DLSystemImage(img::EasyImage& image, const ini::Configuration& conf){
@@ -79,10 +65,10 @@ void generate2DLSystemImage(img::EasyImage& image, const ini::Configuration& con
 
     Lines2D lines;
     LSystem_2D(lines, inputFile, Color(lineColor));
-    draw2DLines(image, size, lines, bgColor);
+    draw2DLines(image, size, lines, bgColor, ZBUF_NONE);
 }
 
-void generateWireframeImage(img::EasyImage& image, const ini::Configuration& conf, const bool zbuffed = false){
+void generateWireframeImage(img::EasyImage& image, const ini::Configuration& conf, ZBUF_MODE zbufMode){
     const unsigned int size = conf["General"]["size"].as_int_or_die();
     const std::vector<double> bgColor = conf["General"]["backgroundcolor"].as_double_tuple_or_die();
     const unsigned int nrFigs = conf["General"]["nrFigures"].as_int_or_die();
@@ -121,6 +107,7 @@ void generateWireframeImage(img::EasyImage& image, const ini::Configuration& con
                 newFigure.faces.push_back(newFace);
             }
         }
+
         else if (fig_type == "Cube") createCube(newFigure);
         else if (fig_type == "Tetrahedron") createTetrahedron(newFigure);
         else if (fig_type == "Octahedron") createOctahedron(newFigure);
@@ -146,5 +133,19 @@ void generateWireframeImage(img::EasyImage& image, const ini::Configuration& con
         figures.push_back(newFigure);
     }
 
-    draw2DLines(image, size, doProjection(figures), bgColor, zbuffed);
+    Lines2D projectedLines = doProjection(figures);
+
+    if (zbufMode == ZBUF_TRIANGLE){
+        auto [scale, dx, dy, imagex, imagey] = getImgVars(projectedLines, size);
+        ZBuffer zbuf(lround(imagex), lround(imagey));
+        for (auto const& [points, faces, color] : figures){
+            for (const Face& face : faces){
+                for (const Face& tri : triangulate(face)){
+                    drawZBufTriangle(zbuf, image, points[tri[0]], points[tri[1]], points[tri[2]], scale, dx, dy, color);
+                }
+            }
+        }
+    } else {
+        draw2DLines(image, size, projectedLines, bgColor, zbufMode);
+    }
 }

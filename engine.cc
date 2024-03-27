@@ -13,8 +13,9 @@ img::EasyImage generate_image(const ini::Configuration &configuration){
 
 //    Timer timer(type);
     if (type == "2DLSystem") generate2DLSystemImage(image, configuration);
-    else if (type == "Wireframe") generateWireframeImage(image, configuration);
-    else if (type == "ZBufferedWireframe") generateWireframeImage(image, configuration, true);
+    else if (type == "Wireframe") generateWireframeImage(image, configuration, ZBUF_NONE);
+    else if (type == "ZBufferedWireframe") generateWireframeImage(image, configuration, ZBUF_LINE);
+    else if (type == "ZBuffering") generateWireframeImage(image, configuration, ZBUF_TRIANGLE);
     return image;
 }
 

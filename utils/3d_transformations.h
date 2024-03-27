@@ -95,9 +95,11 @@ inline Lines2D doProjection(const Figures3D& figures){
             for (unsigned int i=0 ; i<nrPoints ; i++){
                 Vector3D p1 = points[face[i]];
                 Vector3D p2 = points[face[(i+1) % nrPoints]];
-                lines.emplace_back(doProjection(p1), doProjection(p2), p1.z, p2.z, color);
+                lines.emplace_back(doProjection(p1), doProjection(p2), color, p1.z, p2.z);
             }
         }
     }
     return lines;
 }
+
+inline Point
