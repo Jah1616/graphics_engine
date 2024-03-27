@@ -14,23 +14,19 @@ constexpr double toDegrees(double x) {return x / M_PI * 180;}
 class Timer{
 private:
     const std::string _target;
-    const std::chrono::time_point<std::chrono::high_resolution_clock> _startTime;
+    const std::chrono::time_point<std::chrono::high_resolution_clock> _start;
     std::ostream& _outputStream;
 protected:
 public:
     Timer(const std::string& target, std::ostream& out = std::cout)
-    :_target(target)
-    ,_startTime(std::chrono::high_resolution_clock::now())
-    ,_outputStream(out) {}
-    ~Timer(){Stop();}
+    : _target(target)
+    , _start(std::chrono::high_resolution_clock::now())
+    , _outputStream(out) {}
+    ~Timer(){stop();}
 
-    void Stop(){
-        auto endTime = std::chrono::high_resolution_clock::now();
-
-        auto start = std::chrono::time_point_cast<std::chrono::milliseconds>(_startTime).time_since_epoch();
-        auto end = std::chrono::time_point_cast<std::chrono::milliseconds>(endTime).time_since_epoch();
-
-        auto duration = end - start;
+    void stop(){
+        auto end = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - _start);
         _outputStream << _target << " duration: " << duration.count() << "ms\n";
     }
 };
@@ -60,7 +56,7 @@ struct Line2D{Point2D p1; Point2D p2; Color color; double z1; double z2;
         std::swap(z1, z2);
     }
 };
-typedef std::list<Line2D> Lines2D;
+typedef std::vector<Line2D> Lines2D;
 
 
 struct PointPolar{
@@ -82,7 +78,7 @@ struct Figure3D{std::vector<Vector3D> points; std::vector<Face> faces; Color col
     :points(points) ,faces(faces) ,color(color){}
     Figure3D(const Color& color): points{}, faces{}, color(color) {};
 };
-typedef std::list<Figure3D> Figures3D;
+typedef std::vector<Figure3D> Figures3D;
 
 
 // Point2D operators

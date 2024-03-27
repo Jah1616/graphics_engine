@@ -170,7 +170,7 @@ void LSystem_3D(Figure3D& figure, const std::string& input){
                 if (!figure.points.empty() and p1 == figure.points.back()){
                     figure.points.push_back(p2);
                     figure.faces.push_back({index-1, index});
-                    ++index;
+                    index++;
                 } else {
                     figure.points.push_back(p1);
                     figure.points.push_back(p2);

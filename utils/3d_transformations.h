@@ -4,11 +4,11 @@
 
 
 void applyTransform(Figure3D& f, const Matrix& m){
-    for (Vector3D& point : f.points) point *= m;
+    for (auto& point : f.points) point *= m;
 }
 
 void applyTransform(Figures3D& f, const Matrix& m){
-    for (Figure3D& figure : f) applyTransform(figure, m);
+    for (auto& figure : f) applyTransform(figure, m);
 }
 
 inline Matrix scale(const double factor){
@@ -90,8 +90,8 @@ inline Point2D doProjection(const Vector3D& point, const double d = 1){
 inline Lines2D doProjection(const Figures3D& figures){
     Lines2D lines;
     for (const auto& [points, faces, color] : figures){
-        for (const Face& face : faces){
-            unsigned int nrPoints = face.size();
+        for (const auto& face : faces){
+            auto nrPoints = face.size();
             for (unsigned int i=0 ; i<nrPoints ; i++){
                 Vector3D p1 = points[face[i]];
                 Vector3D p2 = points[face[(i+1) % nrPoints]];

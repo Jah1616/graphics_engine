@@ -9,12 +9,12 @@
 
 img::EasyImage generate_image(const ini::Configuration &configuration){
     img::EasyImage image;
-    const std::string type = configuration["General"]["type"].as_string_or_die();
+    const std::string& type = configuration["General"]["type"].as_string_or_die();
 
 //    Timer timer(type);
     if (type == "2DLSystem") generate2DLSystemImage(image, configuration);
-    if (type == "Wireframe") generateWireframeImage(image, configuration);
-    if (type == "ZBufferedWireframe") generateWireframeImage(image, configuration, true);
+    else if (type == "Wireframe") generateWireframeImage(image, configuration);
+    else if (type == "ZBufferedWireframe") generateWireframeImage(image, configuration, true);
     return image;
 }
 

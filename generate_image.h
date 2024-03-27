@@ -13,7 +13,9 @@
 
 void draw2DLines (img::EasyImage& image, const unsigned int size, const Lines2D& lines,
                   const std::vector<double>& bgColor, const bool zbuffed = false){
-//    Timer timer("draw2DLines()");
+//    if (zbuffed) Timer timer("draw2DLines (zbuffed)");
+//    else Timer timer("draw2DLines");
+
     double xmin = std::numeric_limits<double>::infinity();
     double ymin = xmin;
     double xmax = -std::numeric_limits<double>::infinity();
@@ -39,7 +41,6 @@ void draw2DLines (img::EasyImage& image, const unsigned int size, const Lines2D&
     const double dy = (imagey - scale * (ymin + ymax)) / 2;
 
     if (zbuffed){
-//        Timer timer("draw2DLines() (zbuffed)");
         ZBuffer zbuf(lround(imagex), lround(imagey));
         for (auto [p1, p2, lineColor, z1, z2]: lines) {
             p1 *= scale;
@@ -55,7 +56,6 @@ void draw2DLines (img::EasyImage& image, const unsigned int size, const Lines2D&
                                  imgColor(lineColor));
         }
     } else {
-//        Timer timer("draw2DLines()");
         for (auto [p1, p2, lineColor, z1, z2]: lines) {
             p1 *= scale;
             p2 *= scale;
@@ -71,7 +71,7 @@ void draw2DLines (img::EasyImage& image, const unsigned int size, const Lines2D&
     }
 }
 
-void generate2DLSystemImage(img::EasyImage& image, const ini::Configuration &conf){
+void generate2DLSystemImage(img::EasyImage& image, const ini::Configuration& conf){
     const unsigned int size = conf["General"]["size"].as_int_or_die();
     const std::vector<double> bgColor = conf["General"]["backgroundcolor"].as_double_tuple_or_die();
     const std::string inputFile = conf["2DLSystem"]["inputfile"].as_string_or_die();
@@ -82,7 +82,7 @@ void generate2DLSystemImage(img::EasyImage& image, const ini::Configuration &con
     draw2DLines(image, size, lines, bgColor);
 }
 
-void generateWireframeImage(img::EasyImage& image, const ini::Configuration &conf, const bool zbuffed = false){
+void generateWireframeImage(img::EasyImage& image, const ini::Configuration& conf, const bool zbuffed = false){
     const unsigned int size = conf["General"]["size"].as_int_or_die();
     const std::vector<double> bgColor = conf["General"]["backgroundcolor"].as_double_tuple_or_die();
     const unsigned int nrFigs = conf["General"]["nrFigures"].as_int_or_die();

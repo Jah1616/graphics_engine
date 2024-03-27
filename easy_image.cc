@@ -30,7 +30,7 @@
 constexpr double posInf = std::numeric_limits<double>::infinity();
 constexpr double negInf = -std::numeric_limits<double>::infinity();
 ZBuffer::ZBuffer(const unsigned int width, const unsigned int height):image_width(width), image_height(height){
-    this->resize(width, std::vector<double>(height, posInf));
+    std::vector<std::vector<double>>::resize(image_width, std::vector<double>(image_height, posInf));
 }
 
 namespace {

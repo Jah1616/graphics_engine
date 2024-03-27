@@ -26,8 +26,8 @@ class ZBuffer: public std::vector<std::vector<double>>{
 public:
     ZBuffer(unsigned int width, unsigned int height);
 private:
-    double image_width;
-    double image_height;
+    unsigned int image_width;
+    unsigned int image_height;
 };
 
 /**
