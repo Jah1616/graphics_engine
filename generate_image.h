@@ -54,7 +54,15 @@ void drawZBufTriangle (ZBuffer& zbuffer, img::EasyImage& image,
     const unsigned int ymin = lround(std::min({a.y, b.y, c.y}));
     const unsigned int ymax = lround(std::max({a.y, b.y, c.y}));
 
-    for (unsigned int )
+    unsigned int xl_ab, xl_ac, xl_bc;
+    unsigned int xr_ab, xr_ac, xr_bc;
+    xl_ab = xl_ac = xl_bc = std::numeric_limits<unsigned int>::infinity();
+    xr_ab = xr_ac = xr_bc = -std::numeric_limits<unsigned int>::infinity();
+
+    for (unsigned int i=ymin ; i<=ymax ; i++){
+//        unsigned int xl = lround();
+//        unsigned int xr = lround();
+    }
 }
 
 void generate2DLSystemImage(img::EasyImage& image, const ini::Configuration& conf){
