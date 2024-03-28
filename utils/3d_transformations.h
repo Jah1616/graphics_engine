@@ -69,7 +69,7 @@ inline Matrix translate(const Vector3D& vector){
 inline Matrix eyePointTrans(const Vector3D& eyepoint){
 //    if (!eyepoint.is_point()) {std::cerr << "Can not call eyePointTrans() with a non-point object.\n";}
     Matrix m;
-    auto [r, phi, theta] = toPolar(eyepoint);
+    const auto [r, phi, theta] = toPolar(eyepoint);
     m(1, 1) = -sin(theta);
     m(1, 2) = -cos(theta)*cos(phi);
     m(1, 3) = cos(theta)*sin(phi);
@@ -83,23 +83,21 @@ inline Matrix eyePointTrans(const Vector3D& eyepoint){
     return m;
 }
 
-inline Point2D doProjection(const Vector3D& point, const double d = 1){
-    return {d*point.x/-point.z, d*point.y/-point.z};
+inline Point2D doProjection(const Vector3D& point, const double d = 1, const double dx = 0, const double dy = 0){
+    return {d*point.x/-point.z + dx, d*point.y/-point.z + dy};
 }
 
 inline Lines2D doProjection(const Figures3D& figures){
     Lines2D lines;
     for (const auto& [points, faces, color] : figures){
         for (const auto& face : faces){
-            auto nrPoints = face.size();
+            const auto nrPoints = face.size();
             for (unsigned int i=0 ; i<nrPoints ; i++){
-                Vector3D p1 = points[face[i]];
-                Vector3D p2 = points[face[(i+1) % nrPoints]];
+                const Vector3D& p1 = points[face[i]];
+                const Vector3D& p2 = points[face[(i+1) % nrPoints]];
                 lines.emplace_back(doProjection(p1), doProjection(p2), color, p1.z, p2.z);
             }
         }
     }
     return lines;
 }
-
-inline Point

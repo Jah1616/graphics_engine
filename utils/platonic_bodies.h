@@ -11,7 +11,7 @@ static std::unordered_map<unsigned int, std::vector<std::pair<double, double>>> 
 const std::vector<std::pair<double, double>>& getTrigValues(unsigned int x){
     if (mem_trig.find(x) == mem_trig.end()) {
         mem_trig[x].reserve(x);
-        for (unsigned int i = 0; i < x; ++i)
+        for (unsigned int i=0; i<x; ++i)
             mem_trig[x].emplace_back(cos(2 * i * M_PI / x), sin(2 * i * M_PI / x));
     }
     return mem_trig[x];
@@ -79,17 +79,17 @@ void createCylinder(Figure3D& figure, const unsigned int n, const double h){
     figure.points.reserve(2*n);
     figure.faces.reserve(n+2);
 
-    Face base(n);
-    Face top(n);
+    Face base; base.reserve(n);
+    Face top; top.reserve(n);
     for (unsigned int i=0 ; i<n ; i++){
         base.push_back(n-i-1);
         top.push_back(i + n);
-        auto [cos_ni, sin_ni] = trig[i];
-        figure.points.push_back(Vector3D::point(cos_ni, sin_ni, 0));
+        const auto& [cos_i, sin_i] = trig[i];
+        figure.points.push_back(Vector3D::point(cos_i, sin_i, 0));
         figure.faces.push_back({i, (i + 1) % n, (i + 1) % n + n, i + n});
     }
     for (unsigned int i=0 ; i<n ; i++){
-        auto [cos_i, sin_i] = trig[i];
+        const auto& [cos_i, sin_i] = trig[i];
         figure.points.push_back(Vector3D::point(cos_i, sin_i, h));
     }
     figure.faces.push_back(base);
@@ -105,7 +105,7 @@ void createCone(Figure3D& figure, const unsigned int n, const double h){
 
     Face base;
     for (unsigned int i=0 ; i<n ; i++){
-        auto [cos_i, sin_i] = trig[i];
+        const auto& [cos_i, sin_i] = trig[i];
         figure.points.push_back(Vector3D::point(cos_i, sin_i, 0));
         figure.faces.push_back({i, (i + 1) % n, n});
         base.push_back(n-i-1);
@@ -172,8 +172,8 @@ void createTorus(Figure3D& figure, const double r, const double R, const unsigne
 
     for (unsigned int i = 0; i < n; ++i){
         for (unsigned int j = 0; j < m; ++j){
-            auto [cos_ni, sin_ni] = trig_n[i];
-            auto [cos_mj, sin_mj] = trig_m[j];
+            const auto& [cos_ni, sin_ni] = trig_n[i];
+            const auto& [cos_mj, sin_mj] = trig_m[j];
 
             double x = (R + r * cos_mj) * cos_ni;
             double y = (R + r * cos_mj) * sin_ni;
