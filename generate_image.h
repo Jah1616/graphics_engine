@@ -3,6 +3,7 @@
 #include <vector>
 #include <limits>
 #include <algorithm>
+#include <thread>
 #include "ini/ini_configuration.h"
 #include "easy_image.h"
 #include "utils/utils.h"
@@ -11,35 +12,84 @@
 #include "utils/3d_transformations.h"
 #include "utils/zbuffer.h"
 
-void draw2DLines (img::EasyImage& image, const ImgVars& imgVars, const Lines2D& lines,
-                  const std::vector<double>& bgColor, ZBUF_MODE zbufMode){
-//    if (zbuffed) Timer timer("draw2DLines (zbuffed)");
-//    else Timer timer("draw2DLines");
+static auto nrCores = std::max(std::thread::hardware_concurrency(), (unsigned int)1);
 
+//void draw2DLines(img::EasyImage& image, const ImgVars& imgVars, const Lines2D& lines,
+//                  const std::vector<double>& bgColor, ZBUF_MODE zbufMode){
+////    if (zbuffed) Timer timer("draw2DLines (zbuffed)");
+////    else Timer timer("draw2DLines");
+//
+//    const auto& [scale, dx, dy, imagex, imagey] = imgVars;
+//    image = img::EasyImage(lround(imagex), lround(imagey));
+//    image.clear(imgColor(bgColor));
+//    auto zbuf = (zbufMode == ZBUF_NONE) ? ZBuffer(0, 0) : ZBuffer(lround(imagex), lround(imagey));
+//
+//    for (auto [p1, p2, lineColor, z1, z2] : lines) {
+//        p1 *= scale;
+//        p2 *= scale;
+//
+//        p1.x += dx; p1.y += dy;
+//        p2.x += dx; p2.y += dy;
+//
+//        const auto x1 = lround(p1.x);
+//        const auto y1 = lround(p1.y);
+//        const auto x2 = lround(p2.x);
+//        const auto y2 = lround(p2.y);
+//
+//        if (zbufMode == ZBUF_NONE){
+//            image.draw_line(x1, y1, x2, y2, imgColor(lineColor));
+//        }
+//        else if (zbufMode == ZBUF_LINE){
+//            image.draw_zbuf_line(zbuf, x1, y1, z1, x2, y2, z2, imgColor(lineColor));
+//        }
+//    }
+//}
+
+void draw2DLines(img::EasyImage& image, const ImgVars& imgVars, const Lines2D& lines,
+                 const std::vector<double>& bgColor, ZBUF_MODE zbufMode, int numThreads = nrCores) {
     const auto& [scale, dx, dy, imagex, imagey] = imgVars;
     image = img::EasyImage(lround(imagex), lround(imagey));
     image.clear(imgColor(bgColor));
     auto zbuf = (zbufMode == ZBUF_NONE) ? ZBuffer(0, 0) : ZBuffer(lround(imagex), lround(imagey));
 
-    for (auto [p1, p2, lineColor, z1, z2] : lines) {
-        p1 *= scale;
-        p2 *= scale;
+    std::vector<std::thread> threads;
+    threads.reserve(numThreads);
 
-        p1.x += dx;
-        p1.y += dy;
-        p2.x += dx;
-        p2.y += dy;
+    const size_t linesPerThread = (lines.size() + numThreads - 1) / numThreads;
 
-        if (zbufMode == ZBUF_NONE) image.draw_line(lround(p1.x), lround(p1.y),
-                                                   lround(p2.x), lround(p2.y),
-                                                   imgColor(lineColor));
-        else if (zbufMode == ZBUF_LINE) image.draw_zbuf_line(zbuf, lround(p1.x), lround(p1.y), z1,
-                                                             lround(p2.x), lround(p2.y), z2,
-                                                             imgColor(lineColor));
+    auto drawLines = [&](size_t start, size_t end) {
+        for (size_t i = start; i < end && i < lines.size(); ++i) {
+            auto [p1, p2, lineColor, z1, z2] = lines[i];
+
+            p1 *= scale;
+            p2 *= scale;
+
+            p1.x += dx; p1.y += dy;
+            p2.x += dx; p2.y += dy;
+
+            const auto x1 = lround(p1.x);
+            const auto y1 = lround(p1.y);
+            const auto x2 = lround(p2.x);
+            const auto y2 = lround(p2.y);
+
+            if (zbufMode == ZBUF_NONE) {
+                image.draw_line(x1, y1, x2, y2, imgColor(lineColor));
+            } else if (zbufMode == ZBUF_LINE) {
+                image.draw_zbuf_line(zbuf, x1, y1, z1, x2, y2, z2, imgColor(lineColor));
+            }
+        }
+    };
+
+    for (int i = 0; i < numThreads; ++i) {
+        size_t start = i * linesPerThread;
+        size_t end = start + linesPerThread;
+        threads.emplace_back(drawLines, start, end);
     }
+
+    for (auto& thread : threads) thread.join();
 }
 
-void drawZBufTriangle (ZBuffer& zbuf, img::EasyImage& image,
+void drawZBufTriangle(ZBuffer& zbuf, img::EasyImage& image,
                        const Vector3D& A, const Vector3D& B, const Vector3D& C,
                        const double d, const double dx, const double dy, const Color& color){
     const Point2D a = doProjection(A, d, dx, dy);
@@ -80,7 +130,6 @@ void drawZBufTriangle (ZBuffer& zbuf, img::EasyImage& image,
             }
         }
         image.draw_zbuf_line(zbuf, lround(xl + 0.5), i, zl, lround(xr - 0.5), i, zr, imgColor(color));
-//        image.draw_line(lround(xl + 0.5), i, lround(xr - 0.5), i, imgColor(color));
     }
 }
 
