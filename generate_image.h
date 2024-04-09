@@ -178,7 +178,7 @@ void generateWireframeImage(img::EasyImage& image, const ini::Configuration& con
         figures.push_back(newFigure);
     }
 
-    Lines2D lines = doProjection(figures);
+    const Lines2D lines = doProjection(figures);
     auto imgVars = getImgVars(lines, size);
 
     if (zbufMode == ZBUF_TRIANGLE) drawZBufTriangles(image, imgVars, figures, bgColor);
