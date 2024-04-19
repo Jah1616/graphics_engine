@@ -19,31 +19,31 @@ void LSystem_2D(Lines2D& lines, const std::string &input, const Color &lineColor
     input_stream.close();
 
     // get constants
-    const std::set<char> alphabet = l_system.get_alphabet();
-    std::string initiator = l_system.get_initiator();
-    const unsigned int iterations = l_system.get_nr_iterations();
+    const std::set<char>& alphabet = l_system.get_alphabet();
+    std::string currentString = l_system.get_initiator();
+    const unsigned int& iterations = l_system.get_nr_iterations();
 
     // replacement
-    for (unsigned int i=0 ; i<iterations ; i++){
-        std::string newString{};
-        for (char c : initiator){
-            if (alphabet.find(c) == alphabet.end()) newString.push_back(c);
+    for (auto i=0 ; i<iterations ; i++){
+        std::string newString;
+        for (char c : currentString){
+            if (alphabet.find(c) == alphabet.end()) newString += c;
             else {
                 if (l_system.chances.find(c) == l_system.chances.end())
-                    newString.append(l_system.get_replacement(c));
+                    newString += l_system.get_replacement(c);
                 else {
                     double rand = dis(gen);
                     for (const auto &[replacement, chance] : l_system.get_chances(c)){
                         rand -= chance;
                         if (rand <= 0){
-                            newString.append(replacement);
+                            newString += replacement;
                             break;
                         }
                     }
                 }
             }
         }
-        initiator = newString;
+        currentString = newString;
     }
 
     // parse string
@@ -51,23 +51,17 @@ void LSystem_2D(Lines2D& lines, const std::string &input, const Color &lineColor
     double currentAngle = toRadian(l_system.get_starting_angle());
     Point2D p1(0, 0);
     Point2D p2(0, 0);
-    std::stack<Point2D> pointsStack;
-    std::stack<double> angleStack;
+    std::stack<std::pair<Point2D, double>> stack;
 
-    for (char c : initiator){
+    for (char c : currentString){
         if (alphabet.find(c) == alphabet.end()){
             if (c == '-') currentAngle -= angle;
             else if (c == '+') currentAngle += angle;
-            else if (c == '('){
-                pointsStack.push(p2);
-                angleStack.push(currentAngle);
-            }
+            else if (c == '(') stack.emplace(p2, currentAngle);
             else if (c == ')') {
-                p1 = pointsStack.top();
-                p2 = pointsStack.top();
-                currentAngle = angleStack.top();
-                pointsStack.pop();
-                angleStack.pop();
+                p1 = p2 = stack.top().first;
+                currentAngle = stack.top().second;
+                stack.pop();
             }
         } else {
             p2.x += cos(currentAngle);

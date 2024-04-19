@@ -10,4 +10,6 @@ add_executable(engine easy_image.cc
         utils/vector3d.cc
         utils/3d_transformations.cpp
         utils/l-systems.cpp
-        utils/platonic_bodies.cpp)
+        utils/platonic_bodies.cpp
+        generate_image.cpp
+        utils/utils.cpp)

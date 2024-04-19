@@ -21,7 +21,6 @@
 #include <iostream>
 #include <sstream>
 #include "easy_image.h"
-#include "utils/zbuffer.hpp"
 
 #ifndef le32toh
 #define le32toh(x) (x)
@@ -204,91 +203,6 @@ void img::EasyImage::draw_line(unsigned int x0, unsigned int y0, unsigned int x1
 			}
 		}
 	}
-}
-
-void img::EasyImage::draw_zbuf_line(ZBuffer &zbuf, int x0, int y0, const double z0,
-                                    int x1, int y1, const double z1, const img::Color &color){
-    if (x0 >= this->width || y0 >= this->height || x1 >= this->width || y1 > this->height) {
-        std::stringstream ss;
-        ss << "Drawing line from (" << x0 << "," << y0 << ") to (" << x1 << "," << y1 << ") in image of width "
-           << this->width << " and height " << this->height;
-        throw std::runtime_error(ss.str());
-    }
-    const double delta = abs(sqrt((x1-x0)*(x1-x0) + (y1-y0)*(y1-y0)));
-    if (x0 == x1){
-//        special case for x0 == x1
-        if (y0 > y1) std::swap(y0, y1);
-        for (int i = y0; i <= y1; i++){
-            const double p = abs((i - y1))/delta;
-            const double z_inv = p/z0 + (1-p)/z1;
-            if (z_inv < zbuf[x0][i]){
-                (*this)(x0, i) = color;
-                zbuf[x0][i] = z_inv;
-            }
-        }
-    }
-    else if (y0 == y1){
-//        special case for y0 == y1
-        if (x0 > x1) std::swap(x0, x1);
-        for (int i = x0; i <= x1; i++){
-            const double p = abs((i - x1))/delta;
-            const double z_inv = p/z0 + (1-p)/z1;
-            if (z_inv < zbuf[i][y0]){
-                (*this)(i, y0) = color;
-                zbuf[i][y0] = z_inv;
-            }
-        }
-    }
-    else {
-        if (x0 > x1){
-            //flip points if x1>x0: we want x0 to have the lowest value
-            std::swap(x0, x1);
-            std::swap(y0, y1);
-        }
-        double m = (double)(y1- y0) / (x1-x0);
-        if (-1.0 <= m && m <= 1.0){
-            for (int i = 0; i <= (x1 - x0); i++){
-                const int x = x0+i;
-                const double y = y0 + m * i;
-                const int y_round = lround(y);
-
-                const double p = abs(sqrt((x1-x)*(x1-x) + (y1-y)*(y1-y))) / delta;
-                const double z_inv = p/z0 + (1-p)/z1;
-                if (z_inv < zbuf[x][y_round]){
-                    (*this)(x, y_round) = color;
-                    zbuf[x][y_round] = z_inv;
-                }
-            }
-        }
-        else if (m > 1.0){
-            for (int i = 0; i <= (y1 - y0); i++){
-                const double x = x0 + (i / m);
-                const int x_round = lround(x);
-                const int y = y0 + i;
-
-                const double p = abs(sqrt((x1-x)*(x1-x) + (y1-y)*(y1-y))) / delta;
-                const double z_inv = p/z0 + (1-p)/z1;
-                if (z_inv < zbuf[x_round][y]){
-                    (*this)(x_round, y) = color;
-                    zbuf[x_round][y] = z_inv;
-                }
-            }
-        }
-        else if (m < -1.0){
-            for (int i = 0; i <= (y0 - y1); i++){
-                const double x = x0 - (i / m);
-                const int x_round = lround(x);
-                const int y = y0 - i;
-
-                const double p = abs(sqrt((x1-x)*(x1-x) + (y1-y)*(y1-y))) / delta;
-                const double z_inv = p/z0 + (1-p)/z1;
-                if (z_inv < zbuf[x_round][y]){
-                    (*this)(x_round, y) = color;
-                    zbuf[x_round][y] = z_inv;
-                }
-            }
-        }
-    }
 }
 
 std::ostream& img::operator<<(std::ostream& out, EasyImage const& image)

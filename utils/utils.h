@@ -1,11 +1,11 @@
 #pragma once
 #include <list>
-#include <limits>
 #include <utility>
 #include <vector>
 #include <chrono>
 #include <algorithm>
 #include <cassert>
+#include <cmath>
 #include "vector3d.h"
 #include "../easy_image.h"
 
@@ -16,8 +16,8 @@ constexpr double toDegrees(double x) {return x / M_PI * 180;}
 // Timer
 class Timer{
 private:
-    const std::string _target;
-    const std::chrono::time_point<std::chrono::high_resolution_clock> _start;
+    std::string _target;
+    std::chrono::time_point<std::chrono::high_resolution_clock> _start;
     std::ostream& _outputStream;
 protected:
 public:
@@ -41,12 +41,8 @@ struct Color{double red; double green; double blue;
         assert(color.size() == 3);
     }
 };
-inline img::Color imgColor(const Color& color){
-    return img::Color(img::Color(lround(color.red*255), lround(color.green*255), lround(color.blue*255)));
-}
-inline img::Color imgColor(const std::vector<double>& color){
-    return img::Color(img::Color(lround(color[0]*255), lround(color[1]*255), lround(color[2]*255)));
-}
+img::Color imgColor(const Color& color);
+img::Color imgColor(const std::vector<double>& color);
 
 // 2D utils
 struct Point2D{double x; double y;
@@ -60,7 +56,7 @@ struct Line2D{Point2D p1; Point2D p2; Color color; double z1; double z2;
         std::swap(z1, z2);
     }
 };
-typedef std::vector<Line2D> Lines2D;
+using Lines2D = std::vector<Line2D>;
 
 // 3D utils
 struct PointPolar{
@@ -75,13 +71,8 @@ constexpr PointPolar toPolar(const Vector3D& point){
     return {r, phi, theta};
 }
 
-typedef std::vector<unsigned int> Face;
-static std::vector<Face> triangulate(const Face& face){
-    std::vector<Face> out;
-    unsigned int first = face[0];
-    for (unsigned int i=1 ; i<=face.size()-2 ; i++) out.push_back({first, face[i], face[i+1]});
-    return out;
-}
+using Face = std::vector<unsigned int>;
+std::vector<Face> triangulate(const Face& face);
 
 struct Figure3D{std::vector<Vector3D> points; std::vector<Face> faces; Color color;
     Figure3D(const std::vector<Vector3D>& points, const std::vector<Face>& faces, const Color& color)
@@ -91,72 +82,20 @@ struct Figure3D{std::vector<Vector3D> points; std::vector<Face> faces; Color col
 typedef std::vector<Figure3D> Figures3D;
 
 struct ImgVars{double scale; double dx; double dy; double imagex; double imagey;};
-static ImgVars getImgVars(const Lines2D& lines, const unsigned int size){
-    double xmin = std::numeric_limits<double>::infinity();
-    double ymin = xmin;
-    double xmax = -std::numeric_limits<double>::infinity();
-    double ymax = xmax;
-
-    for (const auto& line : lines){
-        xmin = std::min({xmin, line.p1.x, line.p2.x});
-        xmax = std::max({xmax, line.p1.x, line.p2.x});
-        ymin = std::min({ymin, line.p1.y, line.p2.y});
-        ymax = std::max({ymax, line.p1.y, line.p2.y});
-    }
-
-    const double xrange = xmax - xmin;
-    const double yrange = ymax - ymin;
-    const double imagex = size * xrange / fmax(xrange, yrange);
-    const double imagey = size * yrange / fmax(xrange, yrange);
-
-    const double scale = 0.95 * imagex / xrange;
-    const double dx = (imagex - scale * (xmin + xmax)) / 2;
-    const double dy = (imagey - scale * (ymin + ymax)) / 2;
-
-    return {scale, dx, dy, imagex, imagey};
-}
+ImgVars getImgVars(const Lines2D& lines, unsigned int size);
 
 // Point2D operators
-static void operator *= (Point2D& lhs, const double rhs){
-    lhs.x *= rhs;
-    lhs.y *= rhs;
-}
-static Point2D operator * (Point2D lhs, const double rhs){
-    lhs *= rhs;
-    return lhs;
-}
-static void operator /= (Point2D& lhs, const double rhs){
-    lhs.x /= rhs;
-    lhs.y /= rhs;
-}
-static Point2D operator / (Point2D lhs, const double rhs){
-    lhs /= rhs;
-    return lhs;
-}
-static void operator += (Point2D& lhs, const Point2D& rhs){
-    lhs.x += rhs.x;
-    lhs.y += rhs.y;
-}
-static Point2D operator + (Point2D lhs, const Point2D& rhs){
-    lhs += rhs;
-    return lhs;
-}
-static void operator -= (Point2D& lhs, const Point2D& rhs){
-    lhs.x -= rhs.x;
-    lhs.y -= rhs.y;
-}
-static Point2D operator - (Point2D lhs, const Point2D& rhs){
-    lhs -= rhs;
-    return lhs;
-}
+void operator *= (Point2D& lhs, double rhs);
+Point2D operator * (Point2D lhs, double rhs);
+void operator /= (Point2D& lhs, double rhs);
+Point2D operator / (Point2D lhs, double rhs);
+void operator += (Point2D& lhs, const Point2D& rhs);
+Point2D operator + (Point2D lhs, const Point2D& rhs);
+void operator -= (Point2D& lhs, const Point2D& rhs);
+Point2D operator - (Point2D lhs, const Point2D& rhs);
 
-static bool operator == (const Vector3D& lhs, const Vector3D& rhs){
-    return ((lhs.is_point() and rhs.is_point()) or (lhs.is_vector() and rhs.is_vector()))
-    and lhs.x == rhs.x and lhs.y == rhs.y and lhs.z == rhs.z;
-}
-static bool operator == (const Point2D& lhs, const Point2D& rhs){
-    return lhs.x == rhs.x and lhs.y == rhs.y;
-}
+bool operator == (const Vector3D& lhs, const Vector3D& rhs);
+bool operator == (const Point2D& lhs, const Point2D& rhs);
 
 
 // ===================== DECLARATIONS =====================
