@@ -8,4 +8,6 @@ add_executable(engine easy_image.cc
         engine.cc
         utils/l-parser.cc
         utils/vector3d.cc
-        utils/zbuffer.h)
+        utils/3d_transformations.cpp
+        utils/l-systems.cpp
+        utils/platonic_bodies.cpp)

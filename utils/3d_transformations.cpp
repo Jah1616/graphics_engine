@@ -1,4 +1,3 @@
-#pragma once
 #include <cmath>
 #include "utils.h"
 
@@ -11,7 +10,7 @@ void applyTransform(Figures3D& f, const Matrix& m){
     for (auto& figure : f) applyTransform(figure, m);
 }
 
-inline Matrix scale(const double factor){
+Matrix scale(const double factor){
     Matrix m;
     m(1, 1) = factor;
     m(2, 2) = factor;
@@ -20,7 +19,7 @@ inline Matrix scale(const double factor){
     return m;
 }
 
-inline Matrix rotateX(const double angle){
+Matrix rotateX(const double angle){
     Matrix m;
     m(1, 1) = 1;
     m(2, 2) = cos(angle);
@@ -31,7 +30,7 @@ inline Matrix rotateX(const double angle){
     return m;
 }
 
-inline Matrix rotateY(const double angle){
+Matrix rotateY(const double angle){
     Matrix m;
     m(1, 1) = cos(angle);
     m(1, 3) = -sin(angle);
@@ -42,7 +41,7 @@ inline Matrix rotateY(const double angle){
     return m;
 }
 
-inline Matrix rotateZ(const double angle){
+Matrix rotateZ(const double angle){
     Matrix m;
     m(1, 1) = cos(angle);
     m(1, 2) = sin(angle);
@@ -53,7 +52,7 @@ inline Matrix rotateZ(const double angle){
     return m;
 }
 
-inline Matrix translate(const Vector3D& vector){
+Matrix translate(const Vector3D& vector){
 //    if (!vector.is_vector()) {std::cerr << "Can not call translate() with a non-vector object.\n";}
     Matrix m;
     m(1, 1) = 1;
@@ -66,7 +65,7 @@ inline Matrix translate(const Vector3D& vector){
     return m;
 }
 
-inline Matrix eyePointTrans(const Vector3D& eyepoint){
+Matrix eyePointTrans(const Vector3D& eyepoint){
 //    if (!eyepoint.is_point()) {std::cerr << "Can not call eyePointTrans() with a non-point object.\n";}
     Matrix m;
     const auto [r, phi, theta] = toPolar(eyepoint);
@@ -83,11 +82,11 @@ inline Matrix eyePointTrans(const Vector3D& eyepoint){
     return m;
 }
 
-inline Point2D doProjection(const Vector3D& point, const double d = 1, const double dx = 0, const double dy = 0){
+Point2D doProjection(const Vector3D& point, const double d, const double dx, const double dy){
     return {d*point.x/-point.z + dx, d*point.y/-point.z + dy};
 }
 
-inline Lines2D doProjection(const Figures3D& figures){
+Lines2D doProjection(const Figures3D& figures){
     Lines2D lines;
     for (const auto& [points, faces, color] : figures){
         for (const auto& face : faces){

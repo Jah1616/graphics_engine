@@ -21,7 +21,7 @@
 #include <iostream>
 #include <sstream>
 #include "easy_image.h"
-#include "utils/zbuffer.h"
+#include "utils/zbuffer.hpp"
 
 #ifndef le32toh
 #define le32toh(x) (x)

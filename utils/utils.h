@@ -1,8 +1,11 @@
 #pragma once
 #include <list>
 #include <limits>
+#include <utility>
 #include <vector>
 #include <chrono>
+#include <algorithm>
+#include <cassert>
 #include "vector3d.h"
 #include "../easy_image.h"
 
@@ -10,7 +13,7 @@
 constexpr double toRadian(double x) {return x * M_PI / 180;}
 constexpr double toDegrees(double x) {return x / M_PI * 180;}
 
-
+// Timer
 class Timer{
 private:
     const std::string _target;
@@ -18,8 +21,8 @@ private:
     std::ostream& _outputStream;
 protected:
 public:
-    Timer(const std::string& target, std::ostream& out = std::cout)
-    : _target(target)
+    explicit Timer(std::string  target, std::ostream& out = std::cout)
+    : _target(std::move(target))
     , _start(std::chrono::high_resolution_clock::now())
     , _outputStream(out) {}
     ~Timer(){stop();}
@@ -31,10 +34,12 @@ public:
     }
 };
 
-
+// Color
 struct Color{double red; double green; double blue;
     Color(const double red, const double green, const double blue) :red(red) ,green(green) ,blue(blue) {}
-    Color(const std::vector<double>& color) :red(color[0]), green(color[1]), blue(color[2]) {}
+    explicit Color(const std::vector<double>& color) :red(color[0]), green(color[1]), blue(color[2]) {
+        assert(color.size() == 3);
+    }
 };
 inline img::Color imgColor(const Color& color){
     return img::Color(img::Color(lround(color.red*255), lround(color.green*255), lround(color.blue*255)));
@@ -43,7 +48,7 @@ inline img::Color imgColor(const std::vector<double>& color){
     return img::Color(img::Color(lround(color[0]*255), lround(color[1]*255), lround(color[2]*255)));
 }
 
-
+// 2D utils
 struct Point2D{double x; double y;
     Point2D(const double x, const double y) :x(x), y(y) {}
 };
@@ -57,7 +62,7 @@ struct Line2D{Point2D p1; Point2D p2; Color color; double z1; double z2;
 };
 typedef std::vector<Line2D> Lines2D;
 
-
+// 3D utils
 struct PointPolar{
     double r;
     double phi;
@@ -70,27 +75,23 @@ constexpr PointPolar toPolar(const Vector3D& point){
     return {r, phi, theta};
 }
 
-
 typedef std::vector<unsigned int> Face;
-std::vector<Face> triangulate(const Face& face){
+static std::vector<Face> triangulate(const Face& face){
     std::vector<Face> out;
     unsigned int first = face[0];
     for (unsigned int i=1 ; i<=face.size()-2 ; i++) out.push_back({first, face[i], face[i+1]});
     return out;
 }
 
-
 struct Figure3D{std::vector<Vector3D> points; std::vector<Face> faces; Color color;
     Figure3D(const std::vector<Vector3D>& points, const std::vector<Face>& faces, const Color& color)
     :points(points) ,faces(faces) ,color(color){}
-    Figure3D(const Color& color): points{}, faces{}, color(color) {};
+    explicit Figure3D(const Color& color): points{}, faces{}, color(color) {};
 };
 typedef std::vector<Figure3D> Figures3D;
 
-
-
 struct ImgVars{double scale; double dx; double dy; double imagex; double imagey;};
-ImgVars getImgVars(const Lines2D& lines, const unsigned int size){
+static ImgVars getImgVars(const Lines2D& lines, const unsigned int size){
     double xmin = std::numeric_limits<double>::infinity();
     double ymin = xmin;
     double xmax = -std::numeric_limits<double>::infinity();
@@ -115,46 +116,73 @@ ImgVars getImgVars(const Lines2D& lines, const unsigned int size){
     return {scale, dx, dy, imagex, imagey};
 }
 
-
-
 // Point2D operators
-void operator *= (Point2D& lhs, const double rhs){
+static void operator *= (Point2D& lhs, const double rhs){
     lhs.x *= rhs;
     lhs.y *= rhs;
 }
-Point2D operator * (Point2D lhs, const double rhs){
+static Point2D operator * (Point2D lhs, const double rhs){
     lhs *= rhs;
     return lhs;
 }
-void operator /= (Point2D& lhs, const double rhs){
+static void operator /= (Point2D& lhs, const double rhs){
     lhs.x /= rhs;
     lhs.y /= rhs;
 }
-Point2D operator / (Point2D lhs, const double rhs){
+static Point2D operator / (Point2D lhs, const double rhs){
     lhs /= rhs;
     return lhs;
 }
-void operator += (Point2D& lhs, const Point2D& rhs){
+static void operator += (Point2D& lhs, const Point2D& rhs){
     lhs.x += rhs.x;
     lhs.y += rhs.y;
 }
-Point2D operator + (Point2D lhs, const Point2D& rhs){
+static Point2D operator + (Point2D lhs, const Point2D& rhs){
     lhs += rhs;
     return lhs;
 }
-void operator -= (Point2D& lhs, const Point2D& rhs){
+static void operator -= (Point2D& lhs, const Point2D& rhs){
     lhs.x -= rhs.x;
     lhs.y -= rhs.y;
 }
-Point2D operator - (Point2D lhs, const Point2D& rhs){
+static Point2D operator - (Point2D lhs, const Point2D& rhs){
     lhs -= rhs;
     return lhs;
 }
 
-bool operator == (const Vector3D& lhs, const Vector3D& rhs){
+static bool operator == (const Vector3D& lhs, const Vector3D& rhs){
     return ((lhs.is_point() and rhs.is_point()) or (lhs.is_vector() and rhs.is_vector()))
     and lhs.x == rhs.x and lhs.y == rhs.y and lhs.z == rhs.z;
 }
-bool operator == (const Point2D& lhs, const Point2D& rhs){
+static bool operator == (const Point2D& lhs, const Point2D& rhs){
     return lhs.x == rhs.x and lhs.y == rhs.y;
 }
+
+
+// ===================== DECLARATIONS =====================
+// 3d_transformations
+void applyTransform(Figure3D& f, const Matrix& m);
+void applyTransform(Figures3D& f, const Matrix& m);
+Matrix scale(double factor);
+Matrix rotateX(double angle);
+Matrix rotateY(double angle);
+Matrix rotateZ(double angle);
+Matrix translate(const Vector3D& vector);
+Matrix eyePointTrans(const Vector3D& eyepoint);
+Point2D doProjection(const Vector3D& point, double d = 1, double dx = 0, double dy = 0);
+Lines2D doProjection(const Figures3D& figures);
+
+// l-systems
+void LSystem_2D(Lines2D& lines, const std::string &input, const Color &lineColor);
+void LSystem_3D(Figure3D& figure, const std::string& input);
+
+// platonic_bodies
+void createCube(Figure3D& figure);
+void createTetrahedron(Figure3D& figure);
+void createOctahedron(Figure3D& figure);
+void createIcosahedron(Figure3D& figure);
+void createDodecahedron(Figure3D& figure);
+void createCylinder(Figure3D& figure, unsigned int n, double h);
+void createCone(Figure3D& figure, unsigned int n, double h);
+void createSphere(Figure3D& figure, unsigned int n);
+void createTorus(Figure3D& figure, double r, double R, unsigned int n, unsigned int m);

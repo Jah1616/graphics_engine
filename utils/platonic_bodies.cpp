@@ -1,14 +1,12 @@
-#pragma once
 #include <cmath>
 #include <unordered_map>
 #include <vector>
-#include <utility>
 #include "utils.h"
 
 
 static std::unordered_map<unsigned int, std::vector<std::pair<double, double>>> mem_trig;
 
-const std::vector<std::pair<double, double>>& getTrigValues(unsigned int x){
+static const std::vector<std::pair<double, double>>& getTrigValues(unsigned int x){
     if (mem_trig.find(x) == mem_trig.end()) {
         mem_trig[x].reserve(x);
         for (unsigned int i=0; i<x; ++i)
@@ -64,7 +62,7 @@ void createDodecahedron(Figure3D& figure){
 //    Timer timer("Dodecahedron");
     static std::vector<Vector3D> mem_points;
     if (mem_points.empty()){
-        Figure3D ico({0,0,0}); createIcosahedron(ico);
+        Figure3D ico(Color{0,0,0}); createIcosahedron(ico);
         mem_points.reserve(20);
         for (const Face& face : ico.faces) mem_points.push_back((ico.points[face[0]] + ico.points[face[1]] + ico.points[face[2]]) / 3);
     }
@@ -121,7 +119,7 @@ void createSphere(Figure3D& figure, const unsigned int n){
     static std::unordered_map<unsigned int, std::vector<Face>> mem_faces;
 
     if (maxN == -1){
-        Figure3D ico({0, 0, 0}); createIcosahedron(ico);
+        Figure3D ico(Color{0, 0, 0}); createIcosahedron(ico);
         mem_points = ico.points;
         mem_faces[0] = ico.faces;
         maxN = 0;

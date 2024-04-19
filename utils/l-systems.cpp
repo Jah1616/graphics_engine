@@ -1,16 +1,15 @@
-#pragma once
 #include <string>
 #include <fstream>
 #include <stack>
 #include <random>
 #include "l-parser.h"
-#include "../utils/utils.h"
+#include "utils.h"
 
 
 // SOURCE: ChatGPT
-std::random_device randomDouble;
-std::mt19937 gen(randomDouble());
-std::uniform_real_distribution<double> dis(0.0, 1.0);
+static std::random_device randomDouble;
+static std::mt19937 gen(randomDouble());
+static std::uniform_real_distribution<double> dis(0.0, 1.0);
 
 void LSystem_2D(Lines2D& lines, const std::string &input, const Color &lineColor){
 //    Timer timer("2D-L-System");

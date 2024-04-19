@@ -6,10 +6,7 @@
 #include "ini/ini_configuration.h"
 #include "easy_image.h"
 #include "utils/utils.h"
-#include "utils/l-systems.h"
-#include "utils/platonic_bodies.h"
-#include "utils/3d_transformations.h"
-#include "utils/zbuffer.h"
+#include "utils/zbuffer.hpp"
 
 void draw2DLines (img::EasyImage& image, const ImgVars& imgVars, const Lines2D& lines,
                   const std::vector<double>& bgColor, ZBUF_MODE zbufMode){
@@ -134,7 +131,7 @@ void generateWireframeImage(img::EasyImage& image, const ini::Configuration& con
         const Vector3D fig_translate = Vector3D::vector(fig_centerCoords[0], fig_centerCoords[1], fig_centerCoords[2]);
         const std::vector<double> fig_color = conf[fig_string]["color"].as_double_tuple_or_die();
 
-        Figure3D newFigure(fig_color);
+        Figure3D newFigure(Color{fig_color});
 
         if (fig_type == "LineDrawing"){
 //            Timer timer("Linedrawing");
