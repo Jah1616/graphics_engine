@@ -105,7 +105,6 @@ void LSystem3D(Figure3D& figure, const std::string& input){
 
     std::stack<Vector3D> vectorStack;
     std::stack<Vector3D> pointsStack;
-    unsigned int index = 0;
 
     for (char c : initiator){
         if (alphabet.find(c) == alphabet.end()){
@@ -163,14 +162,14 @@ void LSystem3D(Figure3D& figure, const std::string& input){
                 unsigned int p1_index = p1_it - figure.points.begin();
                 if (p1_it == figure.points.end()){
                     figure.points.push_back(p1);
-                    p1_index = index++;
+                    p1_index = figure.points.size() - 1;
                 }
 
                 auto p2_it = std::find(figure.points.begin(), figure.points.end(), p2);
                 unsigned int p2_index = p2_it - figure.points.begin();
                 if (p2_it == figure.points.end()){
                     figure.points.push_back(p2);
-                    p2_index = index++;
+                    p2_index = figure.points.size() - 1;
                 }
 
                 figure.faces.push_back({p1_index, p2_index});
