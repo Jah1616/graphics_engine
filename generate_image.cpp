@@ -4,9 +4,7 @@
 
 void draw2DLines(img::EasyImage& image, const ImgVars& imgVars, const Lines2D& lines,
                   const std::vector<double>& bgColor, ZBUF_MODE zbufMode){
-//    if (zbuffed) Timer timer("draw2DLines (zbuffed)");
-//    else Timer timer("draw2DLines");
-
+//    Timer timer("draw2DLines");
     const auto& [scale, dx, dy, imagex, imagey] = imgVars;
     image = img::EasyImage(lround(imagex), lround(imagey));
     image.clear(imgColor(bgColor));
@@ -37,7 +35,7 @@ void generate2DLSystemImage(img::EasyImage& image, const ini::Configuration& con
     const std::vector<double> lineColor = conf["2DLSystem"]["color"].as_double_tuple_or_die();
 
     Lines2D lines;
-    LSystem_2D(lines, inputFile, Color(lineColor));
+    LSystem2D(lines, inputFile, Color(lineColor));
     auto imgVars = getImgVars(lines, size);
     draw2DLines(image, imgVars, lines, bgColor, ZBUF_NONE);
 }
@@ -155,19 +153,18 @@ void generateWireframeImage(img::EasyImage& image, const ini::Configuration& con
 
         Figure3D newFigure(Color{fig_color});
         if (fig_type == "LineDrawing") lineDrawing(newFigure, fig_conf);
-        else if (fig_type == "3DLSystem") LSystem_3D(newFigure, fig_conf["inputfile"].as_string_or_die());
+        else if (fig_type == "3DLSystem") LSystem3D(newFigure, fig_conf["inputfile"].as_string_or_die());
         else platonicBody(newFigure, fig_type, fig_conf);
 
 
         Matrix transformMatrix = scale(fig_scale)
                 * rotateX(fig_rotateX) * rotateY(fig_rotateY) * rotateZ(fig_rotateZ)
-                * translate(fig_translate)
-                * eyePointTrans(eyePoint);
+                * translate(fig_translate);
 
         applyTransform(newFigure, transformMatrix);
         figures.push_back(newFigure);
     }
-
+    applyTransform(figures, eyePointTrans(eyePoint));
     const Lines2D lines = doProjection(figures);
     auto imgVars = getImgVars(lines, size);
 

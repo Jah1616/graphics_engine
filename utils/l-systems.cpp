@@ -5,13 +5,12 @@
 #include "l-parser.h"
 #include "utils.h"
 
-
 // SOURCE: ChatGPT
 static std::random_device randomDouble;
 static std::mt19937 gen(randomDouble());
 static std::uniform_real_distribution<double> dis(0.0, 1.0);
 
-void LSystem_2D(Lines2D& lines, const std::string &input, const Color &lineColor){
+void LSystem2D(Lines2D& lines, const std::string &input, const Color &lineColor){
 //    Timer timer("2D-L-System");
     LParser::LSystem2D l_system;
     std::ifstream input_stream(input);
@@ -72,7 +71,7 @@ void LSystem_2D(Lines2D& lines, const std::string &input, const Color &lineColor
     }
 }
 
-void LSystem_3D(Figure3D& figure, const std::string& input){
+void LSystem3D(Figure3D& figure, const std::string& input){
 //    Timer timer("3D-L-System");
     LParser::LSystem3D l_system;
     std::ifstream input_stream(input);
@@ -175,7 +174,6 @@ void LSystem_3D(Figure3D& figure, const std::string& input){
                 }
 
                 figure.faces.push_back({p1_index, p2_index});
-
             }
             p1 = p2;
         }

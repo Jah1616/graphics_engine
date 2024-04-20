@@ -1,7 +1,6 @@
 #include <cmath>
 #include "utils.h"
 
-
 void applyTransform(Figure3D& f, const Matrix& m){
     for (auto& point : f.points) point *= m;
 }

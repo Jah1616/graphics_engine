@@ -113,8 +113,8 @@ Point2D doProjection(const Vector3D& point, double d = 1, double dx = 0, double 
 Lines2D doProjection(const Figures3D& figures);
 
 // l-systems
-void LSystem_2D(Lines2D& lines, const std::string &input, const Color &lineColor);
-void LSystem_3D(Figure3D& figure, const std::string& input);
+void LSystem2D(Lines2D& lines, const std::string &input, const Color &lineColor);
+void LSystem3D(Figure3D& figure, const std::string& input);
 
 // platonic_bodies
 void createCube(Figure3D& figure);
