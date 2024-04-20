@@ -106,7 +106,7 @@ void LSystem_3D(Figure3D& figure, const std::string& input){
 
     std::stack<Vector3D> vectorStack;
     std::stack<Vector3D> pointsStack;
-    unsigned int index{};
+    unsigned int index = 0;
 
     for (char c : initiator){
         if (alphabet.find(c) == alphabet.end()){
@@ -160,16 +160,22 @@ void LSystem_3D(Figure3D& figure, const std::string& input){
         } else {
             p2 += H;
             if (l_system.draw(c)){
-                if (!figure.points.empty() and p1 == figure.points.back()){
-                    figure.points.push_back(p2);
-                    figure.faces.push_back({index-1, index});
-                    index++;
-                } else {
+                auto p1_it = std::find(figure.points.begin(), figure.points.end(), p1);
+                unsigned int p1_index = p1_it - figure.points.begin();
+                if (p1_it == figure.points.end()){
                     figure.points.push_back(p1);
-                    figure.points.push_back(p2);
-                    figure.faces.push_back({index, index+1});
-                    index += 2;
+                    p1_index = index++;
                 }
+
+                auto p2_it = std::find(figure.points.begin(), figure.points.end(), p2);
+                unsigned int p2_index = p2_it - figure.points.begin();
+                if (p2_it == figure.points.end()){
+                    figure.points.push_back(p2);
+                    p2_index = index++;
+                }
+
+                figure.faces.push_back({p1_index, p2_index});
+
             }
             p1 = p2;
         }

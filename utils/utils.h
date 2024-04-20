@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <set>
 #include "vector3d.h"
 #include "../easy_image.h"
 
@@ -21,7 +22,7 @@ private:
     std::ostream& _outputStream;
 protected:
 public:
-    explicit Timer(std::string  target, std::ostream& out = std::cout)
+    explicit Timer(std::string target, std::ostream& out = std::cout)
     : _target(std::move(target))
     , _start(std::chrono::high_resolution_clock::now())
     , _outputStream(out) {}

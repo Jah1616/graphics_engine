@@ -159,7 +159,6 @@ void createSphere(Figure3D& figure, const unsigned int n){
 
 void createTorus(Figure3D& figure, const double r, const double R, const unsigned int n, const unsigned int m){
 //    Timer timer("Torus");
-
     const auto& trig_n = getTrigValues(n);
     const auto& trig_m = getTrigValues(n);
 

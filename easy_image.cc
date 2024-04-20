@@ -127,6 +127,7 @@ img::EasyImage::~EasyImage(){
 	bitmap.clear();
 }
 
+
 img::EasyImage& img::EasyImage::operator=(img::EasyImage const& img){
 	width = img.width;
 	height = img.height;
