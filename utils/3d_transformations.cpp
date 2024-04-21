@@ -9,7 +9,7 @@ void applyTransform(Figures3D& f, const Matrix& m){
     for (auto& figure : f) applyTransform(figure, m);
 }
 
-Matrix scale(const double factor){
+Matrix scale(double factor){
     Matrix m;
     m(1, 1) = factor;
     m(2, 2) = factor;
@@ -18,7 +18,7 @@ Matrix scale(const double factor){
     return m;
 }
 
-Matrix rotateX(const double angle){
+Matrix rotateX(double angle){
     Matrix m;
     m(1, 1) = 1;
     m(2, 2) = cos(angle);
@@ -29,7 +29,7 @@ Matrix rotateX(const double angle){
     return m;
 }
 
-Matrix rotateY(const double angle){
+Matrix rotateY(double angle){
     Matrix m;
     m(1, 1) = cos(angle);
     m(1, 3) = -sin(angle);
@@ -40,7 +40,7 @@ Matrix rotateY(const double angle){
     return m;
 }
 
-Matrix rotateZ(const double angle){
+Matrix rotateZ(double angle){
     Matrix m;
     m(1, 1) = cos(angle);
     m(1, 2) = sin(angle);
@@ -81,7 +81,7 @@ Matrix eyePointTrans(const Vector3D& eyepoint){
     return m;
 }
 
-Point2D doProjection(const Vector3D& point, const double d, const double dx, const double dy){
+Point2D doProjection(const Vector3D& point, double d, double dx, double dy){
     return {d*point.x/-point.z + dx, d*point.y/-point.z + dy};
 }
 
@@ -90,7 +90,7 @@ Lines2D doProjection(const Figures3D& figures){
     for (const auto& [points, faces, color] : figures){
         for (const auto& face : faces){
             const auto nrPoints = face.size();
-            for (unsigned int i=0 ; i<nrPoints ; i++){
+            for (int i=0 ; i<nrPoints ; i++){
                 const Vector3D& p1 = points[face[i]];
                 const Vector3D& p2 = points[face[(i+1) % nrPoints]];
                 lines.emplace_back(doProjection(p1), doProjection(p2), color, p1.z, p2.z);

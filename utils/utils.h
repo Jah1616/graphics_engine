@@ -37,20 +37,27 @@ public:
 
 // Color
 struct Color{double red; double green; double blue;
-    Color(const double red, const double green, const double blue) :red(red) ,green(green) ,blue(blue) {}
+    Color(double red, double green, double blue) :red(red) ,green(green) ,blue(blue) { checkRange(); }
     explicit Color(const std::vector<double>& color) :red(color[0]), green(color[1]), blue(color[2]) {
         assert(color.size() == 3);
+        checkRange();
+    }
+private:
+    void checkRange() const {
+        assert(0 <= red and red <= 1);
+        assert(0 <= green and green <= 1);
+        assert(0 <= blue and blue <= 1);
     }
 };
-img::Color imgColor(const Color& color);
-img::Color imgColor(const std::vector<double>& color);
+img::Color imgColor(const Color&);
+img::Color imgColor(const std::vector<double>&);
 
 // 2D utils
 struct Point2D{double x; double y;
-    Point2D(const double x, const double y) :x(x), y(y) {}
+    Point2D(double x, double y) :x(x), y(y) {}
 };
 struct Line2D{Point2D p1; Point2D p2; Color color; double z1; double z2;
-    Line2D(const Point2D& p1, const Point2D& p2, const Color& color, const double z1 = 0, const double z2 = 0)
+    Line2D(const Point2D& p1, const Point2D& p2, const Color& color, double z1 = 0, double z2 = 0)
     :p1(p1), p2(p2), color(color), z1(z1), z2(z2){}
     void invert(){
         std::swap(p1, p2);
@@ -72,8 +79,8 @@ constexpr PointPolar toPolar(const Vector3D& point){
     return {r, phi, theta};
 }
 
-using Face = std::vector<unsigned int>;
-std::vector<Face> triangulate(const Face& face);
+using Face = std::vector<int>;
+std::vector<Face> triangulate(const Face&);
 
 struct Figure3D{std::vector<Vector3D> points; std::vector<Face> faces; Color color;
     Figure3D(const std::vector<Vector3D>& points, const std::vector<Face>& faces, const Color& color)
@@ -83,46 +90,46 @@ struct Figure3D{std::vector<Vector3D> points; std::vector<Face> faces; Color col
 typedef std::vector<Figure3D> Figures3D;
 
 struct ImgVars{double scale; double dx; double dy; double imagex; double imagey;};
-ImgVars getImgVars(const Lines2D& lines, unsigned int size);
+ImgVars getImgVars(const Lines2D&, int);
 
 // Point2D operators
-void operator *= (Point2D& lhs, double rhs);
-Point2D operator * (Point2D lhs, double rhs);
-void operator /= (Point2D& lhs, double rhs);
-Point2D operator / (Point2D lhs, double rhs);
-void operator += (Point2D& lhs, const Point2D& rhs);
-Point2D operator + (Point2D lhs, const Point2D& rhs);
-void operator -= (Point2D& lhs, const Point2D& rhs);
-Point2D operator - (Point2D lhs, const Point2D& rhs);
+void operator *= (Point2D&, double);
+Point2D operator * (Point2D, double);
+void operator /= (Point2D&, double);
+Point2D operator / (Point2D, double);
+void operator += (Point2D&, const Point2D&);
+Point2D operator + (Point2D, const Point2D&);
+void operator -= (Point2D&, const Point2D&);
+Point2D operator - (Point2D, const Point2D&);
 
-bool operator == (const Vector3D& lhs, const Vector3D& rhs);
-bool operator == (const Point2D& lhs, const Point2D& rhs);
+bool operator == (const Vector3D&, const Vector3D&);
+bool operator == (const Point2D&, const Point2D&);
 
 
 // ===================== DECLARATIONS =====================
 // 3d_transformations
-void applyTransform(Figure3D& f, const Matrix& m);
-void applyTransform(Figures3D& f, const Matrix& m);
-Matrix scale(double factor);
-Matrix rotateX(double angle);
-Matrix rotateY(double angle);
-Matrix rotateZ(double angle);
-Matrix translate(const Vector3D& vector);
-Matrix eyePointTrans(const Vector3D& eyepoint);
-Point2D doProjection(const Vector3D& point, double d = 1, double dx = 0, double dy = 0);
-Lines2D doProjection(const Figures3D& figures);
+void applyTransform(Figure3D&, const Matrix&);
+void applyTransform(Figures3D&, const Matrix&);
+Matrix scale(double);
+Matrix rotateX(double);
+Matrix rotateY(double);
+Matrix rotateZ(double);
+Matrix translate(const Vector3D&);
+Matrix eyePointTrans(const Vector3D&);
+Point2D doProjection(const Vector3D&, double = 1, double = 0, double = 0);
+Lines2D doProjection(const Figures3D&);
 
 // l-systems
-void LSystem2D(Lines2D& lines, const std::string &input, const Color &lineColor);
-void LSystem3D(Figure3D& figure, const std::string& input);
+void LSystem2D(Lines2D&, const std::string&, const Color&);
+void LSystem3D(Figure3D&, const std::string&);
 
 // platonic_bodies
-void createCube(Figure3D& figure);
-void createTetrahedron(Figure3D& figure);
-void createOctahedron(Figure3D& figure);
-void createIcosahedron(Figure3D& figure);
-void createDodecahedron(Figure3D& figure);
-void createCylinder(Figure3D& figure, unsigned int n, double h);
-void createCone(Figure3D& figure, unsigned int n, double h);
-void createSphere(Figure3D& figure, unsigned int n);
-void createTorus(Figure3D& figure, double r, double R, unsigned int n, unsigned int m);
+void createCube(Figure3D&);
+void createTetrahedron(Figure3D&);
+void createOctahedron(Figure3D&);
+void createIcosahedron(Figure3D&);
+void createDodecahedron(Figure3D&);
+void createCylinder(Figure3D&, int, double);
+void createCone(Figure3D&, int, double);
+void createSphere(Figure3D&, int);
+void createTorus(Figure3D&, double, double, int, int);

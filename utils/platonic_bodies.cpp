@@ -4,12 +4,13 @@
 #include "utils.h"
 
 
-static std::unordered_map<unsigned int, std::vector<std::pair<double, double>>> mem_trig;
+static std::unordered_map<int, std::vector<std::pair<double, double>>> mem_trig;
 
-static const std::vector<std::pair<double, double>>& getTrigValues(unsigned int x){
+static const std::vector<std::pair<double, double>>& getTrigValues(int x){
+    assert(x>0);
     if (mem_trig.find(x) == mem_trig.end()) {
         mem_trig[x].reserve(x);
-        for (unsigned int i=0; i<x; ++i)
+        for (int i=0; i<x; ++i)
             mem_trig[x].emplace_back(cos(2 * i * M_PI / x), sin(2 * i * M_PI / x));
     }
     return mem_trig[x];
@@ -44,10 +45,10 @@ void createIcosahedron(Figure3D& figure){
     if (mem_points.empty()){
         mem_points.reserve(12);
         mem_points.push_back(Vector3D::point(0, 0, sqrt(5) / 2));
-        for (unsigned int i=2 ; i<=6 ; i++)
+        for (int i=2 ; i<=6 ; i++)
             mem_points.push_back(Vector3D::point(cos((i - 2) * 2 * M_PI / 5),
                                                  sin((i - 2) * 2 * M_PI / 5), 0.5));
-        for (unsigned int i=7 ; i<=11 ; i++)
+        for (int i=7 ; i<=11 ; i++)
             mem_points.push_back(Vector3D::point(cos(M_PI / 5 + (i - 7) * 2 * M_PI / 5),
                                                  sin(M_PI/5 + (i-7)*2*M_PI/5),
                                                  -0.5));
@@ -71,7 +72,7 @@ void createDodecahedron(Figure3D& figure){
              {19,18,17,16,15}, {19,14,13,12,18}, {18,12,11,10,17}, {17,10,9,8,16}, {16,8,7,6,15}, {15,6,5,14,19}};
 }
 
-void createCylinder(Figure3D& figure, const unsigned int n, const double h){
+void createCylinder(Figure3D& figure, int n, double h){
 //    Timer timer("Cylinder");
     const auto& trig = getTrigValues(n);
     figure.points.reserve(2*n);
@@ -79,14 +80,14 @@ void createCylinder(Figure3D& figure, const unsigned int n, const double h){
 
     Face base; base.reserve(n);
     Face top; top.reserve(n);
-    for (unsigned int i=0 ; i<n ; i++){
+    for (int i=0 ; i<n ; i++){
         base.push_back(n-i-1);
         top.push_back(i + n);
         const auto& [cos_i, sin_i] = trig[i];
         figure.points.push_back(Vector3D::point(cos_i, sin_i, 0));
         figure.faces.push_back({i, (i + 1) % n, (i + 1) % n + n, i + n});
     }
-    for (unsigned int i=0 ; i<n ; i++){
+    for (int i=0 ; i<n ; i++){
         const auto& [cos_i, sin_i] = trig[i];
         figure.points.push_back(Vector3D::point(cos_i, sin_i, h));
     }
@@ -94,7 +95,7 @@ void createCylinder(Figure3D& figure, const unsigned int n, const double h){
     figure.faces.push_back(top);
 }
 
-void createCone(Figure3D& figure, const unsigned int n, const double h){
+void createCone(Figure3D& figure, int n, double h){
 //    Timer timer("Cone");
     const auto& trig = getTrigValues(n);
 
@@ -102,7 +103,7 @@ void createCone(Figure3D& figure, const unsigned int n, const double h){
     figure.faces.reserve(n+1);
 
     Face base;
-    for (unsigned int i=0 ; i<n ; i++){
+    for (int i=0 ; i<n ; i++){
         const auto& [cos_i, sin_i] = trig[i];
         figure.points.push_back(Vector3D::point(cos_i, sin_i, 0));
         figure.faces.push_back({i, (i + 1) % n, n});
@@ -112,11 +113,11 @@ void createCone(Figure3D& figure, const unsigned int n, const double h){
     figure.faces.push_back(base);
 }
 
-void createSphere(Figure3D& figure, const unsigned int n){
+void createSphere(Figure3D& figure, int n){
 //    Timer timer("Sphere");
     static int maxN = -1;
     static std::vector<Vector3D> mem_points; // points are always added to the back but shared
-    static std::unordered_map<unsigned int, std::vector<Face>> mem_faces;
+    static std::unordered_map<int, std::vector<Face>> mem_faces;
 
     if (maxN == -1){
         Figure3D ico(Color{0, 0, 0}); createIcosahedron(ico);
@@ -129,13 +130,13 @@ void createSphere(Figure3D& figure, const unsigned int n){
         std::vector<Face>& newFaces = mem_faces[maxN + 1];
         newFaces = mem_faces[maxN];
 
-        unsigned int facesEnd = newFaces.size();
+        auto facesEnd = newFaces.size();
         newFaces.reserve(20 * pow(4,maxN+1));
         mem_points.reserve(5 * pow(4, maxN + 2) - 8);
 
-        for (unsigned int i=0 ; i < facesEnd ; i++){
+        for (int i=0 ; i < facesEnd ; i++){
             Face face = newFaces[i];
-            unsigned int pointsEnd = mem_points.size();
+            auto pointsEnd = (int)mem_points.size();
             const Vector3D& a = mem_points[face[0]];
             const Vector3D& b = mem_points[face[1]];
             const Vector3D& c = mem_points[face[2]];
@@ -157,7 +158,7 @@ void createSphere(Figure3D& figure, const unsigned int n){
     figure.faces = mem_faces[n];
 }
 
-void createTorus(Figure3D& figure, const double r, const double R, const unsigned int n, const unsigned int m){
+void createTorus(Figure3D& figure, double r, double R, int n, int m){
 //    Timer timer("Torus");
     const auto& trig_n = getTrigValues(n);
     const auto& trig_m = getTrigValues(n);
@@ -167,8 +168,8 @@ void createTorus(Figure3D& figure, const double r, const double R, const unsigne
     figure.points.reserve(n*m);
     figure.faces.reserve(n*m);
 
-    for (unsigned int i = 0; i < n; ++i){
-        for (unsigned int j = 0; j < m; ++j){
+    for (int i = 0; i < n; ++i){
+        for (int j = 0; j < m; ++j){
             const auto& [cos_ni, sin_ni] = trig_n[i];
             const auto& [cos_mj, sin_mj] = trig_m[j];
 

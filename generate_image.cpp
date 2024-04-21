@@ -29,10 +29,10 @@ void draw2DLines(img::EasyImage& image, const ImgVars& imgVars, const Lines2D& l
 }
 
 void generate2DLSystemImage(img::EasyImage& image, const ini::Configuration& conf){
-    const unsigned int size = conf["General"]["size"].as_int_or_die();
-    const std::vector<double> bgColor = conf["General"]["backgroundcolor"].as_double_tuple_or_die();
-    const std::string inputFile = conf["2DLSystem"]["inputfile"].as_string_or_die();
-    const std::vector<double> lineColor = conf["2DLSystem"]["color"].as_double_tuple_or_die();
+    const int& size = conf["General"]["size"].as_int_or_die();
+    const std::vector<double>& bgColor = conf["General"]["backgroundcolor"].as_double_tuple_or_die();
+    const std::string& inputFile = conf["2DLSystem"]["inputfile"].as_string_or_die();
+    const std::vector<double>& lineColor = conf["2DLSystem"]["color"].as_double_tuple_or_die();
 
     Lines2D lines;
     LSystem2D(lines, inputFile, Color(lineColor));
@@ -40,12 +40,11 @@ void generate2DLSystemImage(img::EasyImage& image, const ini::Configuration& con
     draw2DLines(image, imgVars, lines, bgColor, ZBUF_NONE);
 }
 
-void drawZBufTriangle(ZBuffer& zbuf, img::EasyImage& image,
-                       const Vector3D& A, const Vector3D& B, const Vector3D& C,
-                       const double d, const double dx, const double dy, const Color& color){
-    const Point2D a = doProjection(A, d, dx, dy);
-    const Point2D b = doProjection(B, d, dx, dy);
-    const Point2D c = doProjection(C, d, dx, dy);
+void drawZBufTriangle(ZBuffer& zbuf, img::EasyImage& image, const Vector3D& A, const Vector3D& B, const Vector3D& C,
+                      double d, double dx, double dy, const Color& color){
+    Point2D a = doProjection(A, d, dx, dy);
+    Point2D b = doProjection(B, d, dx, dy);
+    Point2D c = doProjection(C, d, dx, dy);
 
     Lines2D lines{
             {a, b, color, A.z, B.z},
@@ -53,10 +52,10 @@ void drawZBufTriangle(ZBuffer& zbuf, img::EasyImage& image,
             {a, c, color, A.z, C.z}
     };
 
-    const int ymin = lround(std::min({a.y, b.y, c.y}) + 0.5);
-    const int ymax = lround(std::max({a.y, b.y, c.y}) - 0.5);
+    int ymin = lround(std::min({a.y, b.y, c.y}) + 0.5);
+    int ymax = lround(std::max({a.y, b.y, c.y}) - 0.5);
 
-    const Point2D g((a + b + c)/3);
+    Point2D g((a + b + c)/3);
     double zg_inv = (1/A.z + 1/B.z + 1/C.z)/3;
     zg_inv *= 1.0001;
 
@@ -102,17 +101,15 @@ void drawZBufTriangles(img::EasyImage& image, const ImgVars& imgVars, const Figu
 }
 
 void lineDrawing(Figure3D& figure, const ini::Section& conf){
-    const unsigned int nrPoints = conf["nrPoints"].as_int_or_die();
-    for (unsigned int p=0 ; p < nrPoints ; p++){
+    auto nrPoints = conf["nrPoints"].as_int_or_die();
+    for (auto p=0 ; p < nrPoints ; p++){
         const std::vector<double> coords = conf["point" + std::to_string(p)].as_double_tuple_or_die();
         figure.points.push_back(Vector3D::point(coords[0], coords[1], coords[2]));
     }
 
-    const unsigned int nrLines = conf["nrLines"].as_int_or_die();
-    for (unsigned int l=0; l < nrLines ; l++){
-        const std::vector<int> linePoints = conf["line" + std::to_string(l)].as_int_tuple_or_die();
-        Face newFace;
-        for (unsigned int p : linePoints) newFace.push_back(p);
+    auto nrLines = conf["nrLines"].as_int_or_die();
+    for (auto l=0; l < nrLines ; l++){
+        const Face& newFace = conf["line" + std::to_string(l)].as_int_tuple_or_die();
         figure.faces.push_back(newFace);
     }
 }
@@ -131,15 +128,15 @@ void platonicBody(Figure3D& figure, const std::string& type, const ini::Section&
 }
 
 void generateWireframeImage(img::EasyImage& image, const ini::Configuration& conf, ZBUF_MODE zbufMode){
-    const unsigned int size = conf["General"]["size"].as_int_or_die();
-    const std::vector<double> bgColor = conf["General"]["backgroundcolor"].as_double_tuple_or_die();
-    const unsigned int nrFigs = conf["General"]["nrFigures"].as_int_or_die();
+    const auto& size = conf["General"]["size"].as_int_or_die();
+    const std::vector<double>& bgColor = conf["General"]["backgroundcolor"].as_double_tuple_or_die();
+    const auto& nrFigs = conf["General"]["nrFigures"].as_int_or_die();
 
-    const std::vector<double> eyeCoords = conf["General"]["eye"].as_double_tuple_or_die();
+    const std::vector<double>& eyeCoords = conf["General"]["eye"].as_double_tuple_or_die();
     const auto eyePoint = Vector3D::point(eyeCoords[0], eyeCoords[1], eyeCoords[2]);
 
     Figures3D figures;
-    for (unsigned int i=0 ; i < nrFigs ; i++){
+    for (auto i=0 ; i < nrFigs ; i++){
         const ini::Section& fig_conf = conf["Figure" + std::to_string(i)];
         const std::string fig_type = fig_conf["type"].as_string_or_die();
 

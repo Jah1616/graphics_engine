@@ -7,7 +7,7 @@
 #include "generate_image.h"
 
 
-img::EasyImage generate_image(const ini::Configuration &configuration){
+img::EasyImage generate_image(const ini::Configuration& configuration){
     img::EasyImage image;
     const std::string& type = configuration["General"]["type"].as_string_or_die();
 

@@ -10,12 +10,12 @@ img::Color imgColor(const std::vector<double>& color){
 
 std::vector<Face> triangulate(const Face& face){
     std::vector<Face> out;
-    unsigned int first = face[0];
-    for (unsigned int i=1 ; i<=face.size()-2 ; i++) out.push_back({first, face[i], face[i+1]});
+    int first = face[0];
+    for (int i=1 ; i<=face.size()-2 ; i++) out.push_back({first, face[i], face[i+1]});
     return out;
 }
 
-ImgVars getImgVars(const Lines2D& lines, const unsigned int size){
+ImgVars getImgVars(const Lines2D& lines, int size){
     double xmin = std::numeric_limits<double>::infinity();
     double ymin = xmin;
     double xmax = -std::numeric_limits<double>::infinity();
@@ -40,19 +40,19 @@ ImgVars getImgVars(const Lines2D& lines, const unsigned int size){
     return {scale, dx, dy, imagex, imagey};
 }
 
-void operator *= (Point2D& lhs, const double rhs){
+void operator *= (Point2D& lhs, double rhs){
     lhs.x *= rhs;
     lhs.y *= rhs;
 }
-Point2D operator * (Point2D lhs, const double rhs){
+Point2D operator * (Point2D lhs, double rhs){
     lhs *= rhs;
     return lhs;
 }
-void operator /= (Point2D& lhs, const double rhs){
+void operator /= (Point2D& lhs, double rhs){
     lhs.x /= rhs;
     lhs.y /= rhs;
 }
-Point2D operator / (Point2D lhs, const double rhs){
+Point2D operator / (Point2D lhs, double rhs){
     lhs /= rhs;
     return lhs;
 }

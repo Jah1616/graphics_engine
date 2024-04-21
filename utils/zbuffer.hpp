@@ -24,8 +24,8 @@ private:
 };
 
 
-static void draw_zbuf_line(img::EasyImage& image, ZBuffer &zbuf, int x0, int y0, double z0,
-                                    int x1, int y1, double z1, const img::Color &color){
+static void draw_zbuf_line(img::EasyImage& image, ZBuffer& zbuf, int x0, int y0, double z0,
+                                    int x1, int y1, double z1, const img::Color& color){
     if (x0 >= image.get_width() || y0 >= image.get_height() || x1 >= image.get_width() || y1 > image.get_height()) {
         std::cerr << "Drawing zbuf line from (" << x0 << "," << y0 << ") to (" << x1 << "," << y1 << ") in image of width "
            << image.get_width() << " and height " << image.get_height();
@@ -33,7 +33,7 @@ static void draw_zbuf_line(img::EasyImage& image, ZBuffer &zbuf, int x0, int y0,
     }
     assert(x0 >= 0); assert(y0 >= 0);
     assert(x1 >= 0); assert(y1 >= 0);
-    const double delta = sqrt((x1-x0)*(x1-x0) + (y1-y0)*(y1-y0));
+    double delta = sqrt((x1-x0)*(x1-x0) + (y1-y0)*(y1-y0));
     if (x0 == x1){
 //        special case for x0 == x1
         if (y0 > y1){
@@ -41,8 +41,8 @@ static void draw_zbuf_line(img::EasyImage& image, ZBuffer &zbuf, int x0, int y0,
             std::swap(z0, z1);
         }
         for (int i = y0; i <= y1; i++){
-            const double p = abs((i - y1))/delta;
-            const double z_inv = p/z0 + (1-p)/z1;
+            double p = abs((i - y1))/delta;
+            double z_inv = p/z0 + (1-p)/z1;
             if (z_inv < zbuf[x0][i]){
                 image(x0, i) = color;
                 zbuf[x0][i] = z_inv;
@@ -56,8 +56,8 @@ static void draw_zbuf_line(img::EasyImage& image, ZBuffer &zbuf, int x0, int y0,
             std::swap(z0, z1);
         }
         for (int i = x0; i <= x1; i++){
-            const double p = abs((i - x1))/delta;
-            const double z_inv = p/z0 + (1-p)/z1;
+            double p = abs((i - x1))/delta;
+            double z_inv = p/z0 + (1-p)/z1;
             if (z_inv < zbuf[i][y0]){
                 image(i, y0) = color;
                 zbuf[i][y0] = z_inv;
@@ -74,12 +74,12 @@ static void draw_zbuf_line(img::EasyImage& image, ZBuffer &zbuf, int x0, int y0,
         double m = (double)(y1- y0) / (x1-x0);
         if (-1.0 <= m && m <= 1.0){
             for (int i = 0; i <= (x1 - x0); i++){
-                const int x = x0+i;
-                const double y = y0 + m * i;
-                const int y_round = lround(y);
+                int x = x0+i;
+                double y = y0 + m * i;
+                int y_round = lround(y);
 
-                const double p = abs(sqrt((x1-x)*(x1-x) + (y1-y)*(y1-y))) / delta;
-                const double z_inv = p/z0 + (1-p)/z1;
+                double p = abs(sqrt((x1-x)*(x1-x) + (y1-y)*(y1-y))) / delta;
+                double z_inv = p/z0 + (1-p)/z1;
                 if (z_inv < zbuf[x][y_round]){
                     image(x, y_round) = color;
                     zbuf[x][y_round] = z_inv;
@@ -88,12 +88,12 @@ static void draw_zbuf_line(img::EasyImage& image, ZBuffer &zbuf, int x0, int y0,
         }
         else if (m > 1.0){
             for (int i = 0; i <= (y1 - y0); i++){
-                const double x = x0 + (i / m);
-                const int x_round = lround(x);
-                const int y = y0 + i;
+                double x = x0 + (i / m);
+                int x_round = lround(x);
+                int y = y0 + i;
 
-                const double p = abs(sqrt((x1-x)*(x1-x) + (y1-y)*(y1-y))) / delta;
-                const double z_inv = p/z0 + (1-p)/z1;
+                double p = abs(sqrt((x1-x)*(x1-x) + (y1-y)*(y1-y))) / delta;
+                double z_inv = p/z0 + (1-p)/z1;
                 if (z_inv < zbuf[x_round][y]){
                     image(x_round, y) = color;
                     zbuf[x_round][y] = z_inv;
@@ -102,12 +102,12 @@ static void draw_zbuf_line(img::EasyImage& image, ZBuffer &zbuf, int x0, int y0,
         }
         else if (m < -1.0){
             for (int i = 0; i <= (y0 - y1); i++){
-                const double x = x0 - (i / m);
-                const int x_round = lround(x);
-                const int y = y0 - i;
+                double x = x0 - (i / m);
+                int x_round = lround(x);
+                int y = y0 - i;
 
-                const double p = abs(sqrt((x1-x)*(x1-x) + (y1-y)*(y1-y))) / delta;
-                const double z_inv = p/z0 + (1-p)/z1;
+                double p = abs(sqrt((x1-x)*(x1-x) + (y1-y)*(y1-y))) / delta;
+                double z_inv = p/z0 + (1-p)/z1;
                 if (z_inv < zbuf[x_round][y]){
                     image(x_round, y) = color;
                     zbuf[x_round][y] = z_inv;
