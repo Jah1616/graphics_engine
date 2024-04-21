@@ -22,9 +22,10 @@ void draw2DLines(img::EasyImage& image, const ImgVars& imgVars, const Lines2D& l
         if (zbufMode == ZBUF_NONE) image.draw_line(lround(p1.x), lround(p1.y),
                                                    lround(p2.x), lround(p2.y),
                                                    imgColor(lineColor));
-        else if (zbufMode == ZBUF_LINE) draw_zbuf_line(image, zbuf, lround(p1.x), lround(p1.y), z1,
-                                                             lround(p2.x), lround(p2.y), z2,
-                                                             imgColor(lineColor));
+        else if (zbufMode == ZBUF_LINE)
+            drawZBufLine(image, zbuf, lround(p1.x), lround(p1.y), z1,
+                         lround(p2.x), lround(p2.y), z2,
+                         imgColor(lineColor));
     }
 }
 
@@ -40,49 +41,6 @@ void generate2DLSystemImage(img::EasyImage& image, const ini::Configuration& con
     draw2DLines(image, imgVars, lines, bgColor, ZBUF_NONE);
 }
 
-void drawZBufTriangle(ZBuffer& zbuf, img::EasyImage& image, const Vector3D& A, const Vector3D& B, const Vector3D& C,
-                      double d, double dx, double dy, const Color& color){
-    Point2D a = doProjection(A, d, dx, dy);
-    Point2D b = doProjection(B, d, dx, dy);
-    Point2D c = doProjection(C, d, dx, dy);
-
-    Lines2D lines{
-            {a, b, color, A.z, B.z},
-            {b, c, color, B.z, C.z},
-            {a, c, color, A.z, C.z}
-    };
-
-    int ymin = lround(std::min({a.y, b.y, c.y}) + 0.5);
-    int ymax = lround(std::max({a.y, b.y, c.y}) - 0.5);
-
-    Point2D g((a + b + c)/3);
-    double zg_inv = (1/A.z + 1/B.z + 1/C.z)/3;
-    zg_inv *= 1.0001;
-
-    for (int i=ymin ; i<=ymax ; i++){
-        double xl = posInf;
-        double xr = negInf;
-        double zl, zr;
-        for (const auto& [p, q, lineColor, z1, z2] : lines){
-            const bool b1 = (i - p.y)*(i - q.y) <= 0;
-            const bool b2 = p.y != q.y;
-            if (b1 and b2){
-                double t = (i - q.y)/(p.y - q.y);
-                double xi = t*p.x + (1-t)*q.x;
-                if (xi < xl){
-                    xl = xi;
-                    zl = t*z1 + (1-t)*z2;
-                }
-                if (xi > xr){
-                    xr = xi;
-                    zr = t*z1 + (1-t)*z2;
-                }
-            }
-        }
-        draw_zbuf_line(image, zbuf, lround(xl + 0.5), i, zl, lround(xr - 0.5), i, zr, imgColor(color));
-    }
-}
-
 void drawZBufTriangles(img::EasyImage& image, const ImgVars& imgVars, const Figures3D& figures,
                        const std::vector<double>& bgColor){
     const auto& [scale, dx, dy, imagex, imagey] = imgVars;
@@ -90,10 +48,10 @@ void drawZBufTriangles(img::EasyImage& image, const ImgVars& imgVars, const Figu
     image.clear(imgColor(bgColor));
     ZBuffer zbuf(lround(imagex), lround(imagey));
 
-    for (auto const& [points, faces, color] : figures){
+    for (const auto& [points, faces, color] : figures){
         for (const Face& face : faces){
             for (const Face& tri : triangulate(face)){
-                drawZBufTriangle(zbuf, image, points[tri[0]], points[tri[1]], points[tri[2]],
+                drawZBufTriangle(image, zbuf, points[tri[0]], points[tri[1]], points[tri[2]],
                                  scale, dx, dy, color);
             }
         }

@@ -8,9 +8,6 @@ void draw2DLines(img::EasyImage& image, const ImgVars& imgVars, const Lines2D& l
                  const std::vector<double>& bgColor, ZBUF_MODE zbufMode);
 void generate2DLSystemImage(img::EasyImage& image, const ini::Configuration& conf);
 
-void drawZBufTriangle(ZBuffer& zbuf, img::EasyImage& image,
-                      const Vector3D& A, const Vector3D& B, const Vector3D& C,
-                      double d, double dx, double dy, const Color& color);
 void drawZBufTriangles(img::EasyImage& image, const ImgVars& imgVars, const Figures3D& figures,
                        const std::vector<double>& bgColor);
 void lineDrawing(Figure3D& figure, const ini::Section& conf);

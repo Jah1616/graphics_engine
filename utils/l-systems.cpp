@@ -2,6 +2,7 @@
 #include <fstream>
 #include <stack>
 #include <random>
+#include <array>
 #include "l-parser.h"
 #include "utils.h"
 
@@ -23,7 +24,7 @@ void LSystem2D(Lines2D& lines, const std::string& input, const Color& lineColor)
     const auto& iterations = l_system.get_nr_iterations();
 
     // replacement
-    for (int i=0 ; i<iterations ; i++){
+    for (auto i=0 ; i<iterations ; i++){
         std::string newString;
         for (char c : currentString){
             if (alphabet.find(c) == alphabet.end()) newString += c;
@@ -100,7 +101,7 @@ void LSystem3D(Figure3D& figure, const std::string& input){
     Vector3D p1 = Vector3D::point(0, 0, 0);
     Vector3D p2 = Vector3D::point(0, 0, 0);
 
-    std::stack<std::vector<Vector3D>> bracketStack;
+    std::stack<std::array<Vector3D, 4>> bracketStack;
 
     for (char c : initiator){
         if (alphabet.find(c) != alphabet.end()){
@@ -160,11 +161,11 @@ void LSystem3D(Figure3D& figure, const std::string& input){
         }
         else if (c == '(') bracketStack.push({H, L, U, p1});
         else if (c == ')'){
-            const auto& top = bracketStack.top();
-            H = top[0];
-            L = top[1];
-            U = top[2];
-            p1 = p2 = top[3];
+            const auto& [h, l, u, p] = bracketStack.top();
+            H = h;
+            L = l;
+            U = u;
+            p1 = p2 = p;
             bracketStack.pop();
         }
     }
