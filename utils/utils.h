@@ -14,6 +14,10 @@
 constexpr double toRadian(double x) {return x * M_PI / 180;}
 constexpr double toDegrees(double x) {return x / M_PI * 180;}
 
+constexpr bool contains(const std::string& str, const std::string& part){
+    return str.find(part) != std::string::npos;
+}
+
 // Timer
 class Timer{
 private:
@@ -87,7 +91,7 @@ struct Figure3D{std::vector<Vector3D> points; std::vector<Face> faces; Color col
     :points(points) ,faces(faces) ,color(color){}
     explicit Figure3D(const Color& color): points{}, faces{}, color(color) {};
 };
-typedef std::vector<Figure3D> Figures3D;
+using Figures3D = std::vector<Figure3D>;
 
 struct ImgVars{double scale; double dx; double dy; double imagex; double imagey;};
 ImgVars getImgVars(const Lines2D&, int);

@@ -1,5 +1,4 @@
 #include <cmath>
-#include <algorithm>
 #include "generate_image.h"
 
 void draw2DLines(img::EasyImage& image, const ImgVars& imgVars, const Lines2D& lines,
@@ -73,15 +72,15 @@ void lineDrawing(Figure3D& figure, const ini::Section& conf){
 }
 
 void platonicBody(Figure3D& figure, const std::string& type, const ini::Section& conf){
-    if (type == "Cube") createCube(figure);
-    else if (type == "Tetrahedron") createTetrahedron(figure);
-    else if (type == "Octahedron") createOctahedron(figure);
-    else if (type == "Icosahedron") createIcosahedron(figure);
-    else if (type == "Dodecahedron") createDodecahedron(figure);
-    else if (type == "Cylinder") createCylinder(figure, conf["n"].as_int_or_die(), conf["height"].as_double_or_die());
-    else if (type == "Cone") createCone(figure, conf["n"].as_int_or_die(), conf["height"].as_double_or_die());
-    else if (type == "Sphere") createSphere(figure, conf["n"].as_int_or_die());
-    else if (type == "Torus") createTorus(figure, conf["r"].as_double_or_die(), conf["R"].as_double_or_die(),
+    if (contains(type, "Cube")) createCube(figure);
+    else if (contains(type, "Tetrahedron")) createTetrahedron(figure);
+    else if (contains(type, "Octahedron")) createOctahedron(figure);
+    else if (contains(type, "Icosahedron")) createIcosahedron(figure);
+    else if (contains(type, "Dodecahedron")) createDodecahedron(figure);
+    else if (contains(type, "Cylinder")) createCylinder(figure, conf["n"].as_int_or_die(), conf["height"].as_double_or_die());
+    else if (contains(type, "Cone")) createCone(figure, conf["n"].as_int_or_die(), conf["height"].as_double_or_die());
+    else if (contains(type, "Sphere")) createSphere(figure, conf["n"].as_int_or_die());
+    else if (contains(type, "Torus")) createTorus(figure, conf["r"].as_double_or_die(), conf["R"].as_double_or_die(),
                                           conf["n"].as_int_or_die(), conf["m"].as_int_or_die());
 }
 

@@ -14,24 +14,20 @@ enum ZBUF_MODE{
 constexpr double posInf = std::numeric_limits<double>::infinity();
 constexpr double negInf = -std::numeric_limits<double>::infinity();
 
-class ZBuffer: public std::vector<std::vector<double>>{
-public:
-    ZBuffer(const unsigned int width, const unsigned int height):image_width(width), image_height(height){
-        resize(image_width, std::vector<double>(image_height, posInf));
+struct ZBuffer: public std::vector<std::vector<double>>{
+    ZBuffer(const int width, const int height) {
+        resize(width, std::vector<double>(height, posInf));
     }
-private:
-    unsigned int image_width;
-    unsigned int image_height;
 };
-
 
 static void drawZBufLine(img::EasyImage& image, ZBuffer& zbuf, int x0, int y0, double z0,
                          int x1, int y1, double z1, const img::Color& color){
-    if (x0 >= image.get_width() || y0 >= image.get_height() || x1 >= image.get_width() || y1 > image.get_height()) {
+    if (x0 >= image.get_width() || y0 >= image.get_height() || x1 >= image.get_width() || y1 > image.get_height()){
         std::cerr << "Drawing zbuf line from (" << x0 << "," << y0 << ") to (" << x1 << "," << y1 << ") in image of width "
-           << image.get_width() << " and height " << image.get_height();
+        << image.get_width() << " and height " << image.get_height();
         exit(-1);
     }
+
     assert(x0 >= 0); assert(y0 >= 0);
     assert(x1 >= 0); assert(y1 >= 0);
     double delta = sqrt((x1-x0)*(x1-x0) + (y1-y0)*(y1-y0));
@@ -117,7 +113,6 @@ static void drawZBufLine(img::EasyImage& image, ZBuffer& zbuf, int x0, int y0, d
         }
     }
 }
-
 
 static void drawZBufTriangle(img::EasyImage& image, ZBuffer& zbuf, const Vector3D& A, const Vector3D& B, const Vector3D& C,
                       double d, double dx, double dy, const Color& color){
