@@ -38,7 +38,7 @@ static void drawZBufLine(img::EasyImage& image, ZBuffer& zbuf, int x0, int y0, d
             std::swap(z0, z1);
         }
         for (int i = y0; i <= y1; i++){
-            double p = abs((i - y1))/delta;
+            double p = (y1 - i)/delta;
             double z_inv = p/z0 + (1-p)/z1;
             if (z_inv < zbuf[x0][i]){
                 image(x0, i) = color;
@@ -53,7 +53,7 @@ static void drawZBufLine(img::EasyImage& image, ZBuffer& zbuf, int x0, int y0, d
             std::swap(z0, z1);
         }
         for (int i = x0; i <= x1; i++){
-            double p = abs((i - x1))/delta;
+            double p = (x1 - i)/delta;
             double z_inv = p/z0 + (1-p)/z1;
             if (z_inv < zbuf[i][y0]){
                 image(i, y0) = color;
@@ -68,14 +68,14 @@ static void drawZBufLine(img::EasyImage& image, ZBuffer& zbuf, int x0, int y0, d
             std::swap(y0, y1);
             std::swap(z0, z1);
         }
-        double m = (double)(y1- y0) / (x1-x0);
+        double m = (double)(y1-y0) / (x1-x0);
         if (-1.0 <= m && m <= 1.0){
             for (int i = 0; i <= (x1 - x0); i++){
-                int x = x0+i;
+                int x = x0 + i;
                 double y = y0 + m * i;
                 int y_round = lround(y);
 
-                double p = abs(sqrt((x1-x)*(x1-x) + (y1-y)*(y1-y))) / delta;
+                double p = sqrt((x1-x)*(x1-x) + (y1-y)*(y1-y)) / delta;
                 double z_inv = p/z0 + (1-p)/z1;
                 if (z_inv < zbuf[x][y_round]){
                     image(x, y_round) = color;
@@ -89,7 +89,7 @@ static void drawZBufLine(img::EasyImage& image, ZBuffer& zbuf, int x0, int y0, d
                 int x_round = lround(x);
                 int y = y0 + i;
 
-                double p = abs(sqrt((x1-x)*(x1-x) + (y1-y)*(y1-y))) / delta;
+                double p = sqrt((x1-x)*(x1-x) + (y1-y)*(y1-y)) / delta;
                 double z_inv = p/z0 + (1-p)/z1;
                 if (z_inv < zbuf[x_round][y]){
                     image(x_round, y) = color;
@@ -103,7 +103,7 @@ static void drawZBufLine(img::EasyImage& image, ZBuffer& zbuf, int x0, int y0, d
                 int x_round = lround(x);
                 int y = y0 - i;
 
-                double p = abs(sqrt((x1-x)*(x1-x) + (y1-y)*(y1-y))) / delta;
+                double p = sqrt((x1-x)*(x1-x) + (y1-y)*(y1-y)) / delta;
                 double z_inv = p/z0 + (1-p)/z1;
                 if (z_inv < zbuf[x_round][y]){
                     image(x_round, y) = color;
@@ -136,7 +136,7 @@ static void drawZBufTriangle(img::EasyImage& image, ZBuffer& zbuf, const Vector3
     double dzdx = w.x/(-d*k);
     double dzdy = w.y/(-d*k);
 
-    for (auto y=ymin ; y <= ymax ; y++){
+    for (int y=ymin ; y <= ymax ; y++){
         double xl = posInf;
         double xr = negInf;
         for (const auto& [p, q, lineColor, zp, zq] : edges){
@@ -150,7 +150,7 @@ static void drawZBufTriangle(img::EasyImage& image, ZBuffer& zbuf, const Vector3
         }
         int xmin = lround(xl + 0.5);
         int xmax = lround(xr - 0.5);
-        for (auto x=xmin ; x <= xmax ; x++){
+        for (int x=xmin ; x <= xmax ; x++){
             double zi_inv = zg_inv + (x - g.x)*dzdx + (y - g.y)*dzdy;
             if (zi_inv < zbuf[x][y]){
                 zbuf[x][y] = zi_inv;

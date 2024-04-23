@@ -14,7 +14,7 @@
 constexpr double toRadian(double x) {return x * M_PI / 180;}
 constexpr double toDegrees(double x) {return x / M_PI * 180;}
 
-constexpr bool contains(const std::string& str, const std::string& part){
+static bool contains(const std::string& str, const std::string& part){
     return str.find(part) != std::string::npos;
 }
 
