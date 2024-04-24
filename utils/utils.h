@@ -41,20 +41,34 @@ public:
 
 // Color
 struct Color{double red; double green; double blue;
-    Color(double red, double green, double blue) :red(red) ,green(green) ,blue(blue) { checkRange(); }
+    Color(double red, double green, double blue) :red(red) ,green(green) ,blue(blue) { limit(); }
     explicit Color(const std::vector<double>& color) :red(color[0]), green(color[1]), blue(color[2]) {
         assert(color.size() == 3);
-        checkRange();
+        limit();
     }
 private:
-    void checkRange() const {
-        assert(0 <= red and red <= 1);
-        assert(0 <= green and green <= 1);
-        assert(0 <= blue and blue <= 1);
+    void limit(){
+        assert(0 <= red);
+        assert(0 <= green);
+        assert(0 <= blue);
+        if (red > 1) red = 1;
+        if (green > 1) green = 1;
+        if (blue > 1) blue = 1;
     }
 };
 img::Color imgColor(const Color&);
 img::Color imgColor(const std::vector<double>&);
+
+struct Light{ Color ambient; Color diffuse; Color specular; };
+struct InfLight : public Light{ Vector3D ldVector; };
+struct PointLight : public Light{ Vector3D location; double spotAngle; };
+struct FigureReflection : public Light{
+    double reflectionCoefficient;
+    FigureReflection(const Color& amb, const Color& dif, const Color& spec, double coeff)
+    :Light{amb, dif, spec}, reflectionCoefficient(coeff)
+    {}
+};
+using Lights = std::list<Light>;
 
 // 2D utils
 struct Point2D{double x; double y;
@@ -86,10 +100,17 @@ constexpr PointPolar toPolar(const Vector3D& point){
 using Face = std::vector<int>;
 std::vector<Face> triangulate(const Face&);
 
-struct Figure3D{std::vector<Vector3D> points; std::vector<Face> faces; Color color;
+struct Figure3D{
+    std::vector<Vector3D> points; std::vector<Face> faces;
+    FigureReflection reflection;
+
     Figure3D(const std::vector<Vector3D>& points, const std::vector<Face>& faces, const Color& color)
-    :points(points) ,faces(faces) ,color(color){}
-    explicit Figure3D(const Color& color): points{}, faces{}, color(color) {};
+    :points(points), faces(faces), reflection(color, {0,0,0}, {0,0,0}, 1){}
+    explicit Figure3D(const Color& color): points{}, faces{}, reflection(color, {0,0,0}, {0,0,0}, 1) {};
+
+    Figure3D(const std::vector<Vector3D>& points, const std::vector<Face>& faces, const FigureReflection& reflect)
+    :points(points), faces(faces), reflection(reflect){}
+    explicit Figure3D(const FigureReflection& reflect): points{}, faces{}, reflection(reflect){};
 };
 using Figures3D = std::vector<Figure3D>;
 Figure3D compress(const Figures3D&, const Color&);

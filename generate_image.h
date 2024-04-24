@@ -5,4 +5,4 @@
 #include "utils/zbuffer.hpp"
 
 img::EasyImage generate2DLSystemImage(const ini::Configuration&);
-img::EasyImage generateWireframeImage(const ini::Configuration&, ZBUF_MODE);
+img::EasyImage generateWireframeImage(const ini::Configuration&, ZBUF_MODE = ZBUF_NONE, bool = false);

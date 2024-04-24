@@ -106,7 +106,7 @@ img::EasyImage generate2DLSystemImage(const ini::Configuration& conf){
     return image;
 }
 
-img::EasyImage generateWireframeImage(const ini::Configuration& conf, ZBUF_MODE zbufMode){
+img::EasyImage generateWireframeImage(const ini::Configuration& conf, ZBUF_MODE zbufMode, bool lighting){
     const auto& size = conf["General"]["size"].as_int_or_die();
     const std::vector<double>& bgColor = conf["General"]["backgroundcolor"].as_double_tuple_or_die();
     const auto& nrFigs = conf["General"]["nrFigures"].as_int_or_die();
@@ -135,6 +135,7 @@ img::EasyImage generateWireframeImage(const ini::Configuration& conf, ZBUF_MODE 
 
         if (contains(fig_type, "Fractal")){
 //            Figure3D base = newFigure;
+//            newFigure = generateFractal(base, fig_conf);
             newFigure = generateFractal(newFigure, fig_conf);
         }
 
@@ -145,8 +146,14 @@ img::EasyImage generateWireframeImage(const ini::Configuration& conf, ZBUF_MODE 
         applyTransform(newFigure, transformMatrix);
         figures.push_back(newFigure);
     }
+
+    Lights lights;
+
     applyTransform(figures, eyePointTrans(eyePoint));
     const Lines2D lines = doProjection(figures);
+
+    if (lines.empty()) return {};
+
     auto imgVars = getImgVars(lines, size);
 
     img::EasyImage image(lround(imgVars.imagex), lround(imgVars.imagey));
