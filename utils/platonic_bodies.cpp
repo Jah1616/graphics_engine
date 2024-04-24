@@ -16,31 +16,37 @@ static const std::vector<std::pair<double, double>>& getTrigValues(int x){
     return mem_trig[x];
 }
 
-void createCube(Figure3D& figure){
+Figure3D createCube(const Color& color){
 //    Timer timer("Cube");
-    figure.points = {Vector3D::point(1,-1,-1), Vector3D::point(-1,1,-1), Vector3D::point(1,1,1),
+    Figure3D cube(color);
+    cube.points = {Vector3D::point(1,-1,-1), Vector3D::point(-1,1,-1), Vector3D::point(1,1,1),
               Vector3D::point(-1,-1,1), Vector3D::point(1,1,-1), Vector3D::point(-1,-1,-1),
               Vector3D::point(1,-1,1), Vector3D::point(-1,1,1)};
-    figure.faces = {{0,4,2,6}, {4,1,7,2}, {1,5,3,7}, {5,0,6,3}, {6,2,7,3}, {0,5,1,4}};
+    cube.faces = {{0,4,2,6}, {4,1,7,2}, {1,5,3,7}, {5,0,6,3}, {6,2,7,3}, {0,5,1,4}};
+    return cube;
 }
 
-void createTetrahedron(Figure3D& figure){
+Figure3D createTetrahedron(const Color& color){
 //    Timer timer("Tetrahedron");
-    figure.points = {Vector3D::point(1,-1,-1), Vector3D::point(-1,1,-1),
-              Vector3D::point(1,1,1), Vector3D::point(-1,-1,1)};
-    figure.faces = {{0,1,2}, {1,3,2}, {0,3,1}, {0,2,3}};
+    Figure3D tetra(color);
+    tetra.points = {Vector3D::point(1, -1, -1), Vector3D::point(-1, 1, -1),
+                    Vector3D::point(1,1,1), Vector3D::point(-1,-1,1)};
+    tetra.faces = {{0, 1, 2}, {1, 3, 2}, {0, 3, 1}, {0, 2, 3}};
+    return tetra;
 }
 
-void createOctahedron(Figure3D& figure){
+Figure3D createOctahedron(const Color& color){
 //    Timer timer("Octahedron");
-    auto& [points, faces, color] = figure;
-    points = {Vector3D::point(1,0,0), Vector3D::point(0,1,0), Vector3D::point(-1,0,0),
+    Figure3D octa(color);
+    octa.points = {Vector3D::point(1,0,0), Vector3D::point(0,1,0), Vector3D::point(-1,0,0),
               Vector3D::point(0,-1,0), Vector3D::point(0,0,-1), Vector3D::point(0,0,1)};
-    faces = {{0,1,5}, {1,2,5}, {2,3,5}, {3,0,5}, {1,0,4}, {2,1,4}, {3,2,4}, {0,3,4}};
+    octa.faces = {{0,1,5}, {1,2,5}, {2,3,5}, {3,0,5}, {1,0,4}, {2,1,4}, {3,2,4}, {0,3,4}};
+    return octa;
 }
 
-void createIcosahedron(Figure3D& figure){
+Figure3D createIcosahedron(const Color& color){
 //    Timer timer("Icosahedron");
+    Figure3D ico(color);
     static std::vector<Vector3D> mem_points;
     if (mem_points.empty()){
         mem_points.reserve(12);
@@ -54,29 +60,33 @@ void createIcosahedron(Figure3D& figure){
                                                  -0.5));
         mem_points.push_back(Vector3D::point(0, 0, -sqrt(5) / 2));
     }
-    figure.points = mem_points;
-    figure.faces = {{0,1,2}, {0,2,3}, {0,3,4}, {0,4,5}, {0,5,1}, {1,6,2}, {2,6,7}, {2,7,3}, {3,7,8}, {3,8,4}, {4,8,9},
+    ico.points = mem_points;
+    ico.faces = {{0,1,2}, {0,2,3}, {0,3,4}, {0,4,5}, {0,5,1}, {1,6,2}, {2,6,7}, {2,7,3}, {3,7,8}, {3,8,4}, {4,8,9},
              {4,9,5}, {5,9,10}, {5,10,1}, {1,10,6}, {11,7,6}, {11,8,7}, {11,9,8}, {11,10,9}, {11,6,10}};
+    return ico;
 }
 
-void createDodecahedron(Figure3D& figure){
+Figure3D createDodecahedron(const Color& color){
 //    Timer timer("Dodecahedron");
+    Figure3D dodeca(color);
     static std::vector<Vector3D> mem_points;
     if (mem_points.empty()){
-        Figure3D ico(Color{0,0,0}); createIcosahedron(ico);
+        Figure3D ico = createIcosahedron({0,0,0});
         mem_points.reserve(20);
         for (const Face& face : ico.faces) mem_points.push_back((ico.points[face[0]] + ico.points[face[1]] + ico.points[face[2]]) / 3);
     }
-    figure.points = mem_points;
-    figure.faces = {{0,1,2,3,4}, {0,5,6,7,1}, {1,7,8,9,2}, {2,9,10,11,3}, {3,11,12,13,4}, {4,13,14,5,0},
+    dodeca.points = mem_points;
+    dodeca.faces = {{0,1,2,3,4}, {0,5,6,7,1}, {1,7,8,9,2}, {2,9,10,11,3}, {3,11,12,13,4}, {4,13,14,5,0},
              {19,18,17,16,15}, {19,14,13,12,18}, {18,12,11,10,17}, {17,10,9,8,16}, {16,8,7,6,15}, {15,6,5,14,19}};
+    return dodeca;
 }
 
-void createCylinder(Figure3D& figure, int n, double h){
+Figure3D createCylinder(const Color& color, int n, double h){
 //    Timer timer("Cylinder");
+    Figure3D cylinder(color);
     const auto& trig = getTrigValues(n);
-    figure.points.reserve(2*n);
-    figure.faces.reserve(n+2);
+    cylinder.points.reserve(2*n);
+    cylinder.faces.reserve(n+2);
 
     Face base; base.reserve(n);
     Face top; top.reserve(n);
@@ -84,43 +94,47 @@ void createCylinder(Figure3D& figure, int n, double h){
         base.push_back(n-i-1);
         top.push_back(i + n);
         const auto& [cos_i, sin_i] = trig[i];
-        figure.points.push_back(Vector3D::point(cos_i, sin_i, 0));
-        figure.faces.push_back({i, (i + 1) % n, (i + 1) % n + n, i + n});
+        cylinder.points.push_back(Vector3D::point(cos_i, sin_i, 0));
+        cylinder.faces.push_back({i, (i + 1) % n, (i + 1) % n + n, i + n});
     }
     for (int i=0 ; i<n ; i++){
         const auto& [cos_i, sin_i] = trig[i];
-        figure.points.push_back(Vector3D::point(cos_i, sin_i, h));
+        cylinder.points.push_back(Vector3D::point(cos_i, sin_i, h));
     }
-    figure.faces.push_back(base);
-    figure.faces.push_back(top);
+    cylinder.faces.push_back(base);
+    cylinder.faces.push_back(top);
+    return cylinder;
 }
 
-void createCone(Figure3D& figure, int n, double h){
+Figure3D createCone(const Color& color, int n, double h){
 //    Timer timer("Cone");
-    const auto& trig = getTrigValues(n);
+    Figure3D cone(color);
 
-    figure.points.reserve(n+1);
-    figure.faces.reserve(n+1);
+    const auto& trig = getTrigValues(n);
+    cone.points.reserve(n+1);
+    cone.faces.reserve(n+1);
 
     Face base;
     for (int i=0 ; i<n ; i++){
         const auto& [cos_i, sin_i] = trig[i];
-        figure.points.push_back(Vector3D::point(cos_i, sin_i, 0));
-        figure.faces.push_back({i, (i + 1) % n, n});
+        cone.points.push_back(Vector3D::point(cos_i, sin_i, 0));
+        cone.faces.push_back({i, (i + 1) % n, n});
         base.push_back(n-i-1);
     }
-    figure.points.push_back(Vector3D::point(0, 0, h));
-    figure.faces.push_back(base);
+    cone.points.push_back(Vector3D::point(0, 0, h));
+    cone.faces.push_back(base);
+    return cone;
 }
 
-void createSphere(Figure3D& figure, int n){
+Figure3D createSphere(const Color& color, int n){
 //    Timer timer("Sphere");
+    Figure3D sphere(color);
     static int maxN = -1;
     static std::vector<Vector3D> mem_points; // points are always added to the back but shared
     static std::unordered_map<int, std::vector<Face>> mem_faces;
 
     if (maxN == -1){
-        Figure3D ico(Color{0, 0, 0}); createIcosahedron(ico);
+        Figure3D ico = createIcosahedron({0,0,0});
         mem_points = ico.points;
         mem_faces[0] = ico.faces;
         maxN = 0;
@@ -153,20 +167,22 @@ void createSphere(Figure3D& figure, int n){
         ++maxN;
     }
 
-    figure.points.assign(mem_points.begin(), mem_points.begin() + (5 * pow(4, n + 1) - 8));
-    for (Vector3D& p : figure.points) p.normalise();
-    figure.faces = mem_faces[n];
+    sphere.points.assign(mem_points.begin(), mem_points.begin() + (5 * pow(4, n + 1) - 8));
+    for (Vector3D& p : sphere.points) p.normalise();
+    sphere.faces = mem_faces[n];
+    return sphere;
 }
 
-void createTorus(Figure3D& figure, double r, double R, int n, int m){
+Figure3D createTorus(const Color& color, double r, double R, int n, int m){
 //    Timer timer("Torus");
+    Figure3D torus(color);
     const auto& trig_n = getTrigValues(n);
     const auto& trig_m = getTrigValues(n);
 
-    figure.points.clear();
-    figure.faces.clear();
-    figure.points.reserve(n*m);
-    figure.faces.reserve(n*m);
+    torus.points.clear();
+    torus.faces.clear();
+    torus.points.reserve(n*m);
+    torus.faces.reserve(n*m);
 
     for (int i = 0; i < n; ++i){
         for (int j = 0; j < m; ++j){
@@ -176,8 +192,9 @@ void createTorus(Figure3D& figure, double r, double R, int n, int m){
             double x = (R + r * cos_mj) * cos_ni;
             double y = (R + r * cos_mj) * sin_ni;
             double z = r * sin_mj;
-            figure.points.push_back(Vector3D::point(x, y, z));
-            figure.faces.push_back({n*i + j, ((i+1)%n)*n + j, ((i+1)%n)*n + (j+1)%m, n*i + (j+1)%m});
+            torus.points.push_back(Vector3D::point(x, y, z));
+            torus.faces.push_back({n*i + j, ((i+1)%n)*n + j, ((i+1)%n)*n + (j+1)%m, n*i + (j+1)%m});
         }
     }
+    return torus;
 }

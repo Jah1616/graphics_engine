@@ -8,15 +8,14 @@
 
 
 img::EasyImage generate_image(const ini::Configuration& configuration){
-    img::EasyImage image;
     const std::string& type = configuration["General"]["type"].as_string_or_die();
 
 //    Timer timer(type);
-    if (type == "2DLSystem") generate2DLSystemImage(image, configuration);
-    else if (type == "Wireframe") generateWireframeImage(image, configuration, ZBUF_NONE);
-    else if (type == "ZBufferedWireframe") generateWireframeImage(image, configuration, ZBUF_LINE);
-    else if (type == "ZBuffering") generateWireframeImage(image, configuration, ZBUF_TRIANGLE);
-    return image;
+    if (type == "2DLSystem") return generate2DLSystemImage(configuration);
+    else if (type == "Wireframe") return generateWireframeImage(configuration, ZBUF_NONE);
+    else if (type == "ZBufferedWireframe") return generateWireframeImage(configuration, ZBUF_LINE);
+    else if (type == "ZBuffering") return generateWireframeImage(configuration, ZBUF_TRIANGLE);
+    return {};
 }
 
 

@@ -1,12 +1,9 @@
 #include <cmath>
 #include "generate_image.h"
 
-void draw2DLines(img::EasyImage& image, const ImgVars& imgVars, const Lines2D& lines,
-                  const std::vector<double>& bgColor, ZBUF_MODE zbufMode){
+void draw2DLines(img::EasyImage& image, const ImgVars& imgVars, const Lines2D& lines, ZBUF_MODE zbufMode){
 //    Timer timer("draw2DLines");
     const auto& [scale, dx, dy, imagex, imagey] = imgVars;
-    image = img::EasyImage(lround(imagex), lround(imagey));
-    image.clear(imgColor(bgColor));
     auto zbuf = (zbufMode == ZBUF_NONE) ? ZBuffer(0, 0) : ZBuffer(lround(imagex), lround(imagey));
 
     for (auto [p1, p2, lineColor, z1, z2] : lines) {
@@ -28,23 +25,8 @@ void draw2DLines(img::EasyImage& image, const ImgVars& imgVars, const Lines2D& l
     }
 }
 
-void generate2DLSystemImage(img::EasyImage& image, const ini::Configuration& conf){
-    const int& size = conf["General"]["size"].as_int_or_die();
-    const std::vector<double>& bgColor = conf["General"]["backgroundcolor"].as_double_tuple_or_die();
-    const std::string& inputFile = conf["2DLSystem"]["inputfile"].as_string_or_die();
-    const std::vector<double>& lineColor = conf["2DLSystem"]["color"].as_double_tuple_or_die();
-
-    Lines2D lines;
-    LSystem2D(lines, inputFile, Color(lineColor));
-    auto imgVars = getImgVars(lines, size);
-    draw2DLines(image, imgVars, lines, bgColor, ZBUF_NONE);
-}
-
-void drawZBufTriangles(img::EasyImage& image, const ImgVars& imgVars, const Figures3D& figures,
-                       const std::vector<double>& bgColor){
+void drawZBufTriangles(img::EasyImage& image, const ImgVars& imgVars, const Figures3D& figures){
     const auto& [scale, dx, dy, imagex, imagey] = imgVars;
-    image = img::EasyImage(lround(imagex), lround(imagey));
-    image.clear(imgColor(bgColor));
     ZBuffer zbuf(lround(imagex), lround(imagey));
 
     for (const auto& [points, faces, color] : figures){
@@ -57,7 +39,8 @@ void drawZBufTriangles(img::EasyImage& image, const ImgVars& imgVars, const Figu
     }
 }
 
-void lineDrawing(Figure3D& figure, const ini::Section& conf){
+Figure3D lineDrawing(const Color& color, const ini::Section& conf){
+    Figure3D figure(color);
     auto nrPoints = conf["nrPoints"].as_int_or_die();
     for (auto p=0 ; p < nrPoints ; p++){
         const std::vector<double> coords = conf["point" + std::to_string(p)].as_double_tuple_or_die();
@@ -69,22 +52,61 @@ void lineDrawing(Figure3D& figure, const ini::Section& conf){
         const Face& newFace = conf["line" + std::to_string(l)].as_int_tuple_or_die();
         figure.faces.push_back(newFace);
     }
+    return figure;
 }
 
-void platonicBody(Figure3D& figure, const std::string& type, const ini::Section& conf){
-    if (contains(type, "Cube")) createCube(figure);
-    else if (contains(type, "Tetrahedron")) createTetrahedron(figure);
-    else if (contains(type, "Octahedron")) createOctahedron(figure);
-    else if (contains(type, "Icosahedron")) createIcosahedron(figure);
-    else if (contains(type, "Dodecahedron")) createDodecahedron(figure);
-    else if (contains(type, "Cylinder")) createCylinder(figure, conf["n"].as_int_or_die(), conf["height"].as_double_or_die());
-    else if (contains(type, "Cone")) createCone(figure, conf["n"].as_int_or_die(), conf["height"].as_double_or_die());
-    else if (contains(type, "Sphere")) createSphere(figure, conf["n"].as_int_or_die());
-    else if (contains(type, "Torus")) createTorus(figure, conf["r"].as_double_or_die(), conf["R"].as_double_or_die(),
-                                          conf["n"].as_int_or_die(), conf["m"].as_int_or_die());
+Figure3D platonicBody(const Color& color, const std::string& type, const ini::Section& conf){
+    if (contains(type, "Cube")) return createCube(color);
+    else if (contains(type, "Tetrahedron")) return createTetrahedron(color);
+    else if (contains(type, "Octahedron")) return createOctahedron(color);
+    else if (contains(type, "Icosahedron")) return createIcosahedron(color);
+    else if (contains(type, "Dodecahedron")) return createDodecahedron(color);
+    else if (contains(type, "Cylinder")) return createCylinder(color, conf["n"].as_int_or_die(), conf["height"].as_double_or_die());
+    else if (contains(type, "Cone")) return createCone(color, conf["n"].as_int_or_die(), conf["height"].as_double_or_die());
+    else if (contains(type, "Sphere")) return createSphere(color, conf["n"].as_int_or_die());
+    else if (contains(type, "Torus")) return createTorus(color, conf["r"].as_double_or_die(), conf["R"].as_double_or_die(),
+                                                         conf["n"].as_int_or_die(), conf["m"].as_int_or_die());
+    return Figure3D(color);
 }
 
-void generateWireframeImage(img::EasyImage& image, const ini::Configuration& conf, ZBUF_MODE zbufMode){
+Figure3D generateFractal(const Figure3D& figure, const ini::Section& conf){
+    int nr_iterations = conf["nrIterations"].as_int_or_die();
+    double fractalScale = conf["fractalScale"].as_double_or_die();
+    Matrix scaleMatrix = scale(1/fractalScale);
+
+    Figures3D fractal{figure};
+    for (int iteration = 0; iteration < nr_iterations; ++iteration){
+        Figures3D temp;
+        for (const Figure3D& frac : fractal){
+            for (auto i = 0; i < frac.points.size(); ++i){
+                Figure3D newFig = frac;
+                applyTransform(newFig, scaleMatrix);
+                auto p = Vector3D::vector(frac.points[i] - newFig.points[i]);
+                applyTransform(newFig, translate(p));
+                temp.push_back(newFig);
+            }
+        }
+        fractal = temp;
+    }
+
+    return compress(fractal, figure.color);
+}
+
+img::EasyImage generate2DLSystemImage(const ini::Configuration& conf){
+    const int& size = conf["General"]["size"].as_int_or_die();
+    const std::vector<double>& bgColor = conf["General"]["backgroundcolor"].as_double_tuple_or_die();
+    const std::string& inputFile = conf["2DLSystem"]["inputfile"].as_string_or_die();
+    const std::vector<double>& lineColor = conf["2DLSystem"]["color"].as_double_tuple_or_die();
+
+    Lines2D lines = LSystem2D(Color(lineColor), inputFile);
+    auto imgVars = getImgVars(lines, size);
+    img::EasyImage image(lround(imgVars.imagex), lround(imgVars.imagey));
+    image.clear(imgColor(bgColor));
+    draw2DLines(image, imgVars, lines, ZBUF_NONE);
+    return image;
+}
+
+img::EasyImage generateWireframeImage(const ini::Configuration& conf, ZBUF_MODE zbufMode){
     const auto& size = conf["General"]["size"].as_int_or_die();
     const std::vector<double>& bgColor = conf["General"]["backgroundcolor"].as_double_tuple_or_die();
     const auto& nrFigs = conf["General"]["nrFigures"].as_int_or_die();
@@ -103,13 +125,18 @@ void generateWireframeImage(img::EasyImage& image, const ini::Configuration& con
         const double fig_rotateZ = toRadian(fig_conf["rotateZ"].as_double_or_die());
         const std::vector<double> fig_centerCoords = fig_conf["center"].as_double_tuple_or_die();
         const Vector3D fig_translate = Vector3D::vector(fig_centerCoords[0], fig_centerCoords[1], fig_centerCoords[2]);
-        const std::vector<double> fig_color = fig_conf["color"].as_double_tuple_or_die();
+        const std::vector<double> color = fig_conf["color"].as_double_tuple_or_die();
+        auto fig_color = Color(color);
 
-        Figure3D newFigure(Color{fig_color});
-        if (fig_type == "LineDrawing") lineDrawing(newFigure, fig_conf);
-        else if (fig_type == "3DLSystem") LSystem3D(newFigure, fig_conf["inputfile"].as_string_or_die());
-        else platonicBody(newFigure, fig_type, fig_conf);
+        Figure3D newFigure(fig_color);
+        if (fig_type == "LineDrawing") newFigure = lineDrawing(fig_color, fig_conf);
+        else if (fig_type == "3DLSystem") newFigure = LSystem3D(fig_color, fig_conf["inputfile"].as_string_or_die());
+        else newFigure = platonicBody(fig_color, fig_type, fig_conf);
 
+        if (contains(fig_type, "Fractal")){
+//            Figure3D base = newFigure;
+            newFigure = generateFractal(newFigure, fig_conf);
+        }
 
         Matrix transformMatrix = scale(fig_scale)
                 * rotateX(fig_rotateX) * rotateY(fig_rotateY) * rotateZ(fig_rotateZ)
@@ -122,6 +149,11 @@ void generateWireframeImage(img::EasyImage& image, const ini::Configuration& con
     const Lines2D lines = doProjection(figures);
     auto imgVars = getImgVars(lines, size);
 
-    if (zbufMode == ZBUF_TRIANGLE) drawZBufTriangles(image, imgVars, figures, bgColor);
-    else draw2DLines(image, imgVars, lines, bgColor, zbufMode);
+    img::EasyImage image(lround(imgVars.imagex), lround(imgVars.imagey));
+    image.clear(imgColor(bgColor));
+
+    if (zbufMode == ZBUF_TRIANGLE) drawZBufTriangles(image, imgVars, figures);
+    else draw2DLines(image, imgVars, lines, zbufMode);
+
+    return image;
 }

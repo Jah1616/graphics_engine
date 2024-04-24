@@ -28,9 +28,6 @@ static void drawZBufLine(img::EasyImage& image, ZBuffer& zbuf, int x0, int y0, d
         exit(-1);
     }
 
-    assert(x0 >= 0); assert(y0 >= 0);
-    assert(x1 >= 0); assert(y1 >= 0);
-    double delta = sqrt((x1-x0)*(x1-x0) + (y1-y0)*(y1-y0));
     if (x0 == x1){
 //        special case for x0 == x1
         if (y0 > y1){
@@ -38,7 +35,7 @@ static void drawZBufLine(img::EasyImage& image, ZBuffer& zbuf, int x0, int y0, d
             std::swap(z0, z1);
         }
         for (int i = y0; i <= y1; i++){
-            double p = (y1 - i)/delta;
+            double p = (y0 != y1) ? (double)(y1-i)/(y1-y0) : 0;
             double z_inv = p/z0 + (1-p)/z1;
             if (z_inv < zbuf[x0][i]){
                 image(x0, i) = color;
@@ -53,7 +50,7 @@ static void drawZBufLine(img::EasyImage& image, ZBuffer& zbuf, int x0, int y0, d
             std::swap(z0, z1);
         }
         for (int i = x0; i <= x1; i++){
-            double p = (x1 - i)/delta;
+            double p = (double)(x1-i)/(x1-x0);
             double z_inv = p/z0 + (1-p)/z1;
             if (z_inv < zbuf[i][y0]){
                 image(i, y0) = color;
@@ -75,7 +72,7 @@ static void drawZBufLine(img::EasyImage& image, ZBuffer& zbuf, int x0, int y0, d
                 double y = y0 + m * i;
                 int y_round = lround(y);
 
-                double p = sqrt((x1-x)*(x1-x) + (y1-y)*(y1-y)) / delta;
+                double p = 1 - (double)i / (x1-x0);
                 double z_inv = p/z0 + (1-p)/z1;
                 if (z_inv < zbuf[x][y_round]){
                     image(x, y_round) = color;
@@ -89,7 +86,7 @@ static void drawZBufLine(img::EasyImage& image, ZBuffer& zbuf, int x0, int y0, d
                 int x_round = lround(x);
                 int y = y0 + i;
 
-                double p = sqrt((x1-x)*(x1-x) + (y1-y)*(y1-y)) / delta;
+                double p = 1 - (double)i / (y1-y0);
                 double z_inv = p/z0 + (1-p)/z1;
                 if (z_inv < zbuf[x_round][y]){
                     image(x_round, y) = color;
@@ -103,7 +100,7 @@ static void drawZBufLine(img::EasyImage& image, ZBuffer& zbuf, int x0, int y0, d
                 int x_round = lround(x);
                 int y = y0 - i;
 
-                double p = sqrt((x1-x)*(x1-x) + (y1-y)*(y1-y)) / delta;
+                double p = 1 - (double)i / (y0-y1);
                 double z_inv = p/z0 + (1-p)/z1;
                 if (z_inv < zbuf[x_round][y]){
                     image(x_round, y) = color;

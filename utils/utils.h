@@ -92,6 +92,7 @@ struct Figure3D{std::vector<Vector3D> points; std::vector<Face> faces; Color col
     explicit Figure3D(const Color& color): points{}, faces{}, color(color) {};
 };
 using Figures3D = std::vector<Figure3D>;
+Figure3D compress(const Figures3D&, const Color&);
 
 struct ImgVars{double scale; double dx; double dy; double imagex; double imagey;};
 ImgVars getImgVars(const Lines2D&, int);
@@ -124,16 +125,16 @@ Point2D doProjection(const Vector3D&, double = 1, double = 0, double = 0);
 Lines2D doProjection(const Figures3D&);
 
 // l-systems
-void LSystem2D(Lines2D&, const std::string&, const Color&);
-void LSystem3D(Figure3D&, const std::string&);
+Lines2D LSystem2D(const Color&, const std::string&);
+Figure3D LSystem3D(const Color&, const std::string&);
 
 // platonic_bodies
-void createCube(Figure3D&);
-void createTetrahedron(Figure3D&);
-void createOctahedron(Figure3D&);
-void createIcosahedron(Figure3D&);
-void createDodecahedron(Figure3D&);
-void createCylinder(Figure3D&, int, double);
-void createCone(Figure3D&, int, double);
-void createSphere(Figure3D&, int);
-void createTorus(Figure3D&, double, double, int, int);
+Figure3D createCube(const Color&);
+Figure3D createTetrahedron(const Color&);
+Figure3D createOctahedron(const Color&);
+Figure3D createIcosahedron(const Color&);
+Figure3D createDodecahedron(const Color&);
+Figure3D createCylinder(const Color&, int, double);
+Figure3D createCone(const Color&, int, double);
+Figure3D createSphere(const Color&, int);
+Figure3D createTorus(const Color&, double, double, int, int);

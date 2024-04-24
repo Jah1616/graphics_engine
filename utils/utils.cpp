@@ -15,6 +15,21 @@ std::vector<Face> triangulate(const Face& face){
     return out;
 }
 
+Figure3D compress(const Figures3D& figures, const Color& color){
+    Figure3D out(color);
+
+    for (const Figure3D& figure : figures){
+        int points_amt = (int) out.points.size();
+        for (Face face : figure.faces){
+            for (int& index : face) index += points_amt;
+            out.faces.push_back(face);
+        }
+        out.points.insert(out.points.end(), figure.points.begin(), figure.points.end());
+    }
+
+    return out;
+}
+
 ImgVars getImgVars(const Lines2D& lines, int size){
     double xmin = std::numeric_limits<double>::infinity();
     double ymin = xmin;

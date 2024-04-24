@@ -11,7 +11,7 @@ static std::random_device randomDouble;
 static std::mt19937 gen(randomDouble());
 static std::uniform_real_distribution<double> dis(0.0, 1.0);
 
-void LSystem2D(Lines2D& lines, const std::string& input, const Color& lineColor){
+Lines2D LSystem2D(const Color& color, const std::string& input){
 //    Timer timer("2D-L-System");
     LParser::LSystem2D l_system;
     std::ifstream input_stream(input);
@@ -52,10 +52,11 @@ void LSystem2D(Lines2D& lines, const std::string& input, const Color& lineColor)
     Point2D p1(0, 0);
     std::stack<std::pair<Point2D, double>> bracketStack;
 
+    Lines2D lines;
     for (char c : currentString){
         if (alphabet.find(c) != alphabet.end()){
             Point2D p2(p1.x + cos(currentAngle), p1.y + sin(currentAngle));
-            if (l_system.draw(c)) lines.emplace_back(p1, p2, lineColor);
+            if (l_system.draw(c)) lines.emplace_back(p1, p2, color);
             p1 = p2;
         }
         else if (c == '-') currentAngle -= angle;
@@ -67,9 +68,11 @@ void LSystem2D(Lines2D& lines, const std::string& input, const Color& lineColor)
             bracketStack.pop();
         }
     }
+
+    return lines;
 }
 
-void LSystem3D(Figure3D& figure, const std::string& input){
+Figure3D LSystem3D(const Color& color, const std::string& input){
 //    Timer timer("3D-L-System");
     LParser::LSystem3D l_system;
     std::ifstream input_stream(input);
@@ -103,6 +106,7 @@ void LSystem3D(Figure3D& figure, const std::string& input){
 
     std::stack<std::array<Vector3D, 4>> bracketStack;
 
+    Figure3D figure(color);
     for (char c : initiator){
         if (alphabet.find(c) != alphabet.end()){
             p2 += H;
@@ -169,4 +173,5 @@ void LSystem3D(Figure3D& figure, const std::string& input){
             bracketStack.pop();
         }
     }
+    return figure;
 }
