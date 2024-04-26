@@ -15,7 +15,7 @@ std::vector<Face> triangulate(const Face& face){
     return out;
 }
 
-Figure3D compress(const Figures3D& figures, const Color& color){
+Figure3D compress(const Figures3D& figures, const Light& color){
     Figure3D out(color);
 
     for (const Figure3D& figure : figures){

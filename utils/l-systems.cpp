@@ -49,13 +49,13 @@ Lines2D LSystem2D(const Color& color, const std::string& input){
     // parse string
     const double angle = toRadian(l_system.get_angle());
     double currentAngle = toRadian(l_system.get_starting_angle());
-    Point2D p1(0, 0);
+    Point2D p1{0, 0};
     std::stack<std::pair<Point2D, double>> bracketStack;
 
     Lines2D lines;
     for (char c : currentString){
         if (alphabet.find(c) != alphabet.end()){
-            Point2D p2(p1.x + cos(currentAngle), p1.y + sin(currentAngle));
+            Point2D p2{p1.x + cos(currentAngle), p1.y + sin(currentAngle)};
             if (l_system.draw(c)) lines.emplace_back(p1, p2, color);
             p1 = p2;
         }

@@ -29,11 +29,11 @@ void drawZBufTriangles(img::EasyImage& image, const ImgVars& imgVars, const Figu
     const auto& [scale, dx, dy, imagex, imagey] = imgVars;
     ZBuffer zbuf(lround(imagex), lround(imagey));
 
-    for (const auto& [points, faces, color] : figures){
+    for (const auto& [points, faces, reflection] : figures){
         for (const Face& face : faces){
             for (const Face& tri : triangulate(face)){
                 drawZBufTriangle(image, zbuf, points[tri[0]], points[tri[1]], points[tri[2]],
-                                 scale, dx, dy, color);
+                                 scale, dx, dy, reflection.ambient);
             }
         }
     }
@@ -89,7 +89,7 @@ Figure3D generateFractal(const Figure3D& figure, const ini::Section& conf){
         fractal = temp;
     }
 
-    return compress(fractal, figure.color);
+    return compress(fractal, figure.reflection);
 }
 
 img::EasyImage generate2DLSystemImage(const ini::Configuration& conf){
@@ -106,13 +106,25 @@ img::EasyImage generate2DLSystemImage(const ini::Configuration& conf){
     return image;
 }
 
-img::EasyImage generateWireframeImage(const ini::Configuration& conf, ZBUF_MODE zbufMode, bool lighting){
+img::EasyImage generateWireframeImage(const ini::Configuration& conf, ZBUF_MODE zbufMode){
     const auto& size = conf["General"]["size"].as_int_or_die();
     const std::vector<double>& bgColor = conf["General"]["backgroundcolor"].as_double_tuple_or_die();
     const auto& nrFigs = conf["General"]["nrFigures"].as_int_or_die();
 
     const std::vector<double>& eyeCoords = conf["General"]["eye"].as_double_tuple_or_die();
     const auto eyePoint = Vector3D::point(eyeCoords[0], eyeCoords[1], eyeCoords[2]);
+
+    const auto& nrLights = conf["General"]["size"].as_int_or_default(0);
+    Lights lights;
+    if (nrLights == 0) lights = {Light{{1,1,1}}};
+    else {
+        for (int i = 0; i < nrLights; ++i) {
+            const auto& light_conf = conf["Light" + std::to_string(i)];
+            const std::vector<double>& ambient = light_conf["ambient"].as_double_tuple_or_die();
+
+            lights.push_back({Color{ambient}});
+        }
+    }
 
     Figures3D figures;
     for (auto i=0 ; i < nrFigs ; i++){
@@ -146,8 +158,6 @@ img::EasyImage generateWireframeImage(const ini::Configuration& conf, ZBUF_MODE 
         applyTransform(newFigure, transformMatrix);
         figures.push_back(newFigure);
     }
-
-    Lights lights;
 
     applyTransform(figures, eyePointTrans(eyePoint));
     const Lines2D lines = doProjection(figures);

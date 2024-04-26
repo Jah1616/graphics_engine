@@ -15,7 +15,7 @@ img::EasyImage generate_image(const ini::Configuration& configuration){
     else if (type == "Wireframe") return generateWireframeImage(configuration);
     else if (type == "ZBufferedWireframe") return generateWireframeImage(configuration, ZBUF_LINE);
     else if (type == "ZBuffering") return generateWireframeImage(configuration, ZBUF_TRIANGLE);
-    else if (type == "LightedZBuffering") return generateWireframeImage(configuration, ZBUF_TRIANGLE, true);
+    else if (type == "LightedZBuffering") return generateWireframeImage(configuration, ZBUF_TRIANGLE);
     return {};
 }
 

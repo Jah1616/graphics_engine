@@ -87,13 +87,13 @@ Point2D doProjection(const Vector3D& point, double d, double dx, double dy){
 
 Lines2D doProjection(const Figures3D& figures){
     Lines2D lines;
-    for (const auto& [points, faces, color] : figures){
+    for (const auto& [points, faces, reflection] : figures){
         for (const auto& face : faces){
             const auto nrPoints = face.size();
             for (int i=0 ; i<nrPoints ; i++){
                 const Vector3D& p1 = points[face[i]];
                 const Vector3D& p2 = points[face[(i+1) % nrPoints]];
-                lines.emplace_back(doProjection(p1), doProjection(p2), color, p1.z, p2.z);
+                lines.emplace_back(doProjection(p1), doProjection(p2), reflection.ambient, p1.z, p2.z);
             }
         }
     }
