@@ -71,7 +71,9 @@ private:
 Color operator + (Color, const Color& rhs);
 Color operator * (Color, const Color& rhs);
 
-struct Light{ Color ambient; };
+struct Light{ Color ambient; Color diffuse; };
+struct InfLight : public Light { Vector3D direction; };
+struct PointLight : public Light { Vector3D location; double angle; };
 using Lights = std::list<Light>;
 
 img::Color imgColor(const Color&);

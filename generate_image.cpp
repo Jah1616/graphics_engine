@@ -110,6 +110,18 @@ img::EasyImage generate2DLSystemImage(const ini::Configuration& conf){
     return image;
 }
 
+Light parseLight(const ini::Section& conf){
+    std::vector<double> ambient;
+    if (conf["ambientLight"].as_double_tuple_if_exists(ambient));
+    else (conf["ambient"].as_double_tuple_if_exists(ambient));
+
+    std::vector<double> diffuse = conf["diffuseLight"].as_double_tuple_or_default({0,0,0});
+
+    bool inf = conf["infinity"].as_bool_or_default(false);
+
+    return PointLight{Color(ambient), Color(diffuse)};
+}
+
 img::EasyImage generateWireframeImage(const ini::Configuration& conf, ZBUF_MODE zbufMode){
     const auto& size = conf["General"]["size"].as_int_or_die();
     const std::vector<double>& bgColor = conf["General"]["backgroundcolor"].as_double_tuple_or_die();
@@ -120,13 +132,12 @@ img::EasyImage generateWireframeImage(const ini::Configuration& conf, ZBUF_MODE 
 
     const auto& nrLights = conf["General"]["nrLights"].as_int_or_default(0);
     Lights lights;
-    if (nrLights == 0) lights.push_back(Light{{1,1,1}});
+    if (nrLights == 0) lights.push_back(Light{{1,1,1}, {0,0,0}});
     else {
         for (int i = 0; i < nrLights; ++i) {
             const auto& light_conf = conf["Light" + std::to_string(i)];
-            const std::vector<double>& ambient = light_conf["ambient"].as_double_tuple_or_die();
-
-            lights.push_back({Color(ambient)});
+            Light newLight = parseLight(light_conf);
+            lights.push_back(newLight);
         }
     }
 
@@ -141,11 +152,13 @@ img::EasyImage generateWireframeImage(const ini::Configuration& conf, ZBUF_MODE 
         const double fig_rotateZ = toRadian(fig_conf["rotateZ"].as_double_or_die());
         const std::vector<double> fig_centerCoords = fig_conf["center"].as_double_tuple_or_die();
         const Vector3D fig_translate = Vector3D::vector(fig_centerCoords[0], fig_centerCoords[1], fig_centerCoords[2]);
-        const std::vector<double> color = fig_conf["color"].as_double_tuple_or_default({});
-        const std::vector<double> ambient = fig_conf["ambientReflection"].as_double_tuple_or_default({});
-        Color fig_ambient = ambient.empty() ? Color(color) : Color(ambient);
 
-        Light reflection{fig_ambient};
+        std::vector<double> ambient;
+        if (fig_conf["color"].as_double_tuple_if_exists(ambient));
+        else (fig_conf["ambientReflection"].as_double_tuple_if_exists(ambient));
+        const std::vector<double> diffuse = fig_conf["diffuseReflection"].as_double_tuple_or_default({0,0,0});
+
+        Light reflection{Color(ambient), Color(diffuse)};
 
         Figure3D newFigure(reflection);
         if (fig_type == "LineDrawing") newFigure = lineDrawing(reflection, fig_conf);
