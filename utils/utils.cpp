@@ -7,6 +7,14 @@ img::Color imgColor(const std::vector<double>& color){
     assert(color.size() == 3);
     return img::Color(lround(color[0]*255), lround(color[1]*255), lround(color[2]*255));
 }
+Color operator + (Color lhs, const Color& rhs){
+    lhs += rhs;
+    return lhs;
+}
+Color operator * (Color lhs, const Color& rhs){
+    lhs *= rhs;
+    return lhs;
+}
 
 std::vector<Face> triangulate(const Face& face){
     std::vector<Face> out;
@@ -55,43 +63,24 @@ ImgVars getImgVars(const Lines2D& lines, int size){
     return {scale, dx, dy, imagex, imagey};
 }
 
-void operator *= (Point2D& lhs, double rhs){
-    lhs.x *= rhs;
-    lhs.y *= rhs;
-}
+
 Point2D operator * (Point2D lhs, double rhs){
     lhs *= rhs;
     return lhs;
-}
-void operator /= (Point2D& lhs, double rhs){
-    lhs.x /= rhs;
-    lhs.y /= rhs;
 }
 Point2D operator / (Point2D lhs, double rhs){
     lhs /= rhs;
     return lhs;
 }
-void operator += (Point2D& lhs, const Point2D& rhs){
-    lhs.x += rhs.x;
-    lhs.y += rhs.y;
-}
 Point2D operator + (Point2D lhs, const Point2D& rhs){
     lhs += rhs;
     return lhs;
-}
-void operator -= (Point2D& lhs, const Point2D& rhs){
-    lhs.x -= rhs.x;
-    lhs.y -= rhs.y;
 }
 Point2D operator - (Point2D lhs, const Point2D& rhs){
     lhs -= rhs;
     return lhs;
 }
-
 bool operator == (const Vector3D& lhs, const Vector3D& rhs){
     return ((lhs.is_point() and rhs.is_point()) or (lhs.is_vector() and rhs.is_vector()))
            and lhs.x == rhs.x and lhs.y == rhs.y and lhs.z == rhs.z;
-}
-bool operator == (const Point2D& lhs, const Point2D& rhs){
-    return lhs.x == rhs.x and lhs.y == rhs.y;
 }

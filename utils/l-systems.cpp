@@ -72,7 +72,7 @@ Lines2D LSystem2D(const Color& color, const std::string& input){
     return lines;
 }
 
-Figure3D LSystem3D(const Color& color, const std::string& input){
+Figure3D LSystem3D(const Light& reflection, const std::string& input){
 //    Timer timer("3D-L-System");
     LParser::LSystem3D l_system;
     std::ifstream input_stream(input);
@@ -106,7 +106,7 @@ Figure3D LSystem3D(const Color& color, const std::string& input){
 
     std::stack<std::array<Vector3D, 4>> bracketStack;
 
-    Figure3D figure(color);
+    Figure3D figure(reflection);
     for (char c : initiator){
         if (alphabet.find(c) != alphabet.end()){
             p2 += H;

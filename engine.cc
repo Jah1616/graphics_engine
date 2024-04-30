@@ -19,7 +19,6 @@ img::EasyImage generate_image(const ini::Configuration& configuration){
     return {};
 }
 
-
 int main(int argc, char const* argv[]){
     Timer timer("Total");
         int retVal = 0;

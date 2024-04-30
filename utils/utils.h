@@ -46,6 +46,18 @@ struct Color{double red; double green; double blue;
         assert(color.size() == 3);
         limit();
     }
+    void operator += (const Color& rhs){
+        red += rhs.red;
+        green += rhs.green;
+        blue += rhs.blue;
+        limit();
+    }
+    void operator *= (const Color& rhs){
+        red *= rhs.red;
+        green *= rhs.green;
+        blue *= rhs.blue;
+        limit();
+    }
 private:
     void limit(){
         assert(0 <= red);
@@ -56,6 +68,8 @@ private:
         if (blue > 1) blue = 1;
     }
 };
+Color operator + (Color, const Color& rhs);
+Color operator * (Color, const Color& rhs);
 
 struct Light{ Color ambient; };
 using Lights = std::list<Light>;
@@ -63,8 +77,34 @@ using Lights = std::list<Light>;
 img::Color imgColor(const Color&);
 img::Color imgColor(const std::vector<double>&);
 
+
 // 2D utils
-struct Point2D{ double x; double y; };
+struct Point2D{double x; double y;
+    void operator *= (double rhs){
+        x *= rhs;
+        y *= rhs;
+    }
+    void operator /= (double rhs){
+        x /= rhs;
+        y /= rhs;
+    }
+    void operator += (const Point2D& rhs){
+        x += rhs.x;
+        y += rhs.y;
+    }
+    void operator -= (const Point2D& rhs){
+        x -= rhs.x;
+        y -= rhs.y;
+    }
+    bool operator == (const Point2D& rhs) const {
+        return x == rhs.x and y == rhs.y;
+    }
+};
+Point2D operator * (Point2D, double);
+Point2D operator / (Point2D, double);
+Point2D operator + (Point2D, const Point2D&);
+Point2D operator - (Point2D, const Point2D&);
+
 struct Line2D{Point2D p1; Point2D p2; Color color; double z1; double z2;
     Line2D(const Point2D& p1, const Point2D& p2, const Color& color, double z1 = 0, double z2 = 0)
     :p1(p1), p2(p2), color(color), z1(z1), z2(z2){}
@@ -93,27 +133,14 @@ struct Figure3D{
 
     Figure3D(const std::vector<Vector3D>& points, const std::vector<Face>& faces, const Color& color)
     :points(points), faces(faces), reflection{color}{}
-    explicit Figure3D(const Color& color): points{}, faces{}, reflection{color} {};
     explicit Figure3D(const Light& reflection): points{}, faces{}, reflection(reflection) {};
 };
+bool operator == (const Vector3D&, const Vector3D&);
 using Figures3D = std::vector<Figure3D>;
 Figure3D compress(const Figures3D&, const Light&);
 
 struct ImgVars{double scale; double dx; double dy; double imagex; double imagey;};
 ImgVars getImgVars(const Lines2D&, int);
-
-// Point2D operators
-void operator *= (Point2D&, double);
-Point2D operator * (Point2D, double);
-void operator /= (Point2D&, double);
-Point2D operator / (Point2D, double);
-void operator += (Point2D&, const Point2D&);
-Point2D operator + (Point2D, const Point2D&);
-void operator -= (Point2D&, const Point2D&);
-Point2D operator - (Point2D, const Point2D&);
-
-bool operator == (const Vector3D&, const Vector3D&);
-bool operator == (const Point2D&, const Point2D&);
 
 
 // ===================== DECLARATIONS =====================
@@ -131,15 +158,15 @@ Lines2D doProjection(const Figures3D&);
 
 // l-systems
 Lines2D LSystem2D(const Color&, const std::string&);
-Figure3D LSystem3D(const Color&, const std::string&);
+Figure3D LSystem3D(const Light&, const std::string&);
 
 // platonic_bodies
-Figure3D createCube(const Color&);
-Figure3D createTetrahedron(const Color&);
-Figure3D createOctahedron(const Color&);
-Figure3D createIcosahedron(const Color&);
-Figure3D createDodecahedron(const Color&);
-Figure3D createCylinder(const Color&, int, double);
-Figure3D createCone(const Color&, int, double);
-Figure3D createSphere(const Color&, int);
-Figure3D createTorus(const Color&, double, double, int, int);
+Figure3D createCube(const Light&);
+Figure3D createTetrahedron(const Light&);
+Figure3D createOctahedron(const Light&);
+Figure3D createIcosahedron(const Light&);
+Figure3D createDodecahedron(const Light&);
+Figure3D createCylinder(const Light&, int, double);
+Figure3D createCone(const Light&, int, double);
+Figure3D createSphere(const Light&, int);
+Figure3D createTorus(const Light&, double, double, int, int);

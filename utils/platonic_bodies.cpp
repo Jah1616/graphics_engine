@@ -16,9 +16,9 @@ static const std::vector<std::pair<double, double>>& getTrigValues(int x){
     return mem_trig[x];
 }
 
-Figure3D createCube(const Color& color){
+Figure3D createCube(const Light& reflection){
 //    Timer timer("Cube");
-    Figure3D cube(color);
+    Figure3D cube(reflection);
     cube.points = {Vector3D::point(1,-1,-1), Vector3D::point(-1,1,-1), Vector3D::point(1,1,1),
               Vector3D::point(-1,-1,1), Vector3D::point(1,1,-1), Vector3D::point(-1,-1,-1),
               Vector3D::point(1,-1,1), Vector3D::point(-1,1,1)};
@@ -26,27 +26,27 @@ Figure3D createCube(const Color& color){
     return cube;
 }
 
-Figure3D createTetrahedron(const Color& color){
+Figure3D createTetrahedron(const Light& reflection){
 //    Timer timer("Tetrahedron");
-    Figure3D tetra(color);
+    Figure3D tetra(reflection);
     tetra.points = {Vector3D::point(1, -1, -1), Vector3D::point(-1, 1, -1),
                     Vector3D::point(1,1,1), Vector3D::point(-1,-1,1)};
     tetra.faces = {{0, 1, 2}, {1, 3, 2}, {0, 3, 1}, {0, 2, 3}};
     return tetra;
 }
 
-Figure3D createOctahedron(const Color& color){
+Figure3D createOctahedron(const Light& reflection){
 //    Timer timer("Octahedron");
-    Figure3D octa(color);
+    Figure3D octa(reflection);
     octa.points = {Vector3D::point(1,0,0), Vector3D::point(0,1,0), Vector3D::point(-1,0,0),
               Vector3D::point(0,-1,0), Vector3D::point(0,0,-1), Vector3D::point(0,0,1)};
     octa.faces = {{0,1,5}, {1,2,5}, {2,3,5}, {3,0,5}, {1,0,4}, {2,1,4}, {3,2,4}, {0,3,4}};
     return octa;
 }
 
-Figure3D createIcosahedron(const Color& color){
+Figure3D createIcosahedron(const Light& reflection){
 //    Timer timer("Icosahedron");
-    Figure3D ico(color);
+    Figure3D ico(reflection);
     static std::vector<Vector3D> mem_points;
     if (mem_points.empty()){
         mem_points.reserve(12);
@@ -66,12 +66,12 @@ Figure3D createIcosahedron(const Color& color){
     return ico;
 }
 
-Figure3D createDodecahedron(const Color& color){
+Figure3D createDodecahedron(const Light& reflection){
 //    Timer timer("Dodecahedron");
-    Figure3D dodeca(color);
+    Figure3D dodeca(reflection);
     static std::vector<Vector3D> mem_points;
     if (mem_points.empty()){
-        Figure3D ico = createIcosahedron({0,0,0});
+        Figure3D ico = createIcosahedron({{0,0,0}});
         mem_points.reserve(20);
         for (const Face& face : ico.faces) mem_points.push_back((ico.points[face[0]] + ico.points[face[1]] + ico.points[face[2]]) / 3);
     }
@@ -81,9 +81,9 @@ Figure3D createDodecahedron(const Color& color){
     return dodeca;
 }
 
-Figure3D createCylinder(const Color& color, int n, double h){
+Figure3D createCylinder(const Light& reflection, int n, double h){
 //    Timer timer("Cylinder");
-    Figure3D cylinder(color);
+    Figure3D cylinder(reflection);
     const auto& trig = getTrigValues(n);
     cylinder.points.reserve(2*n);
     cylinder.faces.reserve(n+2);
@@ -106,9 +106,9 @@ Figure3D createCylinder(const Color& color, int n, double h){
     return cylinder;
 }
 
-Figure3D createCone(const Color& color, int n, double h){
+Figure3D createCone(const Light& reflection, int n, double h){
 //    Timer timer("Cone");
-    Figure3D cone(color);
+    Figure3D cone(reflection);
 
     const auto& trig = getTrigValues(n);
     cone.points.reserve(n+1);
@@ -126,15 +126,15 @@ Figure3D createCone(const Color& color, int n, double h){
     return cone;
 }
 
-Figure3D createSphere(const Color& color, int n){
+Figure3D createSphere(const Light& reflection, int n){
 //    Timer timer("Sphere");
-    Figure3D sphere(color);
+    Figure3D sphere(reflection);
     static int maxN = -1;
     static std::vector<Vector3D> mem_points; // points are always added to the back but shared
     static std::unordered_map<int, std::vector<Face>> mem_faces;
 
     if (maxN == -1){
-        Figure3D ico = createIcosahedron({0,0,0});
+        Figure3D ico = createIcosahedron({{0, 0, 0}});
         mem_points = ico.points;
         mem_faces[0] = ico.faces;
         maxN = 0;
@@ -173,9 +173,9 @@ Figure3D createSphere(const Color& color, int n){
     return sphere;
 }
 
-Figure3D createTorus(const Color& color, double r, double R, int n, int m){
+Figure3D createTorus(const Light& reflection, double r, double R, int n, int m){
 //    Timer timer("Torus");
-    Figure3D torus(color);
+    Figure3D torus(reflection);
     const auto& trig_n = getTrigValues(n);
     const auto& trig_m = getTrigValues(n);
 
