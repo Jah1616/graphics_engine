@@ -71,7 +71,7 @@ Figure3D createDodecahedron(const Light& reflection){
     Figure3D dodeca(reflection);
     static std::vector<Vector3D> mem_points;
     if (mem_points.empty()){
-        Figure3D ico = createIcosahedron({{0,0,0}});
+        Figure3D ico = createIcosahedron(Light::Reflection({0, 0, 0}));
         mem_points.reserve(20);
         for (const Face& face : ico.faces) mem_points.push_back((ico.points[face[0]] + ico.points[face[1]] + ico.points[face[2]]) / 3);
     }
@@ -134,7 +134,7 @@ Figure3D createSphere(const Light& reflection, int n){
     static std::unordered_map<int, std::vector<Face>> mem_faces;
 
     if (maxN == -1){
-        Figure3D ico = createIcosahedron({{0, 0, 0}});
+        Figure3D ico = createIcosahedron(Light::Reflection({0, 0, 0}));
         mem_points = ico.points;
         mem_faces[0] = ico.faces;
         maxN = 0;

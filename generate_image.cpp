@@ -25,19 +25,28 @@ void draw2DLines(img::EasyImage& image, const ImgVars& imgVars, const Lines2D& l
     }
 }
 
-void drawZBufTriangles(img::EasyImage& image, const ImgVars& imgVars, const Figures3D& figures, const Lights& lights){
+void drawZBufTriangles(img::EasyImage& image, const ImgVars& imgVars, const Figures3D& figures,
+                       const Lights& infLights, const Lights& pointLights){
     const auto& [scale, dx, dy, imagex, imagey] = imgVars;
     ZBuffer zbuf(lround(imagex), lround(imagey));
 
     for (const auto& [points, faces, reflection] : figures){
-        Color face_color{0, 0, 0};
-        for (const auto& [ambient] : lights){
-            face_color += (reflection.ambient * ambient);
-        }
         for (const Face& face : faces){
+            const Vector3D& A = points[face[0]];
+            const Vector3D& B = points[face[1]];
+            const Vector3D& C = points[face[2]];
+            Color face_color{0, 0, 0};
+            auto face_dir = Vector3D::cross(B-A, C-A);
+            face_dir.normalise();
+
+            for (const auto& [ambient, diffuse, position, angle] : infLights){
+                face_color += (reflection.ambient * ambient);
+                double cosAngle = -(face_dir.x * position.x + face_dir.y * position.y + face_dir.z * position.z);
+                if (cosAngle > 0) face_color += (reflection.diffuse * diffuse * cosAngle);
+            }
             for (const Face& tri : triangulate(face)){
                 drawZBufTriangle(image, zbuf, points[tri[0]], points[tri[1]], points[tri[2]],
-                                 scale, dx, dy, face_color);
+                                 scale, dx, dy, face_color, pointLights, reflection);
             }
         }
     }
@@ -110,16 +119,32 @@ img::EasyImage generate2DLSystemImage(const ini::Configuration& conf){
     return image;
 }
 
-Light parseLight(const ini::Section& conf){
+Light parseLight(const ini::Section& conf, const Vector3D& eyePoint){
+    Matrix transform = eyePointTrans(eyePoint);
+
+    bool inf = conf["infinity"].as_bool_or_default(false);
+
+    std::vector<double> dir = conf["direction"].as_double_tuple_or_default({0,0,0});
+    assert(dir.size() == 3);
+    auto direction = Vector3D::vector(dir[0], dir[1], dir[2]);
+    direction *= transform;
+
+    std::vector<double> loc = conf["location"].as_double_tuple_or_default({0,0,0});
+    assert(loc.size() == 3);
+    auto location = Vector3D::point(loc[0], loc[1], loc[2]);
+    location *= transform;
+
     std::vector<double> ambient;
     if (conf["ambientLight"].as_double_tuple_if_exists(ambient));
     else (conf["ambient"].as_double_tuple_if_exists(ambient));
 
     std::vector<double> diffuse = conf["diffuseLight"].as_double_tuple_or_default({0,0,0});
 
-    bool inf = conf["infinity"].as_bool_or_default(false);
+    double spotAngle = conf["spotAngle"].as_double_or_default(90);
 
-    return PointLight{Color(ambient), Color(diffuse)};
+
+    if (inf) return Light::InfLight(Color(ambient), Color(diffuse), direction);
+    else return Light::PointLight(Color(ambient), Color(diffuse), location, spotAngle);
 }
 
 img::EasyImage generateWireframeImage(const ini::Configuration& conf, ZBUF_MODE zbufMode){
@@ -131,13 +156,14 @@ img::EasyImage generateWireframeImage(const ini::Configuration& conf, ZBUF_MODE 
     const auto eyePoint = Vector3D::point(eyeCoords[0], eyeCoords[1], eyeCoords[2]);
 
     const auto& nrLights = conf["General"]["nrLights"].as_int_or_default(0);
-    Lights lights;
-    if (nrLights == 0) lights.push_back(Light{{1,1,1}, {0,0,0}});
+    Lights infLights;
+    Lights pointLights;
+    if (nrLights == 0) pointLights.push_back(Light::Center());
     else {
         for (int i = 0; i < nrLights; ++i) {
             const auto& light_conf = conf["Light" + std::to_string(i)];
-            Light newLight = parseLight(light_conf);
-            lights.push_back(newLight);
+            Light newLight = parseLight(light_conf, eyePoint);
+            newLight.is_infLight() ? infLights.push_back(newLight) : pointLights.push_back(newLight);
         }
     }
 
@@ -189,7 +215,7 @@ img::EasyImage generateWireframeImage(const ini::Configuration& conf, ZBUF_MODE 
     img::EasyImage image(lround(imgVars.imagex), lround(imgVars.imagey));
     image.clear(imgColor(bgColor));
 
-    if (zbufMode == ZBUF_TRIANGLE) drawZBufTriangles(image, imgVars, figures, lights);
+    if (zbufMode == ZBUF_TRIANGLE) drawZBufTriangles(image, imgVars, figures, infLights, pointLights);
     else draw2DLines(image, imgVars, lines, zbufMode);
 
     return image;

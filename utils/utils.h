@@ -35,7 +35,18 @@ public:
     void stop(){
         auto end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - _start);
-        _outputStream << _target << " duration: " << duration.count() << "ms\n";
+        auto totalMilliseconds = duration.count();
+        auto minutes = std::chrono::duration_cast<std::chrono::minutes>(duration);
+        auto seconds = std::chrono::duration_cast<std::chrono::seconds>(duration - minutes);
+        auto milliseconds = duration - minutes - seconds;
+
+        if (totalMilliseconds < 1000) {
+            _outputStream << _target << " duration: " << totalMilliseconds << "ms\n";
+        } else if (totalMilliseconds < 60000) {
+            _outputStream << _target << " duration: " << seconds.count() << "s " << milliseconds.count() << "ms\n";
+        } else {
+            _outputStream << _target << " duration: " << minutes.count() << "m " << seconds.count() << "s " << milliseconds.count() << "ms\n";
+        }
     }
 };
 
@@ -58,11 +69,17 @@ struct Color{double red; double green; double blue;
         blue *= rhs.blue;
         limit();
     }
+    void operator *= (double rhs){
+        red *= rhs;
+        green *= rhs;
+        blue *= rhs;
+        limit();
+    }
 private:
     void limit(){
-        assert(0 <= red);
-        assert(0 <= green);
-        assert(0 <= blue);
+        assert(red >= 0);
+        assert(green >= 0);
+        assert(blue >= 0);
         if (red > 1) red = 1;
         if (green > 1) green = 1;
         if (blue > 1) blue = 1;
@@ -70,10 +87,27 @@ private:
 };
 Color operator + (Color, const Color& rhs);
 Color operator * (Color, const Color& rhs);
+Color operator * (Color, double rhs);
 
-struct Light{ Color ambient; Color diffuse; };
-struct InfLight : public Light { Vector3D direction; };
-struct PointLight : public Light { Vector3D location; double angle; };
+struct Light {Color ambient; Color diffuse; Vector3D position; double angle;
+    static Light InfLight(const Color& ambient, const Color& diffuse, Vector3D direction){
+        assert(direction.is_vector());
+        direction.normalise();
+        return Light{ambient, diffuse, direction, 0};
+    }
+    static Light PointLight(const Color& ambient, const Color& diffuse, const Vector3D& location, double angle){
+        assert(location.is_point());
+        return Light{ambient, diffuse, location, toRadian(angle)};
+    }
+    static Light Reflection(const Color& ambient, const Color& diffuse = {0,0,0}){
+        return Light{ambient, diffuse, Vector3D::point(0,0,0), 0};
+    }
+    static Light Center(){
+        return Light{{1,1,1}, {0,0,0}, Vector3D::point(0,0,0), 0};
+    };
+    bool is_infLight() const { return position.is_vector(); }
+    bool is_pointLight() const { return position.is_point(); }
+};
 using Lights = std::list<Light>;
 
 img::Color imgColor(const Color&);
@@ -107,13 +141,10 @@ Point2D operator / (Point2D, double);
 Point2D operator + (Point2D, const Point2D&);
 Point2D operator - (Point2D, const Point2D&);
 
-struct Line2D{Point2D p1; Point2D p2; Color color; double z1; double z2;
+struct Line2D{
+    Point2D p1; Point2D p2; Color color; double z1 = 0; double z2 = 0;
     Line2D(const Point2D& p1, const Point2D& p2, const Color& color, double z1 = 0, double z2 = 0)
     :p1(p1), p2(p2), color(color), z1(z1), z2(z2){}
-    void invert(){
-        std::swap(p1, p2);
-        std::swap(z1, z2);
-    }
 };
 using Lines2D = std::vector<Line2D>;
 
@@ -134,7 +165,7 @@ struct Figure3D{
     Light reflection;
 
     Figure3D(const std::vector<Vector3D>& points, const std::vector<Face>& faces, const Color& color)
-    :points(points), faces(faces), reflection{color}{}
+    :points(points), faces(faces), reflection(Light::Reflection(color)){}
     explicit Figure3D(const Light& reflection): points{}, faces{}, reflection(reflection) {};
 };
 bool operator == (const Vector3D&, const Vector3D&);

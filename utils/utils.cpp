@@ -15,6 +15,10 @@ Color operator * (Color lhs, const Color& rhs){
     lhs *= rhs;
     return lhs;
 }
+Color operator * (Color lhs, double rhs){
+    lhs *= rhs;
+    return lhs;
+}
 
 std::vector<Face> triangulate(const Face& face){
     std::vector<Face> out;
