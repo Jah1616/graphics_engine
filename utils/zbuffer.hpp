@@ -112,7 +112,7 @@ static void drawZBufLine(img::EasyImage& image, ZBuffer& zbuf, int x0, int y0, d
 }
 
 static void drawZBufTriangle(img::EasyImage& image, ZBuffer& zbuf, const Vector3D& A, const Vector3D& B, const Vector3D& C,
-                      double d, double dx, double dy, Color color, const Lights& pointLights, const Light& reflection){
+                      double d, double dx, double dy, const Color& color, const Lights& pointLights, const Light& reflection){
     Point2D a = doProjection(A, d, dx, dy);
     Point2D b = doProjection(B, d, dx, dy);
     Point2D c = doProjection(C, d, dx, dy);
@@ -150,19 +150,21 @@ static void drawZBufTriangle(img::EasyImage& image, ZBuffer& zbuf, const Vector3
             double zi_inv = zg_inv + (x - g.x)*dzdx + (y - g.y)*dzdy;
             if (zi_inv < zbuf[x][y]){
                 zbuf[x][y] = zi_inv;
-                double Px = (dx - x) / zi_inv / d;
-                double Py = (dy - y) / zi_inv / d;
+                double Px = (x - dx) / -zi_inv / d;
+                double Py = (y - dy) / -zi_inv / d;
                 auto P = Vector3D::point(Px, Py, 1/zi_inv);
 
+                Color point_color = color;
                 for (const auto& [ambient, diffuse, position, angle] : pointLights){
-                    color += (reflection.ambient * ambient);
+                    point_color += (reflection.ambient * ambient);
 
-                    auto dir = Vector3D(position - P);
+                    auto dir = Vector3D(P - position);
                     double cosAngle = -(w.x * dir.x + w.y * dir.y + w.z * dir.z);
-                    if (cosAngle > 0) color += (reflection.diffuse * diffuse * cosAngle);
+                    std::cout << cosAngle << "\n";
+                    if (cosAngle > 0) point_color += (reflection.diffuse * diffuse * cosAngle);
                 }
 
-                image(x, y) = imgColor(color);
+                image(x, y) = imgColor(point_color);
             }
         }
     }
