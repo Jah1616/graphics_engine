@@ -191,11 +191,9 @@ img::EasyImage generateWireframeImage(const ini::Configuration& conf, ZBUF_MODE 
         else if (fig_type == "3DLSystem") newFigure = LSystem3D(reflection, fig_conf["inputfile"].as_string_or_die());
         else newFigure = platonicBody(reflection, fig_type, fig_conf);
 
-        if (contains(fig_type, "Fractal")){
-//            Figure3D base = newFigure;
-//            newFigure = generateFractal(base, fig_conf);
-            newFigure = generateFractal(newFigure, fig_conf);
-        }
+        if (contains(fig_type, "Fractal")) newFigure = generateFractal(newFigure, fig_conf);
+
+        if (newFigure.points.empty()) continue;
 
         Matrix transformMatrix = scale(fig_scale)
                 * rotateX(fig_rotateX) * rotateY(fig_rotateY) * rotateZ(fig_rotateZ)
@@ -205,10 +203,10 @@ img::EasyImage generateWireframeImage(const ini::Configuration& conf, ZBUF_MODE 
         figures.push_back(newFigure);
     }
 
+    if (figures.empty()) return {};
+    
     applyTransform(figures, eyePointTrans(eyePoint));
     const Lines2D lines = doProjection(figures);
-
-    if (lines.empty()) return {};
 
     auto imgVars = getImgVars(lines, size);
 
