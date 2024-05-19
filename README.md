@@ -25,16 +25,16 @@ X: Niet werkend of niet geïmplementeerd
 | 6 | 3D fractalen             | V      |
 |   | BuckyBall                | X      |
 |   | Mengerspons              | X      |
-|   | View Frustum             |        |
-| 7 | Ambient licht            |        |
-|   | Diffuus licht (oneindig) |        |
-|   | Diffuus licht (puntbron) |        |
-|   | Speculair licht          |        |
-| 8 | Schaduw                  |        |
-|   | Texture mapping          |        |
-| 9 | Bollen en cylinders      |        |
-|   | UV-coordinaten           |        |
-|   | Cube mapping             |        |
+|   | View Frustum             | X      |
+| 7 | Ambient licht            | V      |
+|   | Diffuus licht (oneindig) | V      |
+|   | Diffuus licht (puntbron) | -      |
+|   | Speculair licht          | X      |
+| 8 | Schaduw                  | X      |
+|   | Texture mapping          | X      |
+| 9 | Bollen en cylinders      | X      |
+|   | UV-coordinaten           | X      |
+|   | Cube mapping             | X      |
 
 Geïmplementeerde vorm van texture mapping: ...
 
