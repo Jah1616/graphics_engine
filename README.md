@@ -44,3 +44,11 @@ Geïmplementeerde vorm van texture mapping: ...
 
 ## Extra functionaliteit, niet in de opgaves beschreven
 
+voorbeeld stochastische 2d-l-systemen (optioneel in .L2D file):
+    StochasticRules = {
+        F -> {
+        "F(+F)F(-F)F" : 0.33,
+        "F(+F)F" : 0.33,
+        "F(-F)F" : 0.34
+        }
+    }
